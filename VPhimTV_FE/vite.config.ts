@@ -1,7 +1,28 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
+import dotenv from "dotenv";
+import react from "@vitejs/plugin-react";
+import { resolve } from "path";
 
-// https://vite.dev/config/
+dotenv.config();
+
 export default defineConfig({
-  plugins: [react()],
-})
+  build: {
+    outDir: "dist",
+    minify: false,
+    cssMinify: false,
+    emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        index: resolve(__dirname, "index.html"),
+      },
+    },
+  },
+  server: { port: 8765 },
+  resolve: {
+    alias: {
+      "~": resolve(__dirname, "src"),
+    },
+  },
+  plugins: [react(), tailwindcss()],
+});
