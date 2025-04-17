@@ -1,10 +1,9 @@
 {
   "name": "vphimtv",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/phamluu/VPhimTV.git",
-  "author": "An Thanh Le <an.thanhle@infodation.vn>",
-  "license": "MIT",
+  "author": "An, Luu, Khanh, Dat",
+  "license": "UNLICENSED",
   "scripts": {
     "start:laravel": "cd VPhimTV_BE && php artisan serve",
     "start:react": "cd VPhimTV_FE && yarn dev",
