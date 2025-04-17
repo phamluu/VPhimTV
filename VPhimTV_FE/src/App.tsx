@@ -6,9 +6,9 @@ import Home from './pages/Home/Home';
 
 function MainLayout() {
   return (
-    <div className="flex flex-col h-screen">
+    <div>
       <Header />
-      <main className="flex-1 overflow-auto no-scrollbar">
+      <main className="min-h-[calc(100vh-245px-32px)] mt-6 mb-6">
         <Outlet />
       </main>
       <Footer />
