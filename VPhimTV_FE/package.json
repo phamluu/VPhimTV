@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "author": "An, Luu, Khanh, Dat",
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "vite --host",
     "build": "tsc -b && vite build",

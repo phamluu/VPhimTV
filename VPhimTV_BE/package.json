@@ -1,6 +1,8 @@
 {
     "private": true,
     "type": "module",
+    "author": "An, Luu, Khanh, Dat",
+    "license": "UNLICENSED",
     "scripts": {
         "build": "vite build",
         "dev": "vite"
