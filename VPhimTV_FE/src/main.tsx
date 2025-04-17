@@ -1,10 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import utc from "dayjs/plugin/utc";
+import React from "react";
+import { createRoot } from "react-dom/client";
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+import App from "./App";
+
+const container = document.getElementById('root');
+const root = createRoot(container!);
+
+// Initialize dayjs plugin
+dayjs.extend(utc);
+dayjs.extend(customParseFormat);
+
+root.render(
+  <React.StrictMode>
     <App />
-  </StrictMode>,
-)
+  </React.StrictMode>
+);

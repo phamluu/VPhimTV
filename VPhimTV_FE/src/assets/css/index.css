@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, cupcake, garden, dracula;
+}
+
+@font-face {
+  font-family: "Courgette";
+  src: url("../fonts/Courgette/Courgette-Regular.ttf") format("truetype");
+}
+
+@layer utilities {
+  .no-scrollbar {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .select:focus,
+  .select:focus-within,
+  .input:focus,
+  .input:focus-within {
+    --input-color: color-mix(
+      in oklab,
+      var(--color-base-content) 40%,
+      transparent
+    );
+  }
+}
