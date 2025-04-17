@@ -3,9 +3,7 @@ export default function Header() {
         <div className="navbar bg-base-100 shadow-sm">
             <div className="navbar-start">
                 <a className="btn btn-ghost text-xl">VPhimTV.com</a>
-            </div>
 
-            <div className="navbar-center">
                 <div className="dropdown dropdown-hover">
                     <div tabIndex={0} role="button" className="btn m-1">Phim Mới</div>
                     <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
@@ -13,9 +11,6 @@ export default function Header() {
                         <li><a>Item 2</a></li>
                     </ul>
                 </div>
-            </div>
-
-            <div className="navbar-center">
                 <div className="dropdown dropdown-hover">
                     <div tabIndex={0} role="button" className="btn m-1">Phim Lẻ</div>
                     <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
@@ -23,9 +18,6 @@ export default function Header() {
                         <li><a>Item 2</a></li>
                     </ul>
                 </div>
-            </div>
-
-            <div className="navbar-center">
                 <div className="dropdown dropdown-hover">
                     <div tabIndex={0} role="button" className="btn m-1">Phim Bộ</div>
                     <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
@@ -33,11 +25,29 @@ export default function Header() {
                         <li><a>Item 2</a></li>
                     </ul>
                 </div>
-            </div>
-
-            <div className="navbar-center">
                 <div className="dropdown dropdown-hover">
                     <div tabIndex={0} role="button" className="btn m-1">Phim Chiếu Rạp</div>
+                    <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <li><a>Item 1</a></li>
+                        <li><a>Item 2</a></li>
+                    </ul>
+                </div>
+                <div className="dropdown dropdown-hover">
+                    <div tabIndex={0} role="button" className="btn m-1">Thể Loại</div>
+                    <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <li><a>Item 1</a></li>
+                        <li><a>Item 2</a></li>
+                    </ul>
+                </div>
+                <div className="dropdown dropdown-hover">
+                    <div tabIndex={0} role="button" className="btn m-1">Quốc Gia</div>
+                    <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                        <li><a>Item 1</a></li>
+                        <li><a>Item 2</a></li>
+                    </ul>
+                </div>
+                <div className="dropdown dropdown-hover">
+                    <div tabIndex={0} role="button" className="btn m-1">Năm Phát Hành</div>
                     <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                         <li><a>Item 1</a></li>
                         <li><a>Item 2</a></li>
