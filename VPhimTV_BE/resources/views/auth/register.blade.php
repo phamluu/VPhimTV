@@ -9,6 +9,7 @@
 
     <!-- css files -->
     <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" media="all">
+    <link href="css/login.css" rel="stylesheet" type="text/css" media="all" />
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
     <!-- /css files -->
 
@@ -23,15 +24,26 @@
                 <div class="main-agileits">
                     <div class="form-w3-agile">
                         <h2>Register | VPhimTV</h2>
-                        <form action="#" method="post">
+                        <form action="{{ route('register') }}" method="post">
+                            @csrf
                             <div class="form-sub-w3">
-                                <input type="text" name="Username" placeholder="Username " required="" />
+                                <input type="text" name="name" placeholder="name " required="" />
                                 <div class="icon-w3">
                                     <i class="fa fa-user" aria-hidden="true"></i>
                                 </div>
                             </div>
                             <div class="form-sub-w3">
-                                <input type="password" name="Password" placeholder="Password" required="" />
+                                <input type="text" name="email" placeholder="email " required="" />
+                                <div class="icon-w3">
+                                    <i class="fa fa-user" aria-hidden="true"></i>
+                                </div>
+                                @if ($errors->has('email'))
+                                <div class="error">{{ $errors->first('email') }}</div>
+                                @endif
+
+                            </div>
+                            <div class="form-sub-w3">
+                                <input type="password" name="password" placeholder="password" required="" />
                                 <div class="icon-w3">
                                     <i class="fa fa-unlock-alt" aria-hidden="true"></i>
                                 </div>

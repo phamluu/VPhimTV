@@ -5,41 +5,41 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+    public function showRegister()
+    {
+        return view('auth.register');
+    }
     public function register(Request $request)
     {
-        if ($request->isMethod('get')) {
-            return view('auth.register');
-        }
+        // $request->validate([
+        //     'name'     => 'required|string|max:255',
+        //     'email'    => 'required|string|email|max:255|unique:users',
+        //     'password' => 'required|string|min:4|confirmed',
+        // ]);
         $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
+            'name'     => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required',
         ]);
-
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
         ]);
+        Auth::login($user);
 
-        // Create Token
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'access_token' => $token,
-            'token_type'   => 'Bearer',
-            'user'         => $user
-        ]);
+        return redirect('/dashboard');
     }
-    // Login
+    public function showlogin()
+    {
+        return view('auth.login');
+    }
     public function login(Request $request)
     {
-        if ($request->isMethod('get')) {
-            return view('auth.login');
-        }
         $request->validate([
             'email'    => 'required|email',
             'password' => 'required'
@@ -51,21 +51,16 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        // Create Token
-        $token = $user->createToken('auth_token')->plainTextToken;
+        Auth::login($user);
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type'   => 'Bearer',
-            'user'         => $user
-        ]);
+        // Redirect to the intended URL or fallback to the dashboard
+        return redirect()->intended('/dashboard');
     }
 
-    // Logout
-    public function logout(Request $request)
+    public function logout()
     {
-        $request->user()->currentAccessToken()->delete();
+        Auth::logout();
 
-        return response()->json(['message' => 'Logged out successfully']);
+        return redirect('/login');
     }
 }
