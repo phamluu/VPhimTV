@@ -61,7 +61,7 @@ export default function Home() {
                             </p>
 
                             <img
-                                src="https://oamarense.com/wp-content/uploads/2025/04/kinh-mong-15977-poster.webp"
+                                src={'/src/assets/imgs/anh-mau.webp'}
                                 alt="Poster phim"
                                 className="w-full h-full object-cover"
                             />
