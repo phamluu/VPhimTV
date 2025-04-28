@@ -10,9 +10,5 @@ class DashboardController extends Controller
     {
         $user = $request->user();
         return view('dashboard', ['user' => $user]);
-        // return response()->json([
-        //     'message' => 'Welcome to your dashboard!',
-        //     'user'    => $user
-        // ]);
     }
 }
