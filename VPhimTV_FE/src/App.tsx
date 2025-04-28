@@ -3,6 +3,7 @@ import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import Footer from './components/footer';
 import Header from './components/header';
 import Home from './pages/Home/Home';
+import Info from './pages/Info/Info';
 
 function MainLayout() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
+          <Route path="/info" element={<Info />} />
         </Route>
       </Routes>
     </BrowserRouter>
