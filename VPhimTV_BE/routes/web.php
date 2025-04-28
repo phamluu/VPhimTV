@@ -1,7 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AuthController;
 
-require __DIR__ . '/web/home.php';
-require __DIR__ . '/web/admin.php';
-require __DIR__ . '/web/auth.php';
+
+include_once('web/auth.php');
+include_once('web/home.php');
+include_once('web/admin.php');
