@@ -6,7 +6,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start:laravel": "cd VPhimTV_BE && php artisan serve",
-    "start:react": "cd VPhimTV_FE && yarn dev",
+    "start:react": "cd VPhimTV_FE && npm run dev",
     "start": "run-p start:*"
   },
   "devDependencies": {
