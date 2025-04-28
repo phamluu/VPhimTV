@@ -4,6 +4,7 @@ import Footer from './components/footer';
 import Header from './components/header';
 import Home from './pages/Home/Home';
 import Info from './pages/Info/Info';
+import Search from './pages/Search/Search';
 
 function MainLayout() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="/info" element={<Info />} />
+          <Route path="/search" element={<Search/>} />
         </Route>
       </Routes>
     </BrowserRouter>
