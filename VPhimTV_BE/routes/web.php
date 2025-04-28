@@ -10,7 +10,6 @@ Route::get('/', function () {
 
 Route::middleware(['auth:sanctum', 'can:edit-post'])->get('/dashboard', [DashboardController::class, 'index']);
 
-// Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::get('/login', [AuthController::class, 'showlogin']);
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegister']);
