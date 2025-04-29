@@ -5,8 +5,11 @@
   "author": "An, Luu, Khanh, Dat",
   "license": "UNLICENSED",
   "scripts": {
-    "start:laravel": "cd VPhimTV_BE && php artisan serve",
-    "start:react": "cd VPhimTV_FE && npm run dev",
+    "start:backend": "cd VPhimTV_BE && php artisan serve",
+    "start:frontend": "cd VPhimTV_FE && npm run dev",
+    "install:backend": "cd VPhimTV_BE && composer install",
+    "install:frontend": "cd VPhimTV_FE && npm install",
+    "install": "run-p install:*",
     "start": "run-p start:*"
   },
   "devDependencies": {
