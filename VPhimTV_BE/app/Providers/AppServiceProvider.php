@@ -22,8 +22,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
-        Schema::defaultCharset('utf8mb4');
-        Schema::defaultCollation('utf8mb4_unicode_ci');
         Gate::define('view-post', function ($user) {
             return $user->id;
         });
