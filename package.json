@@ -5,6 +5,8 @@
   "author": "An, Luu, Khanh, Dat",
   "license": "UNLICENSED",
   "scripts": {
+    "prepare:backend": "cd VPhimTV_BE && php artisan key:generate && php artisan migrate",
+    "prepare": "npm run prepare:backend",
     "start:backend": "cd VPhimTV_BE && php artisan serve",
     "start:frontend": "cd VPhimTV_FE && npm run dev",
     "install:backend": "cd VPhimTV_BE && composer install",

@@ -33,6 +33,11 @@ npm i
 npm run install:all
 ```
 
+#### Tiếp tục chạy lệnh sau để khởi tạo database
+```bash
+npm run prepare
+```
+
 ### 3. **Chạy dự án**
 
 #### Chạy câu lệnh sau để khởi chạy dự án
