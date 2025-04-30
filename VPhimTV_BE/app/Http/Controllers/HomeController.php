@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\MovieService;
+use Illuminate\Http\Request;
+use App\Models\MovieQueryParams;
+
 class HomeController extends Controller
 {
-    public function index()
-    {
-        $data = [
-            'message' => 'Welcome to the movie site!',
-            'status' => 'success',
-            'movies' => [
-                ['id' => 1, 'title' => 'Inception'],
-                ['id' => 2, 'title' => 'Interstellar'],
-            ],
-        ];
+    protected MovieService $movieService;
 
-        return $data;
+    public function __construct(MovieService $movieService)
+    {
+        $this->movieService = $movieService;
+    }
+
+    public function index(Request $request)
+    {
+        $query = new MovieQueryParams();
+        $data = $this->movieService->getList();
+
+        // Trả về kết quả dưới dạng JSON
+        return response()->json($data);
     }
 }
