@@ -19,7 +19,7 @@ git clone https://github.com/phamluu/VPhimTV.git
 cd VPhimTV
 ```
 
-### 2. **Cài đặt các phụ thuộc**
+### 2. **Cài đặt các package**
 
 #### Chạy lệnh sau để cài đặt các package khi clone mã nguồn:
 ```bash
@@ -30,7 +30,7 @@ npm i
 
 #### Sau đó chạy lệnh sau để cài đặt các package cho cả FrontEnd và BackEnd
 ```bash
-npm run install
+npm run install:all
 ```
 
 ### 3. **Chạy dự án**
