@@ -103,7 +103,7 @@ export default function Info() {
           </div>
         </div>
 
-        <div className="bg-base-300 rounded p-3">
+        <div className="bg-base-300 rounded p-3 space-y-4">
           <div className="bg-base-100 p-4 space-y-4">
             <p className="font-bold text-primary text-xl">
               <i className="fa-regular fa-circle-info"></i>
@@ -230,16 +230,18 @@ export default function Info() {
               </div>
             ))}
           </div>
-        </div>
 
-        <MovieContainer
-          className="space-y-3"
-          movies={relatedMovies}
-          placeholderCount={16}
-          primary={false}
-          grid={4}
-          imageType="poster"
-        />
+          <p className="font-bold text-xl mt-6 mb-6">Có thể bạn thích:</p>
+
+          <MovieContainer
+            className="space-y-3"
+            movies={relatedMovies}
+            placeholderCount={16}
+            primary={false}
+            grid={4}
+            imageType="poster"
+          />
+        </div>
       </div>
     );
   }
