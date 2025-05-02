@@ -39,8 +39,8 @@ export default function MovieContainer({
             status={isLoading ? '' : `${movie.episode_current} | ${movie.lang}`}
             title={isLoading ? '' : movie.name}
             image={isLoading ? '' : movie.thumb_url}
+            linkTo={isLoading ? '' : `/info/${movie.slug}`}
             primary={primary && i === 0}
-            placeholder={isLoading}
           />
         ))}
       </div>

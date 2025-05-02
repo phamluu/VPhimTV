@@ -73,7 +73,6 @@ export default function Home() {
                 title={`404 - Chạy ngay đi - ${i}`}
                 image="https://oamarense.com/wp-content/uploads/2025/04/404-chay-ngay-di-15356-poster.webp"
                 className="shadow relative"
-                placeholder={true}
               />
             </SplideSlide>
           ))}
