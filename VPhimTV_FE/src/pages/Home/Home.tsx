@@ -2,12 +2,12 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import { useEffect, useState } from 'react';
 
 import MovieCard from '~/components/MovieCard';
+import { fetchMovies, fetchNewMovies, MovieType } from '~/service/movieAPI';
 
 import MovieContainer from './components/MovieContainer';
-import { fetchMovies, fetchNewMovies, MovieType } from './Home.API';
 
 export default function Home() {
-  const [phimMoiCapNhat, setPhimMoiCapNhat] = useState([]);
+  const [phimMoi, setPhimMoi] = useState([]);
   const [phimBo, setPhimBo] = useState([]);
   const [phimLe, setPhimLe] = useState([]);
   const [phimHoatHinh, setPhimHoatHinh] = useState([]);
@@ -38,7 +38,7 @@ export default function Home() {
           }),
         ]);
 
-      setPhimMoiCapNhat(getPhimMoi);
+      setPhimMoi(getPhimMoi);
       setPhimBo(getPhimBo);
       setPhimLe(getPhimLe);
       setPhimHoatHinh(getPhimHoatHinh);
@@ -72,7 +72,7 @@ export default function Home() {
                 status="Full | Vietsub + Lồng Tiếng"
                 title={`404 - Chạy ngay đi - ${i}`}
                 image="https://oamarense.com/wp-content/uploads/2025/04/404-chay-ngay-di-15356-poster.webp"
-                className="shadow relative"
+                className="max-h-[137px]"
               />
             </SplideSlide>
           ))}
@@ -82,29 +82,14 @@ export default function Home() {
       <MovieContainer
         title="Phim Mới Cập Nhật"
         className="space-y-3"
-        movies={phimMoiCapNhat}
-        isLoading={phimMoiCapNhat.length === 0}
+        movies={phimMoi}
       />
-
-      <MovieContainer
-        title="Phim Bộ"
-        className="space-y-3"
-        movies={phimBo}
-        isLoading={phimBo.length === 0}
-      />
-
-      <MovieContainer
-        title="Phim Lẻ"
-        className="space-y-3"
-        movies={phimLe}
-        isLoading={phimLe.length === 0}
-      />
-
+      <MovieContainer title="Phim Bộ" className="space-y-3" movies={phimBo} />
+      <MovieContainer title="Phim Lẻ" className="space-y-3" movies={phimLe} />
       <MovieContainer
         title="Phim Hoạt Hình"
         className="space-y-3"
         movies={phimHoatHinh}
-        isLoading={phimHoatHinh.length === 0}
       />
     </div>
   );

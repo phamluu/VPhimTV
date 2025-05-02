@@ -54,11 +54,24 @@ export async function fetchMovies(params: fetchMoviesParams) {
         const items = result.data.data.items.map((item: any) => ({
             ...item,
             thumb_url: `${result.data.data.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`,
+            poster_url: `${result.data.data.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`,
         }));
 
         return items;
     } catch (error) {
         console.error('Error fetching movies:', error);
+        throw error;
+    }
+}
+
+export async function fetchMovieInfo(slug: string) {
+    const url = `${MOVIE_API}/phim/${slug}`;
+
+    try {
+        const result = await axios.get(url);
+        return result.data;
+    } catch (error) {
+        console.error('Error fetching movie info:', error);
         throw error;
     }
 }
