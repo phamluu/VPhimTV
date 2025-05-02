@@ -13,7 +13,8 @@
     "install:frontend": "cd VPhimTV_FE && npm install",
     "install:all": "concurrently \"npm run install:backend\" \"npm run install:frontend\"",
     "open": "node -e \"require('child_process').exec(process.platform === 'win32' ? 'start http://localhost:8765' : 'xdg-open http://localhost:8765')\"",
-    "start": "npm run install:all && concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run open\""
+    "start": "npm run install:all && concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run open\"",
+    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
