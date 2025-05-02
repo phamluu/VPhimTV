@@ -1,95 +1,61 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import MovieContainer from '../home/components/MovieContainer';
+import { fetchMovies, MovieType } from '../home/Home.API';
 
 export default function Search() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 16;
+  const [phim, setPhim] = useState([]);
 
-  const movieList = Array.from({ length: 30 });
+  useEffect(() => {
+    (async () => {
+      const movies = await fetchMovies({
+        type: MovieType.PhimBo,
+        page: 1,
+        limit: 12,
+        sort_field: 'modified.time',
+        sort_type: 'desc',
+      });
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentMovies = movieList.slice(indexOfFirstItem, indexOfLastItem);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const totalPages = Math.ceil(movieList.length / itemsPerPage);
+      setPhim(movies);
+    })();
+  }, []);
 
   return (
-    <div className="min-h-screen text-white">
-      {/* Header */}
-      <div className="bg-gray-800 p-3 rounded-md mb-6 flex items-center gap-2 text-sm max-w-7xl mx-auto">
-        <i className="fa fa-home text-orange-400"></i>
-        <a href="/" className="text-orange-400 hover:underline">VPHIMTV</a>
-        <span className="text-gray-400">{' > '}</span>
-        <span className="text-gray-300">Tìm kiếm</span>
-      </div>
+    <div className="container mx-auto">
+      <div className="space-y-5">
+        {/* BreadCrumb */}
+        <div className="breadcrumbs p-2 bg-base-100 rounded">
+          <ul className="bg-base-300 rounded p-2">
+            <li className="text-primary space-x-2">
+              <i className="fa-regular fa-house"></i>
+              <Link to={'/'}> VPhimTV</Link>
+            </li>
+            <li>Tìm kiếm</li>
+          </ul>
+        </div>
 
-      {/* Content */}
-      <div className="p-4 flex justify-center">
-        <div className="w-full max-w-7xl">
-          {/* Đẩy tiêu đề vào góc trái */}
-          <h1 className="text-2xl font-bold mb-6 text-left">
-            Kết quả tìm kiếm : <span className="text-yellow-400"></span>
-          </h1>
+        <p className="text-2xl">Kết quả tìm kiếm: </p>
 
-          {/* Movie List */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-center">
-            {currentMovies.map((_, i) => (
-              <div key={i} className="relative group overflow-hidden rounded-md shadow-lg max-w-xs mx-auto">
-                <img 
-                  src="/src/assets/imgs/anh-mau.webp" 
-                  alt={`Phim ${i + 1}`} 
-                  className="w-full h-48 object-cover group-hover:scale-105 transition" 
-                />
-                
-                {/* Nút Play */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
-                  <i className="fa fa-play text-white text-4xl"></i>
-                </div>
+        <MovieContainer
+          title=""
+          className="space-y-3"
+          movies={phim}
+          isLoading={phim.length === 0}
+          placeholderCount={15}
+          primary={false}
+        />
 
-                <div className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
-                  {i % 2 === 0 ? "0 | Vietsub | FHD" : "1 | Vietsub + Lồng Tiếng | HD"}
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black p-2">
-                  <h2 className="text-sm font-semibold truncate">Doraemon: Phim số {i + 1}</h2>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Pagination */}
-          <div className="mt-6 flex justify-center gap-2">
-            <button 
-              onClick={() => paginate(currentPage - 1)} 
-              disabled={currentPage === 1} 
-              className="btn btn-primary"
-            >
-              Prev
-            </button>
-
-            {Array.from({ length: totalPages }).map((_, index) => (
-              <button
-                key={index}
-                onClick={() => paginate(index + 1)} 
-                className={`btn ${currentPage === index + 1 ? 'btn-secondary' : 'btn-ghost'}`}
-              >
-                {index + 1}
-              </button>
-            ))}
-
-            <button 
-              onClick={() => paginate(currentPage + 1)} 
-              disabled={currentPage === totalPages} 
-              className="btn btn-primary"
-            >
-              Next
-            </button>
-          </div>
+        <div className="w-full join justify-center">
+          <button className="join-item btn hidden">◀</button>
+          <button className="join-item btn">1</button>
+          <button className="join-item btn">2</button>
+          <button className="join-item btn btn-disabled">...</button>
+          <button className="join-item btn">99</button>
+          <button className="join-item btn">100</button>
+          <button className="join-item btn">▶</button>
         </div>
       </div>
-
-      {/* Footer */}
-      {/* Thêm phần footer nếu cần */}
     </div>
   );
 }
