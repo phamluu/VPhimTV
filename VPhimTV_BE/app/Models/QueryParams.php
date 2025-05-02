@@ -10,11 +10,3 @@ class QueryParams
     public string $sort_type = 'desc';
 }
 
-class MovieQueryParams extends QueryParams
-{
-    public ?string $type_list;
-    public ?string $sort_lang;
-    public ?string $category;
-    public ?string $country;
-    public ?int $year;
-}

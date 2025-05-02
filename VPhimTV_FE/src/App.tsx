@@ -1,10 +1,10 @@
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 
-import Footer from './components/footer';
-import Header from './components/header';
-import Home from './pages/Home/Home';
-import Info from './pages/Info/Info';
-import Search from './pages/Search/Search';
+import Footer from './components/Footer';
+import Header from './components/Header';
+import Home from './pages/home/Home';
+import Info from './pages/info/Info';
+import Search from './pages/search/Search';
 
 function MainLayout() {
   return (
@@ -25,7 +25,7 @@ export default function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="/info" element={<Info />} />
-          <Route path="/search" element={<Search/>} />
+          <Route path="/search" element={<Search />} />
         </Route>
       </Routes>
     </BrowserRouter>
