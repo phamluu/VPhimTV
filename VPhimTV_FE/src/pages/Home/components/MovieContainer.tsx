@@ -26,9 +26,6 @@ export default function MovieContainer({
 
   const gridClasses = `grid-cols-${grid}`;
 
-  console.log(grid);
-  console.log(imageType)
-
   return (
     <div className={className}>
       {title && (
