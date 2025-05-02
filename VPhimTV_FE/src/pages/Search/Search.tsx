@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+
+import BreadCrumb from '~/components/BreadCrumb';
+import { fetchMovies, MovieType } from '~/service/movieAPI';
 
 import MovieContainer from '../home/components/MovieContainer';
-import { fetchMovies, MovieType } from '../home/Home.API';
 
 export default function Search() {
   const [phim, setPhim] = useState([]);
+  const appName = import.meta.env.VITE_APP_NAME;
 
   useEffect(() => {
     (async () => {
@@ -25,15 +27,18 @@ export default function Search() {
     <div className="container mx-auto">
       <div className="space-y-5">
         {/* BreadCrumb */}
-        <div className="breadcrumbs p-2 bg-base-100 rounded">
-          <ul className="bg-base-300 rounded p-2">
-            <li className="text-primary space-x-2">
-              <i className="fa-regular fa-house"></i>
-              <Link to={'/'}> VPhimTV</Link>
-            </li>
-            <li>Tìm kiếm</li>
-          </ul>
-        </div>
+        <BreadCrumb
+          className="p-2 bg-base-100 rounded"
+          items={[
+            {
+              label: appName,
+              href: '/',
+              iconElement: <i className="fa-regular fa-house"></i>,
+              className: 'space-x-2',
+            },
+            { label: 'Tìm kiếm' },
+          ]}
+        />
 
         <p className="text-2xl">Kết quả tìm kiếm: </p>
 
@@ -41,7 +46,6 @@ export default function Search() {
           title=""
           className="space-y-3"
           movies={phim}
-          isLoading={phim.length === 0}
           placeholderCount={15}
           primary={false}
         />

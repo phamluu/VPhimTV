@@ -22,11 +22,7 @@ export default function MovieCard({
 
   return (
     <div
-      className={`shadow relative ${
-        primary ? '' : 'max-h-[137px]'
-      } ${className} ${primary ? 'col-span-2 row-span-2' : ''} ${
-        !isLoaded ? 'skeleton' : ''
-      }`}
+      className={`shadow relative ${className} ${!isLoaded ? 'skeleton' : ''}`}
     >
       <Link to={linkTo || ''}>
         {/* Placeholder Image */}

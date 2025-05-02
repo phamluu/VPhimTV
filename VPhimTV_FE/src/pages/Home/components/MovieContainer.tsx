@@ -6,20 +6,28 @@ interface MovieContainerProps {
   title?: string;
   className?: string;
   movies: any[];
-  isLoading?: boolean;
   placeholderCount?: number;
   primary?: boolean;
+  grid?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+  imageType?: 'thumb' | 'poster';
 }
 
 export default function MovieContainer({
   title,
   className,
   movies,
-  isLoading = false,
   placeholderCount,
   primary = true,
+  grid = 5,
+  imageType = 'thumb',
 }: MovieContainerProps) {
   const placeholders = Array.from({ length: placeholderCount || 12 });
+  const isLoading = movies.length === 0;
+
+  const gridClasses = `grid-cols-${grid}`;
+
+  console.log(grid);
+  console.log(imageType)
 
   return (
     <div className={className}>
@@ -32,13 +40,26 @@ export default function MovieContainer({
         </div>
       )}
 
-      <div className="grid grid-cols-5 gap-4">
+      <div className={`grid ${gridClasses} gap-4`}>
         {(isLoading ? placeholders : movies).map((movie: any, i) => (
           <MovieCard
             key={isLoading ? i : movie._id}
+            className={`${primary && i === 0 ? 'col-span-2 row-span-2' : ''} ${
+              imageType === 'thumb'
+                ? primary && i === 0
+                  ? 'max-h-[290px]'
+                  : 'max-h-[137px]'
+                : ''
+            }`}
             status={isLoading ? '' : `${movie.episode_current} | ${movie.lang}`}
             title={isLoading ? '' : movie.name}
-            image={isLoading ? '' : movie.thumb_url}
+            image={
+              isLoading
+                ? ''
+                : imageType === 'thumb'
+                ? movie?.thumb_url
+                : movie?.poster_url
+            }
             linkTo={isLoading ? '' : `/info/${movie.slug}`}
             primary={primary && i === 0}
           />
