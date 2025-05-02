@@ -28,7 +28,7 @@ export default function MovieCard({
           <p
             className={`absolute top-0 left-0 ${
               primary ? '' : 'text-xs'
-            } text-white bg-gradient-to-r from-red-600 to-yellow-400 px-2 py-0.5 rounded`}
+            } text-white bg-gradient-to-r from-red-600 to-yellow-400 px-2 py-0.5 rounded-br-md`}
           >
             {status}
           </p>
