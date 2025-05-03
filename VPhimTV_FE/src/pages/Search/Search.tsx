@@ -1,27 +1,55 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import BreadCrumb from '~/components/BreadCrumb';
-import { fetchMovies, MovieType } from '~/service/movieAPI';
+import Pagination from '~/components/Pagination';
+import { fetchMovies, fetchSearchMovies, MovieType } from '~/service/movieAPI';
 
 import MovieContainer from '../home/components/MovieContainer';
 
 export default function Search() {
-  const [phim, setPhim] = useState([]);
   const appName = import.meta.env.VITE_APP_NAME;
+  const [phim, setPhim] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [totalPage, setTotalPage] = useState(1);
+  const query = searchParams.get('q');
+  const page = searchParams.get('page') || 1;
+
+  const handlePageChange = (newPage: number) => {
+    setSearchParams((prev) => {
+      prev.set('page', newPage.toString());
+      return prev;
+    });
+  };
 
   useEffect(() => {
     (async () => {
-      const movies = await fetchMovies({
-        type: MovieType.PhimBo,
-        page: 1,
-        limit: 12,
+      let movies = [];
+      let totalPage = 0;
+
+      const options = {
+        page: Number(page),
+        limit: 15,
         sort_field: 'modified.time',
-        sort_type: 'desc',
-      });
+        sort_type: 'desc' as const,
+      };
+
+      if (query) {
+        [movies, totalPage] = await fetchSearchMovies({
+          keyword: query,
+          ...options,
+        });
+      } else {
+        movies = await fetchMovies({
+          type: MovieType.PhimBo,
+          ...options,
+        });
+      }
 
       setPhim(movies);
+      setTotalPage(totalPage);
     })();
-  }, []);
+  }, [page, query]);
 
   return (
     <div className="container mx-auto">
@@ -50,15 +78,11 @@ export default function Search() {
           primary={false}
         />
 
-        <div className="w-full join justify-center">
-          <button className="join-item btn hidden">◀</button>
-          <button className="join-item btn">1</button>
-          <button className="join-item btn">2</button>
-          <button className="join-item btn btn-disabled">...</button>
-          <button className="join-item btn">99</button>
-          <button className="join-item btn">100</button>
-          <button className="join-item btn">▶</button>
-        </div>
+        <Pagination
+          currentPage={Number(page)}
+          totalPage={totalPage}
+          onPageChange={handlePageChange}
+        />
       </div>
     </div>
   );

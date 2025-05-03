@@ -75,3 +75,38 @@ export async function fetchMovieInfo(slug: string) {
         throw error;
     }
 }
+
+interface SearchMoviesParams extends Omit<fetchMoviesParams, 'type'> {
+    keyword: string;
+}
+
+export async function fetchSearchMovies(params: SearchMoviesParams) {
+    const { ...rest } = params;
+
+    const searchParams = new URLSearchParams();
+
+    Object.entries(rest).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+            searchParams.append(key, String(value));
+        }
+    });
+
+    const url = `${MOVIE_API}/v1/api/tim-kiem?${searchParams.toString()}`;
+
+    console.log('url', url);
+
+    try {
+        const result = await axios.get(url);
+
+        const items = result.data.data.items.map((item: any) => ({
+            ...item,
+            thumb_url: `${result.data.data.APP_DOMAIN_CDN_IMAGE}/${item.thumb_url}`,
+            poster_url: `${result.data.data.APP_DOMAIN_CDN_IMAGE}/${item.poster_url}`,
+        }));
+
+        return [items, result.data.data.params.pagination.totalPages];
+    } catch (error) {
+        console.error('Error fetching movies:', error);
+        throw error;
+    }
+}

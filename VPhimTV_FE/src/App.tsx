@@ -25,7 +25,7 @@ export default function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="/info/:slug" element={<Info />} />
-          <Route path="/search" element={<Search />} />
+          <Route path="/search/" element={<Search />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -67,11 +67,11 @@ export default function Info() {
             ]}
           />
 
-          <img className=" brightness-75" src={movieInfo?.movie?.thumb_url} />
+          <img className="min-h-[503px] brightness-75" src={movieInfo?.movie?.thumb_url} />
 
           <div className="absolute bottom-4 left-4 z-10 flex space-x-4">
             <img
-              src="https://phimmoichill.moi/wp-content/uploads/2025/04/mat-vu-phu-ho-15810-poster.webp"
+              src={movieInfo?.movie?.thumb_url}
               className="w-[250px] object-cover border"
             />
 
