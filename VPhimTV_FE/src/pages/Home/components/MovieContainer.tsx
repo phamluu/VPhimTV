@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import MovieCard from '~/components/MovieCard';
+import { gridClassMap } from '~/utils/classMap';
 
 interface MovieContainerProps {
   title?: string;
@@ -24,8 +25,6 @@ export default function MovieContainer({
   const placeholders = Array.from({ length: placeholderCount || 12 });
   const isLoading = movies.length === 0;
 
-  const gridClasses = `grid-cols-${grid}`;
-
   return (
     <div className={className}>
       {title && (
@@ -37,7 +36,7 @@ export default function MovieContainer({
         </div>
       )}
 
-      <div className={`grid ${gridClasses} gap-4`}>
+      <div className={`grid ${gridClassMap[grid]} gap-4`}>
         {(isLoading ? placeholders : movies).map((movie: any, i) => (
           <MovieCard
             key={isLoading ? i : movie._id}
