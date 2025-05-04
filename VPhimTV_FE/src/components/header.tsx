@@ -1,22 +1,38 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
+import { fetchCategory, fetchCountry } from '~/service/movieAPI';
+
 export default function Header() {
   const [value, setValue] = useState('');
   const navigate = useNavigate();
   const [searchParams, _setSearchParams] = useSearchParams();
+  const [category, setCategory] = useState([]);
+  const [country, setCountry] = useState([]);
 
   useEffect(() => {
     const q = searchParams.get('q');
     if (q) setValue(q);
   }, [searchParams]);
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: any) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       navigate(`/search?q=${encodeURIComponent(value.trim())}&page=1`);
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const [categoryResult, countryResult] = await Promise.all([
+        fetchCategory(),
+        fetchCountry(),
+      ]);
+
+      setCategory(categoryResult);
+      setCountry(countryResult);
+    })();
+  }, []);
 
   return (
     <div className="bg-base-100">
@@ -48,31 +64,39 @@ export default function Header() {
           <div className="inline-flex">
             <Link
               className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary sm:inline-flex hidden"
-              to="/phim-moi"
+              to="/list/phim-moi?page=1"
             >
               Phim Mới
             </Link>
             <Link
               className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary sm:inline-flex hidden"
-              to="/phim-ler"
+              to="/list/phim-le?page=1"
             >
               Phim Lẻ
             </Link>
 
             <Link
               className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary lg:inline-flex hidden"
-              to="/phim-bo"
+              to="/list/phim-bo?page=1"
             >
               Phim Bộ
             </Link>
+
             <Link
               className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary lg:inline-flex hidden"
-              to="/phim-chieu-rap"
+              to="/list/tv-shows?page=1"
             >
-              Phim Chiếu Rạp
+              TV Shows
             </Link>
 
-            <div className="dropdown dropdown-hover xl:inline-block hidden">
+            <Link
+              className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary lg:inline-flex hidden"
+              to="/list/hoat-hinh?page=1"
+            >
+              Hoạt Hình
+            </Link>
+
+            <div className="dropdown dropdown-end dropdown-hover xl:inline-block hidden">
               <div
                 tabIndex={0}
                 role="button"
@@ -82,17 +106,18 @@ export default function Header() {
               </div>
               <ul
                 tabIndex={0}
-                className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow"
+                className="dropdown-content menu grid grid-cols-3 gap-1 bg-base-100 rounded-box z-1 w-96 p-2 shadow"
               >
-                <li>
-                  <Link to={'/'}>Item 1</Link>
-                </li>
-                <li>
-                  <Link to={'/'}>Item 2</Link>
-                </li>
+                {category.map((item: any) => (
+                  <li key={item._id} className="hover:text-primary">
+                    <Link to={`/search?category=${item.slug}&page=1`}>
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
-            <div className="dropdown dropdown-hover xl:inline-block hidden">
+            <div className="dropdown dropdown-end dropdown-hover xl:inline-block hidden">
               <div
                 tabIndex={0}
                 role="button"
@@ -102,34 +127,15 @@ export default function Header() {
               </div>
               <ul
                 tabIndex={0}
-                className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow"
+                className="dropdown-content menu grid grid-cols-3 gap-1 bg-base-100 rounded-box z-1 w-96 p-2 shadow"
               >
-                <li>
-                  <Link to={'/'}>Item 1</Link>
-                </li>
-                <li>
-                  <Link to={'/'}>Item 2</Link>
-                </li>
-              </ul>
-            </div>
-            <div className="dropdown dropdown-hover xl:inline-block hidden">
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary"
-              >
-                Năm Phát Hành
-              </div>
-              <ul
-                tabIndex={0}
-                className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow"
-              >
-                <li>
-                  <Link to={'/'}>Item 1</Link>
-                </li>
-                <li>
-                  <Link to={'/'}>Item 2</Link>
-                </li>
+                {country.map((item: any) => (
+                  <li key={item._id} className="hover:text-primary">
+                    <Link to={`/search?country=${item.slug}&page=1`}>
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

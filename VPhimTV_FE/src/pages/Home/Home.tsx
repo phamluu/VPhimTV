@@ -2,7 +2,12 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import { useEffect, useState } from 'react';
 
 import MovieCard from '~/components/MovieCard';
-import { fetchMovies, fetchNewMovies, MovieType } from '~/service/movieAPI';
+import {
+  fetchMovies,
+  fetchNewMovies,
+  MovieType,
+  SortTypeEnum,
+} from '~/service/movieAPI';
 
 import MovieContainer from './components/MovieContainer';
 
@@ -18,7 +23,7 @@ export default function Home() {
         page: 1,
         limit: 12,
         sort_field: 'modified.time',
-        sort_type: 'desc' as const,
+        sort_type: SortTypeEnum.desc,
       };
 
       const [getPhimMoi, getPhimBo, getPhimLe, getPhimHoatHinh] =
@@ -83,13 +88,25 @@ export default function Home() {
         title="Phim Mới Cập Nhật"
         className="space-y-3"
         movies={phimMoi}
+        linkTo="/list/phim-moi"
       />
-      <MovieContainer title="Phim Bộ" className="space-y-3" movies={phimBo} />
-      <MovieContainer title="Phim Lẻ" className="space-y-3" movies={phimLe} />
+      <MovieContainer
+        title="Phim Bộ"
+        className="space-y-3"
+        movies={phimBo}
+        linkTo="/list/phim-bo"
+      />
+      <MovieContainer
+        title="Phim Lẻ"
+        className="space-y-3"
+        movies={phimLe}
+        linkTo="/list/phim-le"
+      />
       <MovieContainer
         title="Phim Hoạt Hình"
         className="space-y-3"
         movies={phimHoatHinh}
+        linkTo="/list/hoat-hinh"
       />
     </div>
   );

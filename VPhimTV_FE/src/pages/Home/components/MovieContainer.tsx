@@ -5,6 +5,7 @@ import { gridClassMap } from '~/utils/classMap';
 
 interface MovieContainerProps {
   title?: string;
+  linkTo?: string;
   className?: string;
   movies: any[];
   placeholderCount?: number;
@@ -15,6 +16,7 @@ interface MovieContainerProps {
 
 export default function MovieContainer({
   title,
+  linkTo = '/',
   className,
   movies,
   placeholderCount,
@@ -30,7 +32,7 @@ export default function MovieContainer({
       {title && (
         <div className="flex justify-between items-center">
           <p className="text-2xl font-bold text-primary">{title}</p>
-          <Link className="btn btn-ghost btn-primary" to={'/'}>
+          <Link className="btn btn-ghost btn-primary" to={linkTo}>
             Xem Tất Cả ▶
           </Link>
         </div>
