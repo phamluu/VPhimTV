@@ -4,6 +4,7 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Home from './pages/home/Home';
 import Info from './pages/info/Info';
+import List from './pages/list/List';
 import Search from './pages/search/Search';
 
 function MainLayout() {
@@ -26,6 +27,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="/info/:slug" element={<Info />} />
           <Route path="/search/" element={<Search />} />
+          <Route path="/list/:slug" element={<List />} />
         </Route>
       </Routes>
     </BrowserRouter>

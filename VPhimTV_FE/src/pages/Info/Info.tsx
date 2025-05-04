@@ -67,7 +67,10 @@ export default function Info() {
             ]}
           />
 
-          <img className="min-h-[503px] brightness-75" src={movieInfo?.movie?.thumb_url} />
+          <img
+            className="min-h-[503px] brightness-75"
+            src={movieInfo?.movie?.thumb_url}
+          />
 
           <div className="absolute bottom-4 left-4 z-10 flex space-x-4">
             <img
@@ -216,16 +219,18 @@ export default function Info() {
                   <span className="text-info">{episode.server_name}</span>
                 </p>
 
-                <div className="flex flex-wrap gap-2">
-                  {episode.server_data.map((item: any, j: number) => (
-                    <Link
-                      key={j}
-                      to={`/watch/${slug}/${item.slug}`}
-                      className="btn btn-soft"
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
+                <div className="overflow-y-auto max-h-[200px]">
+                  <div className="flex flex-wrap gap-2">
+                    {episode.server_data.map((item: any, j: number) => (
+                      <Link
+                        key={j}
+                        to={`/watch/${slug}/${item.slug}`}
+                        className="btn btn-soft"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             ))}

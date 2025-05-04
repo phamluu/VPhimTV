@@ -3,7 +3,16 @@ import { useSearchParams } from 'react-router-dom';
 
 import BreadCrumb from '~/components/BreadCrumb';
 import Pagination from '~/components/Pagination';
-import { fetchMovies, fetchSearchMovies, MovieType } from '~/service/movieAPI';
+import Select from '~/components/Select';
+import {
+  fetchCategory,
+  fetchCountry,
+  fetchMovies,
+  fetchSearchMovies,
+  MovieType,
+  SortLangEnum,
+  SortTypeEnum,
+} from '~/service/movieAPI';
 
 import MovieContainer from '../home/components/MovieContainer';
 
@@ -12,7 +21,15 @@ export default function Search() {
   const [phim, setPhim] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [totalPage, setTotalPage] = useState(1);
+  const [categoryList, setCategoryList] = useState([]);
+  const [countryList, setCountryList] = useState([]);
+
   const query = searchParams.get('q');
+  const category = searchParams.get('category') || '';
+  const country = searchParams.get('country') || '';
+  const year = searchParams.get('year') || '';
+  const lang = searchParams.get('language') || '';
+  const sort = searchParams.get('sort') || 'desc';
   const page = searchParams.get('page') || 1;
 
   const handlePageChange = (newPage: number) => {
@@ -22,23 +39,37 @@ export default function Search() {
     });
   };
 
+  const handleFilterChange = (key: string, value: string) => {
+    setSearchParams((prev) => {
+      prev.set(key, value);
+      return prev;
+    });
+  };
+
   useEffect(() => {
     (async () => {
       let movies = [];
-      let totalPage = 0;
+      let totalPages = 999;
 
       const options = {
         page: Number(page),
-        limit: 15,
+        limit: 20,
         sort_field: 'modified.time',
-        sort_type: 'desc' as const,
+        sort_type: sort as SortTypeEnum,
+        sort_lang: lang as SortLangEnum,
+        year: year,
+        category,
+        country,
       };
 
       if (query) {
-        [movies, totalPage] = await fetchSearchMovies({
+        const result = await fetchSearchMovies({
           keyword: query,
           ...options,
         });
+
+        movies = result.items;
+        totalPages = result.totalPages;
       } else {
         movies = await fetchMovies({
           type: MovieType.PhimBo,
@@ -47,9 +78,21 @@ export default function Search() {
       }
 
       setPhim(movies);
-      setTotalPage(totalPage);
+      setTotalPage(totalPages);
     })();
-  }, [page, query]);
+  }, [page, query, category, country, year, lang, sort]);
+
+  useEffect(() => {
+    (async () => {
+      const [categoryResult, countryResult] = await Promise.all([
+        fetchCategory(),
+        fetchCountry(),
+      ]);
+
+      setCategoryList(categoryResult);
+      setCountryList(countryResult);
+    })();
+  }, []);
 
   return (
     <div className="container mx-auto">
@@ -70,11 +113,65 @@ export default function Search() {
 
         <p className="text-2xl">Kết quả tìm kiếm: </p>
 
+        <div className="flex justify-end gap-3">
+          <Select
+            className="w-32"
+            placeholder="Thể Loại"
+            options={categoryList.map((item: any) => ({
+              label: item.name,
+              value: item.slug,
+            }))}
+            onChange={(value) => handleFilterChange('category', value)}
+          />
+
+          <Select
+            className="w-32"
+            placeholder="Quốc Gia"
+            options={countryList.map((item: any) => ({
+              label: item.name,
+              value: item.slug,
+            }))}
+            onChange={(value) => handleFilterChange('country', value)}
+          />
+
+          <Select
+            className="w-32"
+            placeholder="Năm"
+            options={Array.from({ length: 2025 - 2017 + 1 }, (_, i) => {
+              const year = 2025 - i;
+              return { label: String(year), value: String(year) };
+            })}
+            onChange={(value) => handleFilterChange('year', value)}
+          />
+
+          <Select
+            className="w-32"
+            placeholder="Ngôn ngữ"
+            options={[
+              { label: 'Vietsub', value: 'vietsub' },
+              { label: 'Thuyết Minh', value: 'thuyet-minh' },
+              { label: 'Lồng Tiếng', value: 'long-tieng' },
+            ]}
+            onChange={(value) => handleFilterChange('language', value)}
+          />
+
+          <Select
+            className="w-32"
+            placeholder="Xếp theo"
+            options={[
+              { label: 'Tăng dần', value: 'asc' },
+              { label: 'Giảm dần', value: 'desc' },
+            ]}
+            defaultOption="desc"
+            onChange={(value) => handleFilterChange('sort', value)}
+          />
+        </div>
+
         <MovieContainer
           title=""
           className="space-y-3"
           movies={phim}
-          placeholderCount={15}
+          placeholderCount={20}
           primary={false}
         />
 
