@@ -159,14 +159,14 @@ export default function Info() {
                   <span className="text-info">{movieInfo?.movie?.time}</span>
                 </p>
 
-                {/* Genre */}
+                {/* Category */}
                 <p className="font-bold">
                   <span>Thể loại: </span>
                   {movieInfo?.movie?.category.map((item: any, i: number) => (
                     <Link
                       key={i}
                       className="text-info hover:text-warning"
-                      to={`/${item.slug}`}
+                      to={`/search?category=${item.slug}&page=1`}
                     >
                       {item.name}
                       {i < movieInfo?.movie?.category.length - 1 ? ', ' : ''}
