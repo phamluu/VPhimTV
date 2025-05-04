@@ -121,6 +121,7 @@ export default function Search() {
               label: item.name,
               value: item.slug,
             }))}
+            defaultOption={category}
             onChange={(value) => handleFilterChange('category', value)}
           />
 
@@ -131,6 +132,7 @@ export default function Search() {
               label: item.name,
               value: item.slug,
             }))}
+            defaultOption={country}
             onChange={(value) => handleFilterChange('country', value)}
           />
 
@@ -141,6 +143,7 @@ export default function Search() {
               const year = 2025 - i;
               return { label: String(year), value: String(year) };
             })}
+            defaultOption={year}
             onChange={(value) => handleFilterChange('year', value)}
           />
 
@@ -152,6 +155,7 @@ export default function Search() {
               { label: 'Thuyết Minh', value: 'thuyet-minh' },
               { label: 'Lồng Tiếng', value: 'long-tieng' },
             ]}
+            defaultOption={lang}
             onChange={(value) => handleFilterChange('language', value)}
           />
 
@@ -162,7 +166,7 @@ export default function Search() {
               { label: 'Tăng dần', value: 'asc' },
               { label: 'Giảm dần', value: 'desc' },
             ]}
-            defaultOption="desc"
+            defaultOption={sort}
             onChange={(value) => handleFilterChange('sort', value)}
           />
         </div>
