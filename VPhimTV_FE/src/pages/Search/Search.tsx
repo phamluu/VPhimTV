@@ -63,10 +63,13 @@ export default function Search() {
       };
 
       if (query) {
-        const result = await fetchSearchMovies({
-          keyword: query,
-          ...options,
-        });
+        const result = await fetchSearchMovies(
+          {
+            keyword: query,
+            ...options,
+          },
+          true,
+        );
 
         movies = result.items;
         totalPages = result.totalPages;
