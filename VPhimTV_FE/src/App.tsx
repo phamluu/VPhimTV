@@ -6,6 +6,7 @@ import Home from './pages/home/Home';
 import Info from './pages/info/Info';
 import List from './pages/list/List';
 import Search from './pages/search/Search';
+import Watch from './pages/watch/Watch';
 
 function MainLayout() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/info/:slug" element={<Info />} />
           <Route path="/search/" element={<Search />} />
           <Route path="/list/:slug" element={<List />} />
+          <Route path="/watch/:slug/:episode" element={<Watch />} />
         </Route>
       </Routes>
     </BrowserRouter>
