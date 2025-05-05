@@ -20,6 +20,8 @@ return new class extends Migration
             $table->integer('type_id')->nullable();
             $table->string('status')->nullable();
             $table->string('trailer_url')->nullable();
+            $table->string('poster_url')->nullable();
+            $table->string('thumb_url')->nullable();
             $table->string('time')->nullable();
             $table->string('episode_current')->nullable();
             $table->string('episode_total')->nullable();
@@ -27,6 +29,8 @@ return new class extends Migration
             $table->string('language')->nullable();
             $table->string('year')->nullable();
             $table->integer('country_id')->nullable();
+            $table->string('actor')->nullable();
+            $table->string('director')->nullable();
             $table->timestamps();
         });
     }
