@@ -35,7 +35,7 @@ export default function Info() {
     })();
   }, [movieInfo]);
 
-  if (!isLoading || !movieInfo) {
+  if (!isLoading && movieInfo) {
     return (
       <div className="container mx-auto space-y-8 max-w-4xl">
         <div className="bg-base-100 rounded relative">
