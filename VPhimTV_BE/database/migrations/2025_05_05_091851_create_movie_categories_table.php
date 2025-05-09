@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('movie_categories', function (Blueprint $table) {
             $table->id();
+            $table->integer('movie_id')->nullable();
+            $table->integer('category_id')->nullable();
             $table->timestamps();
         });
     }
