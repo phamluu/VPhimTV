@@ -5,6 +5,7 @@
   "author": "An, Luu, Khanh, Dat",
   "license": "UNLICENSED",
   "scripts": {
+    "crawl": "tsx scripts/crawler/index.ts",
     "prepare:backend": "cd VPhimTV_BE && php artisan key:generate && php artisan migrate",
     "prepare": "npm run prepare:backend",
     "start:backend": "cd VPhimTV_BE && php artisan serve",
@@ -16,12 +17,19 @@
     "start": "npm run install:all && concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run open\"",
     "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\""
   },
-  "devDependencies": {
-    "concurrently": "^9.1.2",
-    "nodemon": "^3.1.10",
-    "tsx": "^4.19.4"
-  },
   "dependencies": {
-    "axios": "^1.9.0"
+    "axios": "^1.9.0",
+    "dotenv": "^16.5.0",
+    "mysql2": "^3.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "chalk": "^5.4.1",
+    "concurrently": "^9.1.2",
+    "http-proxy-agent": "^7.0.2",
+    "nodemon": "^3.1.10",
+    "p-limit": "^6.2.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4"
   }
 }

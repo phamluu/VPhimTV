@@ -13,8 +13,8 @@ php artisan make:migration create_episodes_table
 
 CREATE TABLE IF NOT EXISTS movie_types(
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    slug VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255),
+    slug VARCHAR(255) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -27,13 +27,16 @@ CREATE TABLE IF NOT EXISTS movies(
     content TEXT,
     type_id INTEGER NOT NULL, -- Foreign Key movie_types.id,
     status VARCHAR(50),
-    trailer_url VARCHAR(255),
+    poster_url TEXT,
+    thumb_url TEXT,
     time VARCHAR(100),
     episode_current VARCHAR(100),
     episode_total VARCHAR(100),
     quality VARCHAR(50),
     language VARCHAR(50),
     year VARCHAR(50),
+    actor VARCHAR(255),
+    director VARCHAR(255),
     country_id INTEGER NOT NULL, -- Foreign Key countries.id,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -129,4 +132,4 @@ CREATE TABLE IF NOT EXISTS episodes(
     status VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-)
+);
