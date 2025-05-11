@@ -15,12 +15,5 @@ class HomeController extends Controller
         $this->movieService = $movieService;
     }
 
-    public function index(Request $request)
-    {
-        $query = new MovieQueryParams();
-        $data = $this->movieService->getList();
-
-        // Trả về kết quả dưới dạng JSON
-        return response()->json($data);
-    }
+    public function index(Request $request) {}
 }
