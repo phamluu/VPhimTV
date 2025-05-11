@@ -63,10 +63,4 @@ class AuthController extends Controller
 
         return redirect('/login');
     }
-
-    public function index()
-    {
-        $users = User::all();
-        return view('auth.index', compact('users'));
-    }
 }
