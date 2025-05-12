@@ -10,13 +10,14 @@ class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * php artisan db:seed --class=RoleSeeder
      */
     public function run(): void
     {
         $roles = ['admin', 'editor', 'viewer'];
 
         foreach ($roles as $role) {
-            Role::create([
+            Role::firstOrCreate([
                 'name' => $role,
             ]);
         }

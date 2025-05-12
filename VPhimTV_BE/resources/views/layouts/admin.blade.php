@@ -16,6 +16,8 @@
     <link href="{{asset('assets/css/now-ui-dashboard.css?v=1.5.0')}}" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="{{asset('assets/demo/demo.css')}}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="{{asset('assets/js/core/jquery.min.js')}}"></script>
 </head>
 
 <body class="">
@@ -115,7 +117,8 @@
         </div>
     </div>
     <!--   Core JS Files   -->
-    <script src="{{asset('assets/js/core/jquery.min.js')}}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="{{asset('assets/js/core/popper.min.js')}}"></script>
     <script src="{{asset('assets/js/core/bootstrap.min.js')}}"></script>
     <script src="{{asset('assets/js/plugins/perfect-scrollbar.jquery.min.js')}}"></script>
@@ -132,9 +135,9 @@
         $(document).ready(function() {
             // Javascript method's body can be found in assets/js/demos.js
             demo.initDashboardPageCharts();
-
         });
     </script>
+
 </body>
 
 </html>
