@@ -12,12 +12,20 @@
                     <p class="category"> Quản lý tài khoản</p>
                 </div>
                 <a href="{{ route('user.create') }}" class="btn btn-round btn-primary">Thêm</a>
+                @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+                @endif
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table">
                             <thead class=" text-primary">
                                 <th>
                                     STT
+                                </th>
+                                <th>
+                                    Họ tên
                                 </th>
                                 <th>
                                     Tên đăng nhập
@@ -34,6 +42,9 @@
                                 <tr>
                                     <td>
                                         {{ $loop->iteration }}
+                                    </td>
+                                    <td>
+                                        {{ $user->name }}
                                     </td>
                                     <td>
                                         {{ $user->email }}
