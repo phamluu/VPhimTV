@@ -5,10 +5,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 
 
-Route::middleware(['auth', 'can:view-post'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index']);
-});
-
+// Route::middleware(['auth', 'can:view-post'])->group(function () {
+//     Route::get('/dashboard', [DashboardController::class, 'index']);
+// });
+Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::prefix('admin')->group(function () {
     Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user.index');
