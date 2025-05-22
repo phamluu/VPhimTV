@@ -1,30 +1,21 @@
 import axios from 'axios';
 
+import { MovieQueryParams } from './moviesType';
+
 const MOVIE_API = import.meta.env.VITE_APP_API;
 
-interface MoviesOptions {
-  limit?: number;
-  page?: number;
-  sortField?: string;
-  sortType?: 'asc' | 'desc';
-  typeList?: 'series' | 'single' | 'hoathinh' | 'tvshows';
-  sortLang?: string;
-  category?: string;
-  country?: string;
-  year?: string;
-}
-
-export const fetchMovies = async (options: MoviesOptions) => {
+export const fetchMovies = async (options: MovieQueryParams) => {
   const {
     limit = 10,
     page = 1,
     sortField = 'updated_at',
     sortType = 'desc',
     typeList,
-    sortLang,
+    language,
     category,
     country,
     year,
+    keyword,
   } = options;
   const url = `${MOVIE_API}/movies`;
 
@@ -35,17 +26,16 @@ export const fetchMovies = async (options: MoviesOptions) => {
     params.append('sort_field', sortField);
     params.append('sort_type', sortType);
     if (typeList) params.append('type_list', typeList);
-    if (sortLang) params.append('sort_lang', sortLang);
+    if (language) params.append('sort_lang', language);
     if (category) params.append('category', category);
     if (country) params.append('country', country);
     if (year) params.append('year', year);
+    if (keyword) params.append('keyword', keyword);
 
     console.log(url, params.toString());
 
     const response = await axios.get(url, { params });
-    const data = response.data;
-
-    return data;
+    return response.data;
   } catch (error) {
     console.error('Error fetching movies:', error);
     throw error;

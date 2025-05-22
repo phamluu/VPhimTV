@@ -20,12 +20,14 @@ class MovieController extends Controller
         $category = $request->input('category');
         $country = $request->input('country');
         $year = $request->input('year');
+        $keyword = $request->input('keyword');
 
         $movies = Movie::query();
 
         $movies->join('movie_categories', 'movies.id', '=', 'movie_categories.movie_id')
             ->join('categories', 'movie_categories.category_id', '=', 'categories.id')
-            ->join('movie_types', 'movies.type_id', '=', 'movie_types.id');
+            ->join('movie_types', 'movies.type_id', '=', 'movie_types.id')
+            ->join('countries', 'movies.country_id', '=', 'countries.id');
 
         if (!empty($typeList)) {
             $movies->where('movie_types.slug',  $typeList);
@@ -34,13 +36,19 @@ class MovieController extends Controller
             $movies->where('language', $sortLang);
         }
         if (!empty($category)) {
-            $movies->where('categories.id', $category);
+            $movies->where('categories.slug', $category);
         }
         if (!empty($country)) {
-            $movies->where('country_id', $country);
+            $movies->where('countries.slug', $country);
         }
         if (!empty($year)) {
             $movies->where('year', $year);
+        }
+        if (!empty($keyword)) {
+            $movies->where(function ($query) use ($keyword) {
+                $query->where('movies.name', 'like', '%' . $keyword . '%')
+                    ->orWhere('movies.original_name', 'like', '%' . $keyword . '%');
+            });
         }
         $sortType = strtolower($sortType) === 'asc' ? 'asc' : 'desc';
         $movies->orderBy('movies.' . $sortField, $sortType);

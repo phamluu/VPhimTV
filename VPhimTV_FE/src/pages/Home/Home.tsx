@@ -2,7 +2,8 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import { useQuery } from '@tanstack/react-query';
 
 import MovieCard from '~/components/MovieCard';
-import { fetchMovies } from '~/service/moviesApi';
+import { fetchMovies } from '~/service/movies/moviesApi';
+import { MoviesTypeEnum } from '~/service/movies/moviesType';
 
 import MovieContainer from './components/MovieContainer';
 
@@ -13,15 +14,19 @@ export default function Home() {
   });
   const seriesMovies = useQuery({
     queryKey: ['seriesMovies'],
-    queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: 'series' }),
+    queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: MoviesTypeEnum.series }),
   });
   const singleMovies = useQuery({
     queryKey: ['singleMovies'],
-    queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: 'single' }),
+    queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: MoviesTypeEnum.single }),
   });
   const cartoonMovies = useQuery({
     queryKey: ['cartoonMovies'],
-    queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: 'hoathinh' }),
+    queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: MoviesTypeEnum.hoathinh }),
+  });
+  const tvShowsMovies = useQuery({
+    queryKey: ['tvShowsMovies'],
+    queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: MoviesTypeEnum.tvshows }),
   });
 
   return (
@@ -80,6 +85,12 @@ export default function Home() {
         title="Phim Hoạt Hình"
         className="space-y-3"
         movies={cartoonMovies.data?.data ?? []}
+        linkTo="/list/hoat-hinh"
+      />
+      <MovieContainer
+        title="TV Shows"
+        className="space-y-3"
+        movies={tvShowsMovies.data?.data ?? []}
         linkTo="/list/hoat-hinh"
       />
     </div>

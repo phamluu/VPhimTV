@@ -3,13 +3,8 @@ import { useParams, useSearchParams } from 'react-router-dom';
 
 import BreadCrumb from '~/components/BreadCrumb';
 import Pagination from '~/components/Pagination';
-import {
-  fetchMovies,
-  fetchNewMovies,
-  MovieType,
-  MovieTypeMap,
-  SortTypeEnum,
-} from '~/service/movieAPI';
+import { fetchMovies, fetchNewMovies, MovieType, MovieTypeMap } from '~/service/movieAPI';
+import { SortTypeEnum } from '~/service/movies/moviesType';
 
 import MovieContainer from '../home/components/MovieContainer';
 
@@ -68,19 +63,9 @@ export default function List() {
           ]}
         />
 
-        <MovieContainer
-          title=""
-          className="space-y-3"
-          movies={phim}
-          placeholderCount={20}
-          primary={false}
-        />
+        <MovieContainer title="" className="space-y-3" movies={phim} placeholderCount={20} primary={false} />
 
-        <Pagination
-          currentPage={Number(page)}
-          totalPage={totalPage}
-          onPageChange={handlePageChange}
-        />
+        <Pagination currentPage={Number(page)} totalPage={totalPage} onPageChange={handlePageChange} />
       </div>
     </div>
   );

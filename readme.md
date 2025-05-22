@@ -75,13 +75,14 @@ npm run start
     - **Tham số hỗ trợ:**
         - `limit` Ví dụ: `?limit=10`
         - `page` Ví dụ: `?page=2`
-        - `sortField` Ví dụ: `?sortField=updated_at`
-        - `sortType` Ví dụ: `?sortType=desc`
-        - `typeList` Ví dụ: `?typeList=series`
-        - `sortLang` Ví dụ: `?sortLang=vi`
+        - `sort_field` Ví dụ: `?sort_field=updated_at`
+        - `sort_type` Ví dụ: `?sort_type=desc`
+        - `type_list` Ví dụ: `?type_list=series`
+        - `sort_lang` Ví dụ: `?sort_lang=vi`
         - `category` Ví dụ: `?category=hanh-dong` (dùng api lấy danh sách category)
         - `country` Ví dụ: `?country=vi` (dùng api lấy danh sách country) 
         - `year` Ví dụ: `?year=2023`
+        - `keyword` Ví dụ: `?keyword=nobita`
 
 - **Lấy thông tin chi tiết phim:**
     ```
@@ -100,8 +101,8 @@ npm run start
     http://localhost:8000/category
     ```
     - **Tham số hỗ trợ:**
-        - `sortField` Ví dụ: `?sortField=updated_at`
-        - `sortType` Ví dụ: `?sortType=desc`
+        - `sort_field` Ví dụ: `?sort_field=updated_at`
+        - `sort_type` Ví dụ: `?sort_type=desc`
 
 ### Countries
 
@@ -110,5 +111,5 @@ npm run start
     http://localhost:8000/country
     ```
     - **Tham số hỗ trợ:**
-        - `sortField` Ví dụ: `?sortField=updated_at`
-        - `sortType` Ví dụ: `?sortType=desc`
+        - `sort_field` Ví dụ: `?sort_field=updated_at`
+        - `sort_type` Ví dụ: `?sort_type=desc`

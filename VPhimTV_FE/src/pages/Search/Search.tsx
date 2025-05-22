@@ -1,36 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'react-router-dom';
 
 import BreadCrumb from '~/components/BreadCrumb';
 import Pagination from '~/components/Pagination';
 import Select from '~/components/Select';
-import {
-  fetchCategory,
-  fetchCountry,
-  fetchMovies,
-  fetchSearchMovies,
-  MovieType,
-  SortLangEnum,
-  SortTypeEnum,
-} from '~/service/movieAPI';
+import { fetchCategory } from '~/service/category/categoryApi';
+import { fetchCountry } from '~/service/movieAPI';
+import { fetchMovies } from '~/service/movies/moviesApi';
+import { SortTypeEnum } from '~/service/movies/moviesType';
 
 import MovieContainer from '../home/components/MovieContainer';
 
 export default function Search() {
   const appName = import.meta.env.VITE_APP_NAME;
-  const [phim, setPhim] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [totalPage, setTotalPage] = useState(1);
-  const [categoryList, setCategoryList] = useState([]);
-  const [countryList, setCountryList] = useState([]);
 
-  const query = searchParams.get('q');
+  const keyword = searchParams.get('q') || undefined;
   const category = searchParams.get('category') || '';
   const country = searchParams.get('country') || '';
   const year = searchParams.get('year') || '';
-  const lang = searchParams.get('language') || '';
-  const sort = searchParams.get('sort') || 'desc';
-  const page = searchParams.get('page') || 1;
+  const language = searchParams.get('language') || '';
+  const sortType = (searchParams.get('sort') || 'desc') as SortTypeEnum;
+  const page = Number(searchParams.get('page')) || 1;
 
   const handlePageChange = (newPage: number) => {
     setSearchParams((prev) => {
@@ -46,56 +37,22 @@ export default function Search() {
     });
   };
 
-  useEffect(() => {
-    (async () => {
-      let movies = [];
-      let totalPages = 999;
-
-      const options = {
-        page: Number(page),
+  const categoryList = useQuery({ queryKey: ['categoryList'], queryFn: () => fetchCategory() });
+  const countryList = useQuery({ queryKey: ['countryList'], queryFn: () => fetchCountry() });
+  const searchMovies = useQuery({
+    queryKey: ['searchMovies', keyword, category, country, year, language, sortType],
+    queryFn: () =>
+      fetchMovies({
         limit: 20,
-        sort_field: 'modified.time',
-        sort_type: sort as SortTypeEnum,
-        sort_lang: lang as SortLangEnum,
-        year: year,
+        page,
+        sortType,
+        language,
+        year,
         category,
         country,
-      };
-
-      if (query) {
-        const result = await fetchSearchMovies(
-          {
-            keyword: query,
-            ...options,
-          },
-          true,
-        );
-
-        movies = result.items;
-        totalPages = result.totalPages;
-      } else {
-        movies = await fetchMovies({
-          type: MovieType.PhimBo,
-          ...options,
-        });
-      }
-
-      setPhim(movies);
-      setTotalPage(totalPages);
-    })();
-  }, [page, query, category, country, year, lang, sort]);
-
-  useEffect(() => {
-    (async () => {
-      const [categoryResult, countryResult] = await Promise.all([
-        fetchCategory(),
-        fetchCountry(),
-      ]);
-
-      setCategoryList(categoryResult);
-      setCountryList(countryResult);
-    })();
-  }, []);
+        keyword,
+      }),
+  });
 
   return (
     <div className="container mx-auto">
@@ -120,10 +77,12 @@ export default function Search() {
           <Select
             className="w-32"
             placeholder="Thể Loại"
-            options={categoryList.map((item: any) => ({
-              label: item.name,
-              value: item.slug,
-            }))}
+            options={[{ label: 'Tất cả', value: '' }].concat(
+              categoryList.data?.map((item: any) => ({
+                label: item.name,
+                value: item.slug,
+              })),
+            )}
             defaultOption={category}
             onChange={(value) => handleFilterChange('category', value)}
           />
@@ -131,10 +90,12 @@ export default function Search() {
           <Select
             className="w-32"
             placeholder="Quốc Gia"
-            options={countryList.map((item: any) => ({
-              label: item.name,
-              value: item.slug,
-            }))}
+            options={[{ label: 'Tất cả', value: '' }].concat(
+              countryList.data?.map((item: any) => ({
+                label: item.name,
+                value: item.slug,
+              })),
+            )}
             defaultOption={country}
             onChange={(value) => handleFilterChange('country', value)}
           />
@@ -142,10 +103,12 @@ export default function Search() {
           <Select
             className="w-32"
             placeholder="Năm"
-            options={Array.from({ length: 2025 - 2017 + 1 }, (_, i) => {
-              const year = 2025 - i;
-              return { label: String(year), value: String(year) };
-            })}
+            options={[{ label: 'Tất cả', value: '' }].concat(
+              Array.from({ length: 2025 - 2017 + 1 }, (_, i) => {
+                const year = 2025 - i;
+                return { label: String(year), value: String(year) };
+              }),
+            )}
             defaultOption={year}
             onChange={(value) => handleFilterChange('year', value)}
           />
@@ -154,11 +117,12 @@ export default function Search() {
             className="w-32"
             placeholder="Ngôn ngữ"
             options={[
+              { label: 'Tất cả', value: '' },
               { label: 'Vietsub', value: 'vietsub' },
               { label: 'Thuyết Minh', value: 'thuyet-minh' },
               { label: 'Lồng Tiếng', value: 'long-tieng' },
             ]}
-            defaultOption={lang}
+            defaultOption={language}
             onChange={(value) => handleFilterChange('language', value)}
           />
 
@@ -169,24 +133,30 @@ export default function Search() {
               { label: 'Tăng dần', value: 'asc' },
               { label: 'Giảm dần', value: 'desc' },
             ]}
-            defaultOption={sort}
+            defaultOption={sortType}
             onChange={(value) => handleFilterChange('sort', value)}
           />
         </div>
 
-        <MovieContainer
-          title=""
-          className="space-y-3"
-          movies={phim}
-          placeholderCount={20}
-          primary={false}
-        />
+        {!searchMovies.isLoading && (searchMovies.data as any)?.data.length === 0 ? (
+          <p className="text-center">Không tìm thấy phim</p>
+        ) : (
+          <>
+            <MovieContainer
+              title=""
+              className="space-y-3"
+              movies={searchMovies.data?.data ?? []}
+              placeholderCount={20}
+              primary={false}
+            />
 
-        <Pagination
-          currentPage={Number(page)}
-          totalPage={totalPage}
-          onPageChange={handlePageChange}
-        />
+            <Pagination
+              currentPage={Number(page)}
+              totalPage={searchMovies.data?.total ?? 999}
+              onPageChange={handlePageChange}
+            />
+          </>
+        )}
       </div>
     </div>
   );
