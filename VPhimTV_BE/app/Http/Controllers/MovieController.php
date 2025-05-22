@@ -24,11 +24,11 @@ class MovieController extends Controller
         $movies = Movie::query();
 
         $movies->join('movie_categories', 'movies.id', '=', 'movie_categories.movie_id')
-            ->join('categories', 'movie_categories.category_id', '=', 'categories.id');
+            ->join('categories', 'movie_categories.category_id', '=', 'categories.id')
+            ->join('movie_types', 'movies.type_id', '=', 'movie_types.id');
 
-        // Filter
         if (!empty($typeList)) {
-            $movies->where('type_id', $typeList);
+            $movies->where('movie_types.slug',  $typeList);
         }
         if (!empty($sortLang)) {
             $movies->where('language', $sortLang);
@@ -45,7 +45,7 @@ class MovieController extends Controller
         $sortType = strtolower($sortType) === 'asc' ? 'asc' : 'desc';
         $movies->orderBy('movies.' . $sortField, $sortType);
 
-        $movies->addSelect([
+        $selectFiles = [
             'movies.name',
             'movies.slug',
             'movies.original_name',
@@ -55,7 +55,9 @@ class MovieController extends Controller
             'movies.language',
             'movies.created_at',
             'movies.updated_at'
-        ]);
+        ];
+        $movies->select($selectFiles);
+        $movies->groupBy($selectFiles);
 
         return $movies->paginate($limit, ['*'], 'page', $page);
     }

@@ -1,12 +1,13 @@
 import '@splidejs/react-splide/css';
 
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import utc from "dayjs/plugin/utc";
-import React from "react";
-import { createRoot } from "react-dom/client";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import utc from 'dayjs/plugin/utc';
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 
-import App from "./App";
+import App from './App';
 
 const container = document.getElementById('root');
 const root = createRoot(container!);
@@ -17,6 +18,8 @@ dayjs.extend(customParseFormat);
 
 root.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={new QueryClient()}>
+      <App />
+    </QueryClientProvider>
   </React.StrictMode>
 );

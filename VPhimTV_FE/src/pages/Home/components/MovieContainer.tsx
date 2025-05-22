@@ -49,7 +49,9 @@ export default function MovieContainer({
                   : 'max-h-[137px]'
                 : ''
             }`}
-            status={isLoading ? '' : `${movie.episode_current} | ${movie.lang}`}
+            status={
+              isLoading ? '' : `${movie.episode_current} | ${movie.language}`
+            }
             title={isLoading ? '' : movie.name}
             image={
               isLoading
