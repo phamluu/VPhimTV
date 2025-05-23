@@ -12,9 +12,20 @@ async function findIdMovieType(slug: string) {
     );
 
     if ((rows as any[]).length === 0) {
+      const typeName =
+        slug === 'series'
+          ? 'Phim Bộ'
+          : slug === 'single'
+          ? 'Phim Lẻ'
+          : slug === 'tvshow'
+          ? 'Phim Truyền Hình'
+          : slug === 'hoathinh'
+          ? 'Hoạt Hình'
+          : slug;
+
       const result = await db.execute(
         `INSERT INTO movie_types(name, slug, created_at, updated_at) VALUES (?, ?, NOW(), NOW())`,
-        [slug, slug],
+        [typeName, slug],
       );
 
       return (result[0] as any).insertId;

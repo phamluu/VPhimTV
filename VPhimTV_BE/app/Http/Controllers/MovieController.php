@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Episode;
+use App\Models\MovieCategory;
+use App\Models\MovieType;
 
 class MovieController extends Controller
 {
@@ -20,32 +23,40 @@ class MovieController extends Controller
         $category = $request->input('category');
         $country = $request->input('country');
         $year = $request->input('year');
+        $keyword = $request->input('keyword');
 
         $movies = Movie::query();
 
         $movies->join('movie_categories', 'movies.id', '=', 'movie_categories.movie_id')
-            ->join('categories', 'movie_categories.category_id', '=', 'categories.id');
+            ->join('categories', 'movie_categories.category_id', '=', 'categories.id')
+            ->join('movie_types', 'movies.type_id', '=', 'movie_types.id')
+            ->join('countries', 'movies.country_id', '=', 'countries.id');
 
-        // Filter
         if (!empty($typeList)) {
-            $movies->where('type_id', $typeList);
+            $movies->where('movie_types.slug',  $typeList);
         }
         if (!empty($sortLang)) {
             $movies->where('language', $sortLang);
         }
         if (!empty($category)) {
-            $movies->where('categories.id', $category);
+            $movies->where('categories.slug', $category);
         }
         if (!empty($country)) {
-            $movies->where('country_id', $country);
+            $movies->where('countries.slug', $country);
         }
         if (!empty($year)) {
             $movies->where('year', $year);
         }
+        if (!empty($keyword)) {
+            $movies->where(function ($query) use ($keyword) {
+                $query->where('movies.name', 'like', '%' . $keyword . '%')
+                    ->orWhere('movies.original_name', 'like', '%' . $keyword . '%');
+            });
+        }
         $sortType = strtolower($sortType) === 'asc' ? 'asc' : 'desc';
         $movies->orderBy('movies.' . $sortField, $sortType);
 
-        $movies->addSelect([
+        $selectFiles = [
             'movies.name',
             'movies.slug',
             'movies.original_name',
@@ -55,29 +66,55 @@ class MovieController extends Controller
             'movies.language',
             'movies.created_at',
             'movies.updated_at'
-        ]);
+        ];
+        $movies->select($selectFiles);
+        $movies->groupBy($selectFiles);
 
         return $movies->paginate($limit, ['*'], 'page', $page);
     }
 
     public function getDetail($slug)
     {
-        $movie = Movie::where('slug', $slug)->first();
+        $movie = Movie::query()
+            ->where('slug', $slug)
+            ->first();
 
         if (!$movie) {
             return response()->json(['error' => 'Movie not found'], 404);
         }
 
-        $episodes = Episode::where('movie_id', $movie->id)->get();
+        $categories = MovieCategory::query()
+            ->join('categories', 'movie_categories.category_id', '=', 'categories.id')
+            ->where('movie_categories.movie_id', $movie->id)
+            ->select('categories.name', 'categories.slug')
+            ->get()
+            ->toArray();
 
+        $country = Country::query()
+            ->where('id', $movie->country_id)
+            ->select('name', 'slug')
+            ->first();
+
+        $movieType = MovieType::query()
+            ->where('id', $movie->type_id)
+            ->select('name', 'slug')
+            ->first();
+
+        $episodes = Episode::where('movie_id', $movie->id)->get();
         $groupedEpisodes = $episodes->groupBy('server_name');
 
         $result = $movie->toArray();
+        unset($result['type_id'], $result['country_id']);
+
+        $result['type'] = $movieType;
+        $result['category'] = $categories;
+        $result['country'] = $country;
         $result['episodes'] = [];
 
         foreach ($groupedEpisodes as $serverName => $serverEpisodes) {
             $serverData = $serverEpisodes->map(function ($episode) {
                 return [
+                    'id' => $episode->id,
                     'episode_name' => $episode->episode_name,
                     'slug' => $episode->slug,
                     'file_name' => $episode->file_name,

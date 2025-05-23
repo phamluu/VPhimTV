@@ -49,7 +49,9 @@ export default function MovieContainer({
                   : 'max-h-[137px]'
                 : ''
             }`}
-            status={isLoading ? '' : `${movie.episode_current} | ${movie.lang}`}
+            status={
+              isLoading ? '' : `${movie.episode_current} | ${movie.language}`
+            }
             title={isLoading ? '' : movie.name}
             image={
               isLoading
@@ -58,7 +60,7 @@ export default function MovieContainer({
                 ? movie?.thumb_url
                 : movie?.poster_url
             }
-            linkTo={isLoading ? '' : `/info/${movie.slug}`}
+            linkTo={isLoading ? '' : `/phim/${movie.slug}`}
             primary={primary && i === 0}
           />
         ))}

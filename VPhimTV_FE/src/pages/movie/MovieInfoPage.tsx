@@ -1,41 +1,36 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import Hashids from 'hashids';
+import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import BreadCrumb from '~/components/BreadCrumb';
-import { fetchMovieInfo, fetchMovies, MovieType } from '~/service/movieAPI';
+import { fetchMovieInfo, fetchMovies } from '~/service/movies/moviesApi';
 
 import MovieContainer from '../home/components/MovieContainer';
 
-export default function Info() {
-  const { slug } = useParams();
+export default function MovieInfoPage() {
+  const { movieSlug } = useParams();
   const appName = import.meta.env.VITE_APP_NAME;
-  const [movieInfo, setMovieInfo] = useState({} as any);
-  const [isLoading, setIsLoading] = useState(true);
-  const [relatedMovies, setRelatedMovies] = useState([]);
+  const hashids = useMemo(() => new Hashids(appName, 6), [appName]);
 
-  useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      const result = await fetchMovieInfo(slug as string);
-      setMovieInfo(result);
-      setIsLoading(false);
-    })();
-  }, [slug]);
+  const movieInfo = useQuery({
+    queryKey: ['movieInfo', movieSlug],
+    queryFn: () => fetchMovieInfo(movieSlug!),
+  });
+  const relatedMovies = useQuery({
+    queryKey: ['relatedMovies', movieSlug],
+    queryFn: () => fetchMovies({ limit: 12, country: movieInfo.data?.country.slug, year: movieInfo.data?.year }),
+    enabled: !!movieInfo.data,
+  });
 
-  useEffect(() => {
-    (async () => {
-      const movies = await fetchMovies({
-        type: MovieType.PhimVietSub,
-        page: 1,
-        limit: 16,
-        country: movieInfo?.movie?.country[0]?.slug,
-        year: movieInfo?.movie?.year,
-      });
-      setRelatedMovies(movies);
-    })();
-  }, [movieInfo]);
+  const movieTypeMap = {
+    series: 'phim-bo',
+    single: 'phim-le',
+    hoathinhh: 'phim-hoat-hinh',
+    tvshows: 'phim-truyen-hinh',
+  };
 
-  if (!isLoading && movieInfo) {
+  if (!movieInfo.isLoading && movieInfo.data) {
     return (
       <div className="container mx-auto space-y-8 max-w-4xl">
         <div className="bg-base-100 rounded relative">
@@ -49,54 +44,45 @@ export default function Info() {
                 className: 'space-x-2',
               },
               {
-                label:
-                  movieInfo?.movie.type == 'series' ? 'Phim Bộ' : 'Phim Lẻ',
-                href: `/${movieInfo?.movie.type}`,
+                label: movieInfo.data?.type.name,
+                href: `/${movieTypeMap[movieInfo.data?.type.slug]}`,
               },
               {
-                label: movieInfo?.movie.year,
-                href: `/${movieInfo?.movie.type}/${movieInfo?.movie.year}`,
+                label: movieInfo.data?.year,
+                href: `/${movieTypeMap[movieInfo.data?.type.slug]}/${movieInfo.data?.year}`,
               },
               {
-                label: movieInfo?.movie.country[0].name,
-                href: `/${movieInfo?.movie.type}/${movieInfo?.movie.year}/${movieInfo?.movie.country[0].slug}`,
+                label: movieInfo.data?.country.name,
+                href: `/${movieTypeMap[movieInfo.data?.type.slug]}/${movieInfo.data?.year}/${
+                  movieInfo.data?.country.slug
+                }`,
               },
               {
-                label: movieInfo?.movie.name,
+                label: movieInfo.data?.name,
               },
             ]}
           />
 
-          <img
-            className="min-h-[503px] brightness-75"
-            src={movieInfo?.movie?.thumb_url}
-          />
+          <img className="min-h-[503px] brightness-75" src={movieInfo?.data?.thumb_url} />
 
           <div className="absolute bottom-4 left-4 z-10 flex space-x-4">
-            <img
-              src={movieInfo?.movie?.thumb_url}
-              className="w-[250px] object-cover border"
-            />
+            <img src={movieInfo?.data?.thumb_url} className="w-[250px] object-cover border" />
 
             <div className="flex flex-col justify-end space-y-3">
               <p className="text-3xl font-bold shadow">
-                {movieInfo?.movie?.name} ({movieInfo?.movie?.year})
+                {movieInfo?.data?.name} ({movieInfo?.data?.year})
               </p>
-              <p className="text-2xl font-bold shadow">
-                {movieInfo?.movie?.origin_name}
-              </p>
+              <p className="text-2xl font-bold shadow">{movieInfo?.data?.origin_name}</p>
               <div className="flex gap-4">
-                <Link
-                  className="btn btn-info w-32 font-bold"
-                  to={movieInfo?.movie?.trailer_url}
-                  target="_blank"
-                >
+                <Link className="btn btn-info w-32 font-bold" to={movieInfo?.data?.trailer_url} target="_blank">
                   <i className="fa-brands fa-youtube"></i>
                   Trailer
                 </Link>
                 <Link
                   className="btn btn-error w-32 font-bold"
-                  to={`/watch/${movieInfo?.movie?.slug}`}
+                  to={`/phim/${movieInfo?.data?.slug}/${
+                    movieInfo.data?.episodes[0].server_data[0].slug
+                  }-${hashids.encode(movieInfo.data?.episodes[0].server_data[0].id)}`}
                 >
                   <i className="fa-regular fa-circle-play"></i>
                   Xem phim
@@ -118,29 +104,35 @@ export default function Info() {
                 {/* Status */}
                 <p className="font-bold">
                   <span>Trạng thái: </span>
-                  <span className="text-info">
-                    {movieInfo?.movie?.episode_current}
-                  </span>
+                  <span className="text-info">{movieInfo?.data?.episode_current}</span>
                 </p>
 
                 {/* Country */}
                 <p className="font-bold">
                   <span>Quốc gia: </span>
-                  <span className="text-info">
-                    {movieInfo?.movie?.country[0]?.name}
-                  </span>
+                  <Link
+                    className="text-info hover:text-warning"
+                    to={`/tim-kiem?quoc-gia=${movieInfo?.data?.country?.slug}`}
+                  >
+                    {movieInfo?.data?.country?.name}
+                  </Link>
                 </p>
 
                 {/* Quantity */}
                 <p className="font-bold">
                   <span>Chất lượng: </span>
-                  <span className="text-info">{movieInfo?.movie?.quality}</span>
+                  <span className="text-info">{movieInfo?.data?.quality}</span>
                 </p>
 
                 {/* Year */}
                 <p className="font-bold">
                   <span>Năm phát hành: </span>
-                  <span className="text-info">{movieInfo?.movie?.year}</span>
+                  <Link
+                    className="text-info hover:text-warning"
+                    to={`/tim-kiem?nam=${movieInfo?.data?.year}`}
+                  >
+                    {movieInfo?.data?.year}
+                  </Link>
                 </p>
               </div>
 
@@ -148,28 +140,26 @@ export default function Info() {
                 {/* Total Episodes */}
                 <p className="font-bold">
                   <span>Tổng số tập: </span>
-                  <span className="text-warning">
-                    {movieInfo?.movie?.episode_total}
-                  </span>
+                  <span className="text-warning">{movieInfo?.data?.episode_total}</span>
                 </p>
 
                 {/* Duration */}
                 <p className="font-bold">
                   <span>Thời lượng: </span>
-                  <span className="text-info">{movieInfo?.movie?.time}</span>
+                  <span className="text-info">{movieInfo?.data?.time}</span>
                 </p>
 
                 {/* Category */}
                 <p className="font-bold">
                   <span>Thể loại: </span>
-                  {movieInfo?.movie?.category.map((item: any, i: number) => (
+                  {movieInfo?.data?.category.map((item: any, i: number) => (
                     <Link
                       key={i}
                       className="text-info hover:text-warning"
-                      to={`/search?category=${item.slug}&page=1`}
+                      to={`/tim-kiem?the-loai=${item.slug}&trang=1`}
                     >
                       {item.name}
-                      {i < movieInfo?.movie?.category.length - 1 ? ', ' : ''}
+                      {i < movieInfo?.data?.category.length - 1 ? ', ' : ''}
                     </Link>
                   ))}
                 </p>
@@ -179,23 +169,13 @@ export default function Info() {
                 {/* Director */}
                 <p className="font-bold">
                   <span>Đạo diễn: </span>
-                  {movieInfo?.movie?.director.map((item: any, i: number) => (
-                    <span key={i} className="text-info">
-                      {item}
-                      {i < movieInfo?.movie?.director.length - 1 ? ', ' : ''}
-                    </span>
-                  ))}
+                  <span className="text-info">{movieInfo?.data?.director}</span>
                 </p>
 
                 {/* Actor */}
                 <p className="font-bold">
                   <span>Diễn viên: </span>
-                  {movieInfo?.movie?.actor.map((item: any, i: number) => (
-                    <span key={i} className="text-info">
-                      {item}
-                      {i < movieInfo?.movie?.actor.length - 1 ? ', ' : ''}
-                    </span>
-                  ))}
+                  <span className="text-info">{movieInfo?.data?.actor}</span>
                 </p>
               </div>
             </div>
@@ -205,18 +185,17 @@ export default function Info() {
               <span> Nội dung</span>
             </p>
 
-            <p>{movieInfo?.movie.content}</p>
+            <p>{movieInfo.data?.content}</p>
 
             <p className="font-bold text-primary text-xl">
               <i className="fa-regular fa-database"></i>
               <span> Danh sách tập</span>
             </p>
 
-            {movieInfo?.episodes?.map((episode: any, i: number) => (
+            {movieInfo.data?.episodes?.map((episode: any, i: number) => (
               <div key={i} className="space-y-2">
                 <p className="font-bold">
-                  SERVER:{' '}
-                  <span className="text-info">{episode.server_name}</span>
+                  SERVER: <span className="text-info">{episode.server_name}</span>
                 </p>
 
                 <div className="overflow-y-auto max-h-[200px]">
@@ -224,10 +203,10 @@ export default function Info() {
                     {episode.server_data.map((item: any, j: number) => (
                       <Link
                         key={j}
-                        to={`/watch/${slug}/${item.slug}`}
+                        to={`/phim/${movieSlug}/${item.slug}-${hashids.encode(item.id)}`}
                         className="btn btn-soft"
                       >
-                        {item.name}
+                        {item.episode_name}
                       </Link>
                     ))}
                   </div>
@@ -240,7 +219,7 @@ export default function Info() {
 
           <MovieContainer
             className="space-y-3"
-            movies={relatedMovies}
+            movies={relatedMovies.data?.data || []}
             placeholderCount={16}
             primary={false}
             grid={4}

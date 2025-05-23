@@ -1,56 +1,115 @@
 # Hướng dẫn cài đặt dự án
 
 ## Yêu cầu hệ thống
-### Frontend (Node.js React)
-- **Node.js**: Phiên bản >= 16.x ([Tải Node.js tại đây](https://nodejs.org/))
-- **npm**: Phiên bản >= 8.x hoặc **yarn** >= 1.x
 
-### Backend (PHP Laravel)
-- **PHP**: Phiên bản >= 8.12 (có thể sử dụng [XAMPP](https://www.apachefriends.org/index.html) để cài đặt PHP và MySQL)
-- **Composer**: Phiên bản >= 2.x ([Tải Composer tại đây](https://getcomposer.org/))
-- **MySQL**: Phiên bản >= 5.7 hoặc **MariaDB** >= 10.3
+### Frontend (Node.js & React)
+- **Node.js**: >= 16.x ([Tải Node.js](https://nodejs.org/))
+- **npm**: >= 8.x hoặc **yarn** >= 1.x
+
+### Backend (PHP & Laravel)
+- **PHP**: >= 8.1.2 (có thể dùng [XAMPP](https://www.apachefriends.org/index.html) để cài PHP & MySQL)
+- **Composer**: >= 2.x ([Tải Composer](https://getcomposer.org/))
+- **MySQL**: >= 5.7 hoặc **MariaDB** >= 10.3
+
+---
 
 ## Các bước cài đặt
 
-### 1. **Clone dự án**
-Sử dụng lệnh sau để clone mã nguồn về máy:
+### 1. Clone dự án
+
 ```bash
 git clone https://github.com/phamluu/VPhimTV.git
 cd VPhimTV
 ```
 
-### 2. **Cài đặt các package**
+### 2. Cài đặt dependencies
 
-#### Chạy lệnh sau để cài đặt các package khi clone mã nguồn:
-```bash
-npm install
-#Hoặc
-npm i
-```
+- **Cài đặt package Node.js:**
+    ```bash
+    npm install
+    # hoặc
+    npm i
+    ```
 
-#### Sau đó chạy lệnh sau để cài đặt các package cho cả FrontEnd và BackEnd
-```bash
-npm run install:all
-```
+- **Cài đặt tất cả dependencies cho cả Frontend & Backend:**
+    ```bash
+    npm run install:all
+    ```
 
-#### Tiếp tục chạy lệnh sau để khởi tạo database
-```bash
-npm run prepare
-```
+- **Khởi tạo database:**
+    ```bash
+    npm run prepare
+    ```
 
-### 3. **Chạy dự án**
+### 3. Chạy dự án
 
-#### Chạy câu lệnh sau để khởi chạy dự án
 ```bash
 npm run start
 ```
 
-### 5. **Truy cập ứng dụng**
-- Frontend: Mở trình duyệt và truy cập địa chỉ:
+---
+
+## Truy cập ứng dụng
+
+- **Frontend:**  
+    Mở trình duyệt và truy cập:  
     ```
     http://localhost:8765
     ```
-- Backend: API sẽ chạy tại địa chỉ:
+
+- **Backend (API):**  
     ```
     http://localhost:8000
     ```
+
+---
+
+## API
+
+### Movies
+
+- **Lấy danh sách phim:**  
+    ```
+    http://localhost:8000/movies
+    ```
+    - **Tham số hỗ trợ:**
+        - `limit` Ví dụ: `?limit=10`
+        - `page` Ví dụ: `?page=2`
+        - `sort_field` Ví dụ: `?sort_field=updated_at`
+        - `sort_type` Ví dụ: `?sort_type=desc`
+        - `type_list` Ví dụ: `?type_list=series`
+        - `sort_lang` Ví dụ: `?sort_lang=vi`
+        - `category` Ví dụ: `?category=hanh-dong` (dùng api lấy danh sách category)
+        - `country` Ví dụ: `?country=vi` (dùng api lấy danh sách country) 
+        - `year` Ví dụ: `?year=2023`
+        - `keyword` Ví dụ: `?keyword=nobita`
+
+- **Lấy thông tin chi tiết phim:**
+    ```
+    http://localhost:8000/movies/{slug}
+
+    Ví dụ: 
+
+    http://localhost:8000/movies/cuoc-doi-phi-thuong-cua-ibelin
+    ```
+    
+
+### Categories
+
+- **Lấy danh sách thể loại:**  
+    ```
+    http://localhost:8000/category
+    ```
+    - **Tham số hỗ trợ:**
+        - `sort_field` Ví dụ: `?sort_field=updated_at`
+        - `sort_type` Ví dụ: `?sort_type=desc`
+
+### Countries
+
+- **Lấy danh sách quốc gia:**  
+    ```
+    http://localhost:8000/country
+    ```
+    - **Tham số hỗ trợ:**
+        - `sort_field` Ví dụ: `?sort_field=updated_at`
+        - `sort_type` Ví dụ: `?sort_type=desc`

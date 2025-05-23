@@ -2,11 +2,11 @@ import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 
 import Footer from './components/Footer';
 import Header from './components/Header';
-import Home from './pages/home/Home';
-import Info from './pages/info/Info';
-import List from './pages/list/List';
-import Search from './pages/search/Search';
-import Watch from './pages/watch/Watch';
+import HomePage from './pages/home/HomePage';
+import MovieInfoPage from './pages/movie/MovieInfoPage';
+import MovieListPage from './pages/movie/MovieListPage';
+import MovieWatchPage from './pages/movie/MovieWatchPage';
+import SearchPage from './pages/search/SearchPage';
 
 function MainLayout() {
   return (
@@ -25,11 +25,11 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />
-          <Route path="/info/:slug" element={<Info />} />
-          <Route path="/search/" element={<Search />} />
-          <Route path="/list/:slug" element={<List />} />
-          <Route path="/watch/:slug/:episode" element={<Watch />} />
+          <Route index element={<HomePage />} />
+          <Route path="/tim-kiem/" element={<SearchPage />} />
+          <Route path="/danh-sach/:typeSlug" element={<MovieListPage />} />
+          <Route path="/phim/:movieSlug" element={<MovieInfoPage />} />
+          <Route path="/phim/:movieSlug/:episodeSlug" element={<MovieWatchPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

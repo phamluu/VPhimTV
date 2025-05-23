@@ -49,7 +49,7 @@ export default function Select({
   };
 
   const getSelectedLabel = (value: string) => {
-    const selected = options.find((option) => option.value === value);
+    const selected = options?.find((option) => option?.value === value);
     return selected ? selected.label : placeholder;
   };
 
