@@ -20,8 +20,8 @@ export default function HomePage() {
     queryKey: ['singleMovies'],
     queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: MoviesTypeEnum.single }),
   });
-  const cartoonMovies = useQuery({
-    queryKey: ['cartoonMovies'],
+  const animeMovies = useQuery({
+    queryKey: ['animeMovies'],
     queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: MoviesTypeEnum.hoathinh }),
   });
   const tvShowsMovies = useQuery({
@@ -67,31 +67,31 @@ export default function HomePage() {
         title="Phim Mới Cập Nhật"
         className="space-y-3"
         movies={newMovies.data?.data ?? []}
-        linkTo="/list/phim-moi"
+        linkTo="/danh-sach/phim-moi"
       />
       <MovieContainer
         title="Phim Bộ"
         className="space-y-3"
         movies={seriesMovies.data?.data ?? []}
-        linkTo="/list/phim-bo"
+        linkTo="/danh-sach/phim-bo"
       />
       <MovieContainer
         title="Phim Lẻ"
         className="space-y-3"
         movies={singleMovies.data?.data ?? []}
-        linkTo="/list/phim-le"
+        linkTo="/danh-sach/phim-le"
       />
       <MovieContainer
         title="Phim Hoạt Hình"
         className="space-y-3"
-        movies={cartoonMovies.data?.data ?? []}
-        linkTo="/list/hoat-hinh"
+        movies={animeMovies.data?.data ?? []}
+        linkTo="/danh-sach/hoat-hinh"
       />
       <MovieContainer
         title="TV Shows"
         className="space-y-3"
         movies={tvShowsMovies.data?.data ?? []}
-        linkTo="/list/hoat-hinh"
+        linkTo="/danh-sach/hoat-hinh"
       />
     </div>
   );

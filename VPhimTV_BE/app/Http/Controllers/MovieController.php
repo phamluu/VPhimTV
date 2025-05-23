@@ -114,6 +114,7 @@ class MovieController extends Controller
         foreach ($groupedEpisodes as $serverName => $serverEpisodes) {
             $serverData = $serverEpisodes->map(function ($episode) {
                 return [
+                    'id' => $episode->id,
                     'episode_name' => $episode->episode_name,
                     'slug' => $episode->slug,
                     'file_name' => $episode->file_name,

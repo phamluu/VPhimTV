@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import Hashids from 'hashids';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import ArtPlayer from '~/components/ArtPlayer';
@@ -11,6 +12,8 @@ import MovieContainer from '../home/components/MovieContainer';
 export default function MovieWatchPage() {
   const { movieSlug, episodeSlug } = useParams();
   const [currentEpisode, setCurrentEpisode] = useState<any>();
+  const appName = import.meta.env.VITE_APP_NAME;
+  const hashids = useMemo(() => new Hashids(appName, 6), [appName]);
 
   const movieInfo = useQuery({
     queryKey: ['movieInfo', movieSlug],
@@ -23,12 +26,17 @@ export default function MovieWatchPage() {
   });
 
   useEffect(() => {
-    if (movieInfo.data) {
-      setCurrentEpisode(
-        movieInfo.data.episodes?.flatMap((server: any) => server.server_data).find((ep: any) => ep.slug == episodeSlug),
-      );
+    if (movieInfo.data && episodeSlug) {
+      const slugParts = episodeSlug.split('-');
+      const decodedId = hashids.decode(slugParts[slugParts.length - 1])[0];
+
+      if (decodedId) {
+        setCurrentEpisode(
+          movieInfo.data.episodes?.flatMap((server: any) => server.server_data).find((ep: any) => ep.id === decodedId),
+        );
+      }
     }
-  }, [episodeSlug, movieInfo.data]);
+  }, [episodeSlug, hashids, movieInfo.data]);
 
   const movieTypeMap = {
     series: 'phim-bo',
@@ -36,8 +44,6 @@ export default function MovieWatchPage() {
     hoathinhh: 'phim-hoat-hinh',
     tvshows: 'phim-truyen-hinh',
   };
-
-  console.log(currentEpisode);
 
   if (!movieInfo.isLoading && movieInfo.data && currentEpisode) {
     return (
@@ -47,7 +53,7 @@ export default function MovieWatchPage() {
             className="text-sm p-3"
             items={[
               {
-                label: import.meta.env.VITE_APP_NAME,
+                label: appName,
                 href: '/',
                 iconElement: <i className="fa-regular fa-house"></i>,
                 className: 'space-x-2',
@@ -103,7 +109,11 @@ export default function MovieWatchPage() {
                   <div className="overflow-y-auto max-h-[200px]">
                     <div className="flex flex-wrap gap-2">
                       {episode.server_data.map((item: any, j: number) => (
-                        <Link key={j} to={`/phim/${movieSlug}/${item.slug}`} className="btn btn-soft">
+                        <Link
+                          key={j}
+                          to={`/phim/${movieSlug}/${item.slug}-${hashids.encode(item.id)}`}
+                          className="btn btn-soft"
+                        >
                           {item.episode_name}
                         </Link>
                       ))}

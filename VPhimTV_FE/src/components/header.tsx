@@ -1,38 +1,39 @@
+import { useQueries } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
-import { fetchCategory, fetchCountry } from '~/service/movieAPI';
+import { fetchCategory } from '~/service/category/categoryApi';
+import { fetchCountry } from '~/service/country/countryApi';
 
 export default function Header() {
   const [value, setValue] = useState('');
   const navigate = useNavigate();
   const [searchParams, _setSearchParams] = useSearchParams();
-  const [category, setCategory] = useState([]);
-  const [country, setCountry] = useState([]);
+
+  const [category, country] = useQueries({
+    queries: [
+      {
+        queryKey: ['category'],
+        queryFn: () => fetchCategory(),
+      },
+      {
+        queryKey: ['country'],
+        queryFn: () => fetchCountry(),
+      },
+    ],
+  });
 
   useEffect(() => {
-    const q = searchParams.get('q');
+    const q = searchParams.get('tu-khoa');
     if (q) setValue(q);
   }, [searchParams]);
 
   const handleSearch = (e: any) => {
     if (e.key === 'Enter') {
       e.preventDefault();
-      navigate(`/search?q=${encodeURIComponent(value.trim())}&page=1`);
+      navigate(`/tim-kiem?tu-khoa=${encodeURIComponent(value.trim())}`);
     }
   };
-
-  useEffect(() => {
-    (async () => {
-      const [categoryResult, countryResult] = await Promise.all([
-        fetchCategory(),
-        fetchCountry(),
-      ]);
-
-      setCategory(categoryResult);
-      setCountry(countryResult);
-    })();
-  }, []);
 
   return (
     <div className="bg-base-100">
@@ -64,34 +65,34 @@ export default function Header() {
           <div className="inline-flex">
             <Link
               className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary sm:inline-flex hidden"
-              to="/list/phim-moi?page=1"
+              to="/danh-sach/phim-moi?trang=1"
             >
               Phim Mới
             </Link>
             <Link
               className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary sm:inline-flex hidden"
-              to="/list/phim-le?page=1"
+              to="/danh-sach/phim-le?trang=1"
             >
               Phim Lẻ
             </Link>
 
             <Link
               className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary lg:inline-flex hidden"
-              to="/list/phim-bo?page=1"
+              to="/danh-sach/phim-bo?trang=1"
             >
               Phim Bộ
             </Link>
 
             <Link
               className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary lg:inline-flex hidden"
-              to="/list/tv-shows?page=1"
+              to="/danh-sach/tv-shows?trang=1"
             >
               TV Shows
             </Link>
 
             <Link
               className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary lg:inline-flex hidden"
-              to="/list/hoat-hinh?page=1"
+              to="/list/hoat-hinh?trang=1"
             >
               Hoạt Hình
             </Link>
@@ -108,11 +109,9 @@ export default function Header() {
                 tabIndex={0}
                 className="dropdown-content menu grid grid-cols-3 gap-1 bg-base-100 rounded-box z-1 w-96 p-2 shadow"
               >
-                {category.map((item: any) => (
+                {category.data?.map((item: any) => (
                   <li key={item._id} className="hover:text-primary">
-                    <Link to={`/search?category=${item.slug}&page=1`}>
-                      {item.name}
-                    </Link>
+                    <Link to={`/tim-kiem?the-loai=${item.slug}`}>{item.name}</Link>
                   </li>
                 ))}
               </ul>
@@ -129,11 +128,9 @@ export default function Header() {
                 tabIndex={0}
                 className="dropdown-content menu grid grid-cols-3 gap-1 bg-base-100 rounded-box z-1 w-96 p-2 shadow"
               >
-                {country.map((item: any) => (
+                {country.data?.map((item: any) => (
                   <li key={item._id} className="hover:text-primary">
-                    <Link to={`/search?country=${item.slug}&page=1`}>
-                      {item.name}
-                    </Link>
+                    <Link to={`/tim-kiem?quoc-gia=${item.slug}`}>{item.name}</Link>
                   </li>
                 ))}
               </ul>
@@ -154,11 +151,7 @@ export default function Header() {
           </label>
 
           <div className="dropdown dropdown-end">
-            <div
-              tabIndex={0}
-              role="button"
-              className="btn btn-ghost btn-circle avatar"
-            >
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
@@ -166,10 +159,7 @@ export default function Header() {
                 />
               </div>
             </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-            >
+            <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
               <li>
                 <a className="justify-between">
                   Profile

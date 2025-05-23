@@ -1,4 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
+import Hashids from 'hashids';
+import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import BreadCrumb from '~/components/BreadCrumb';
@@ -9,6 +11,7 @@ import MovieContainer from '../home/components/MovieContainer';
 export default function MovieInfoPage() {
   const { movieSlug } = useParams();
   const appName = import.meta.env.VITE_APP_NAME;
+  const hashids = useMemo(() => new Hashids(appName, 6), [appName]);
 
   const movieInfo = useQuery({
     queryKey: ['movieInfo', movieSlug],
@@ -77,7 +80,9 @@ export default function MovieInfoPage() {
                 </Link>
                 <Link
                   className="btn btn-error w-32 font-bold"
-                  to={`/phim/${movieInfo?.data?.slug}/${movieInfo.data?.episodes[0].server_data[0].slug}`}
+                  to={`/phim/${movieInfo?.data?.slug}/${
+                    movieInfo.data?.episodes[0].server_data[0].slug
+                  }-${hashids.encode(movieInfo.data?.episodes[0].server_data[0].id)}`}
                 >
                   <i className="fa-regular fa-circle-play"></i>
                   Xem phim
@@ -105,7 +110,12 @@ export default function MovieInfoPage() {
                 {/* Country */}
                 <p className="font-bold">
                   <span>Quốc gia: </span>
-                  <span className="text-info">{movieInfo?.data?.country?.name}</span>
+                  <Link
+                    className="text-info hover:text-warning"
+                    to={`/tim-kiem?quoc-gia=${movieInfo?.data?.country?.slug}`}
+                  >
+                    {movieInfo?.data?.country?.name}
+                  </Link>
                 </p>
 
                 {/* Quantity */}
@@ -117,7 +127,12 @@ export default function MovieInfoPage() {
                 {/* Year */}
                 <p className="font-bold">
                   <span>Năm phát hành: </span>
-                  <span className="text-info">{movieInfo?.data?.year}</span>
+                  <Link
+                    className="text-info hover:text-warning"
+                    to={`/tim-kiem?nam=${movieInfo?.data?.year}`}
+                  >
+                    {movieInfo?.data?.year}
+                  </Link>
                 </p>
               </div>
 
@@ -186,7 +201,11 @@ export default function MovieInfoPage() {
                 <div className="overflow-y-auto max-h-[200px]">
                   <div className="flex flex-wrap gap-2">
                     {episode.server_data.map((item: any, j: number) => (
-                      <Link key={j} to={`/phim/${movieSlug}/${item.slug}`} className="btn btn-soft">
+                      <Link
+                        key={j}
+                        to={`/phim/${movieSlug}/${item.slug}-${hashids.encode(item.id)}`}
+                        className="btn btn-soft"
+                      >
                         {item.episode_name}
                       </Link>
                     ))}

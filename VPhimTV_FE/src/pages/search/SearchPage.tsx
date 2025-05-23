@@ -5,7 +5,7 @@ import BreadCrumb from '~/components/BreadCrumb';
 import Pagination from '~/components/Pagination';
 import Select from '~/components/Select';
 import { fetchCategory } from '~/service/category/categoryApi';
-import { fetchCountry } from '~/service/movieAPI';
+import { fetchCountry } from '~/service/country/countryApi';
 import { fetchMovies } from '~/service/movies/moviesApi';
 import { SortTypeEnum } from '~/service/movies/moviesType';
 
@@ -15,17 +15,17 @@ export default function SearchPage() {
   const appName = import.meta.env.VITE_APP_NAME;
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const keyword = searchParams.get('q') || undefined;
-  const category = searchParams.get('category') || '';
-  const country = searchParams.get('country') || '';
-  const year = searchParams.get('year') || '';
-  const language = searchParams.get('language') || '';
-  const sortType = (searchParams.get('sort') || 'desc') as SortTypeEnum;
-  const page = Number(searchParams.get('page')) || 1;
+  const keyword = searchParams.get('tu-khoa') || undefined;
+  const category = searchParams.get('the-loai') || '';
+  const country = searchParams.get('quoc-gia') || '';
+  const year = searchParams.get('nam') || '';
+  const language = searchParams.get('ngon-ngu') || '';
+  const sortType = (searchParams.get('xep') || 'desc') as SortTypeEnum;
+  const page = Number(searchParams.get('trang')) || 1;
 
   const handlePageChange = (newPage: number) => {
     setSearchParams((prev) => {
-      prev.set('page', newPage.toString());
+      prev.set('trang', newPage.toString());
       return prev;
     });
   };
@@ -40,7 +40,7 @@ export default function SearchPage() {
   const categoryList = useQuery({ queryKey: ['categoryList'], queryFn: () => fetchCategory() });
   const countryList = useQuery({ queryKey: ['countryList'], queryFn: () => fetchCountry() });
   const searchMovies = useQuery({
-    queryKey: ['searchMovies', keyword, category, country, year, language, sortType],
+    queryKey: ['searchMovies', keyword, category, country, year, language, sortType, page],
     queryFn: () =>
       fetchMovies({
         limit: 20,
@@ -84,7 +84,7 @@ export default function SearchPage() {
               })),
             )}
             defaultOption={category}
-            onChange={(value) => handleFilterChange('category', value)}
+            onChange={(value) => handleFilterChange('the-loai', value)}
           />
 
           <Select
@@ -97,7 +97,7 @@ export default function SearchPage() {
               })),
             )}
             defaultOption={country}
-            onChange={(value) => handleFilterChange('country', value)}
+            onChange={(value) => handleFilterChange('quoc-gia', value)}
           />
 
           <Select
@@ -110,7 +110,7 @@ export default function SearchPage() {
               }),
             )}
             defaultOption={year}
-            onChange={(value) => handleFilterChange('year', value)}
+            onChange={(value) => handleFilterChange('nam', value)}
           />
 
           <Select
@@ -123,7 +123,7 @@ export default function SearchPage() {
               { label: 'Lồng Tiếng', value: 'long-tieng' },
             ]}
             defaultOption={language}
-            onChange={(value) => handleFilterChange('language', value)}
+            onChange={(value) => handleFilterChange('ngon-ngu', value)}
           />
 
           <Select
@@ -134,12 +134,12 @@ export default function SearchPage() {
               { label: 'Giảm dần', value: 'desc' },
             ]}
             defaultOption={sortType}
-            onChange={(value) => handleFilterChange('sort', value)}
+            onChange={(value) => handleFilterChange('xep', value)}
           />
         </div>
 
         {!searchMovies.isLoading && (searchMovies.data as any)?.data.length === 0 ? (
-          <p className="text-center">Không tìm thấy phim</p>
+          <p className="text-center">Không tìm thấy phim bạn muốn</p>
         ) : (
           <>
             <MovieContainer
