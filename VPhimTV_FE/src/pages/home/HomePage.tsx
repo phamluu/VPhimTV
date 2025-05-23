@@ -67,31 +67,31 @@ export default function HomePage() {
         title="Phim Mới Cập Nhật"
         className="space-y-3"
         movies={newMovies.data?.data ?? []}
-        linkTo="/danh-sach/phim-moi"
+        linkTo={`/danh-sach/phim-moi`}
       />
       <MovieContainer
         title="Phim Bộ"
         className="space-y-3"
         movies={seriesMovies.data?.data ?? []}
-        linkTo="/danh-sach/phim-bo"
+        linkTo={`/danh-sach/${MoviesTypeEnum.series}`}
       />
       <MovieContainer
         title="Phim Lẻ"
         className="space-y-3"
         movies={singleMovies.data?.data ?? []}
-        linkTo="/danh-sach/phim-le"
+        linkTo={`/danh-sach/${MoviesTypeEnum.single}`}
       />
       <MovieContainer
         title="Phim Hoạt Hình"
         className="space-y-3"
         movies={animeMovies.data?.data ?? []}
-        linkTo="/danh-sach/hoat-hinh"
+        linkTo={`/danh-sach/${MoviesTypeEnum.hoathinh}`}
       />
       <MovieContainer
         title="TV Shows"
         className="space-y-3"
         movies={tvShowsMovies.data?.data ?? []}
-        linkTo="/danh-sach/hoat-hinh"
+        linkTo={`/danh-sach/${MoviesTypeEnum.tvshows}`}
       />
     </div>
   );
