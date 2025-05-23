@@ -16,8 +16,8 @@ export default function MovieInfoPage() {
   });
   const relatedMovies = useQuery({
     queryKey: ['relatedMovies', movieSlug],
-    queryFn: () =>
-      fetchMovies({ limit: 12, country: movieInfo.data?.country.slug, year: movieInfo.data?.category[0].slug }),
+    queryFn: () => fetchMovies({ limit: 12, country: movieInfo.data?.country.slug, year: movieInfo.data?.year }),
+    enabled: !!movieInfo.data,
   });
 
   const movieTypeMap = {
@@ -200,7 +200,7 @@ export default function MovieInfoPage() {
 
           <MovieContainer
             className="space-y-3"
-            movies={relatedMovies.data?.data ?? []}
+            movies={relatedMovies.data?.data || []}
             placeholderCount={16}
             primary={false}
             grid={4}
