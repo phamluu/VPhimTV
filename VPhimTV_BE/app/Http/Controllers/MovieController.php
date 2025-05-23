@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use Illuminate\Http\Request;
 use App\Models\Movie;
 use App\Models\Episode;
+use App\Models\MovieCategory;
+use App\Models\MovieType;
 
 class MovieController extends Controller
 {
@@ -72,17 +75,40 @@ class MovieController extends Controller
 
     public function getDetail($slug)
     {
-        $movie = Movie::where('slug', $slug)->first();
+        $movie = Movie::query()
+            ->where('slug', $slug)
+            ->first();
 
         if (!$movie) {
             return response()->json(['error' => 'Movie not found'], 404);
         }
 
-        $episodes = Episode::where('movie_id', $movie->id)->get();
+        $categories = MovieCategory::query()
+            ->join('categories', 'movie_categories.category_id', '=', 'categories.id')
+            ->where('movie_categories.movie_id', $movie->id)
+            ->select('categories.name', 'categories.slug')
+            ->get()
+            ->toArray();
 
+        $country = Country::query()
+            ->where('id', $movie->country_id)
+            ->select('name', 'slug')
+            ->first();
+
+        $movieType = MovieType::query()
+            ->where('id', $movie->type_id)
+            ->select('name', 'slug')
+            ->first();
+
+        $episodes = Episode::where('movie_id', $movie->id)->get();
         $groupedEpisodes = $episodes->groupBy('server_name');
 
         $result = $movie->toArray();
+        unset($result['type_id'], $result['country_id']);
+
+        $result['type'] = $movieType;
+        $result['category'] = $categories;
+        $result['country'] = $country;
         $result['episodes'] = [];
 
         foreach ($groupedEpisodes as $serverName => $serverEpisodes) {

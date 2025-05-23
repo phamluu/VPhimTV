@@ -60,7 +60,7 @@ export default function MovieContainer({
                 ? movie?.thumb_url
                 : movie?.poster_url
             }
-            linkTo={isLoading ? '' : `/info/${movie.slug}`}
+            linkTo={isLoading ? '' : `/phim/${movie.slug}`}
             primary={primary && i === 0}
           />
         ))}

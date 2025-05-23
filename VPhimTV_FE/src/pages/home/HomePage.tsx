@@ -7,7 +7,7 @@ import { MoviesTypeEnum } from '~/service/movies/moviesType';
 
 import MovieContainer from './components/MovieContainer';
 
-export default function Home() {
+export default function HomePage() {
   const newMovies = useQuery({
     queryKey: ['newMovies'],
     queryFn: () => fetchMovies({ limit: 12, page: 1 }),

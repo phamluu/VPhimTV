@@ -11,7 +11,7 @@ import { SortTypeEnum } from '~/service/movies/moviesType';
 
 import MovieContainer from '../home/components/MovieContainer';
 
-export default function Search() {
+export default function SearchPage() {
   const appName = import.meta.env.VITE_APP_NAME;
   const [searchParams, setSearchParams] = useSearchParams();
 
