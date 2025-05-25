@@ -92,7 +92,7 @@ export default function Header() {
 
             <Link
               className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary lg:inline-flex hidden"
-              to="/list/hoat-hinh?trang=1"
+              to="/danh-sach/hoat-hinh?trang=1"
             >
               Hoạt Hình
             </Link>
@@ -150,7 +150,11 @@ export default function Header() {
             <i className="fa-solid fa-magnifying-glass"></i>
           </label>
 
-          <div className="dropdown dropdown-end">
+          <Link to={'/dang-nhap'} className="btn btn-soft btn-primary">
+            Đăng nhập
+          </Link>
+
+          {/* <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
                 <img
@@ -173,7 +177,7 @@ export default function Header() {
                 <a>Logout</a>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

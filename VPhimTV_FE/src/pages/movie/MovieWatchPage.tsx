@@ -112,7 +112,7 @@ export default function MovieWatchPage() {
                         <Link
                           key={j}
                           to={`/phim/${movieSlug}/${item.slug}-${hashids.encode(item.id)}`}
-                          className="btn btn-soft"
+                          className={`btn btn-soft ${currentEpisode?.id === item.id ? 'btn-active' : ''}`}
                         >
                           {item.episode_name}
                         </Link>

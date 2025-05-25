@@ -24,7 +24,7 @@ export default function MovieListPage() {
   const movieTypeMap = {
     series: 'phim-bo',
     single: 'phim-le',
-    hoathinhh: 'phim-hoat-hinh',
+    hoathinh: 'hoat-hinh',
     tvshows: 'phim-truyen-hinh',
   };
   const reversedMovieTypeMap = Object.fromEntries(Object.entries(movieTypeMap).map(([key, value]) => [value, key]));
@@ -35,7 +35,13 @@ export default function MovieListPage() {
       fetchMovies({ typeList: reversedMovieTypeMap[typeSlug!] as MoviesTypeEnum, limit: 20, page: Number(page) }),
   });
 
-  console.log(typeSlug);
+  const breadCrumbMap = {
+    'phim-moi': 'Phim Mới',
+    'phim-bo': 'Phim Bộ',
+    'phim-le': 'Phim Lẻ',
+    'hoat-hinh': 'Phim Hoạt Hình',
+    'tv-shows': 'Phim truyền hình',
+  };
 
   return (
     <div className="container mx-auto">
@@ -50,7 +56,7 @@ export default function MovieListPage() {
               iconElement: <i className="fa-regular fa-house"></i>,
               className: 'space-x-2',
             },
-            { label: movieTypeMap[typeSlug!] },
+            { label: breadCrumbMap[typeSlug!] },
           ]}
         />
 

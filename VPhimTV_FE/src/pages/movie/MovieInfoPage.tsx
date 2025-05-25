@@ -127,10 +127,7 @@ export default function MovieInfoPage() {
                 {/* Year */}
                 <p className="font-bold">
                   <span>Năm phát hành: </span>
-                  <Link
-                    className="text-info hover:text-warning"
-                    to={`/tim-kiem?nam=${movieInfo?.data?.year}`}
-                  >
+                  <Link className="text-info hover:text-warning" to={`/tim-kiem?nam=${movieInfo?.data?.year}`}>
                     {movieInfo?.data?.year}
                   </Link>
                 </p>
