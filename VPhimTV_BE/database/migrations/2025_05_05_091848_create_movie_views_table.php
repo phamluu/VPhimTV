@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('movie_views', function (Blueprint $table) {
-            $table->id();
-            $table->integer('movie_id')->nullable();
-            $table->integer('view_num')->default(0);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('movie_views')) {
+            Schema::create('movie_views', function (Blueprint $table) {
+                $table->id();
+                $table->integer('movie_id')->nullable();
+                $table->integer('view_num')->default(0);
+                $table->timestamps();
+            });
+        }
     }
 
     /**
