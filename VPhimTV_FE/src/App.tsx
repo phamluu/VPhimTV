@@ -11,10 +11,11 @@ import MovieWatchPage from './pages/movie/MovieWatchPage';
 import SearchPage from './pages/search/SearchPage';
 import LoginPage from './pages/user/LoginPage';
 import RegisterPage from './pages/user/RegisterPage';
+import UserPage from './pages/user/UserPage';
 
 function MainLayout() {
   const location = useLocation();
-  const hiddenFooterPaths = ['/dang-nhap', '/dang-ky'];
+  const hiddenFooterPaths = ['/dang-nhap', '/dang-ky', /nguoi-dung/];
   const hideFooter = hiddenFooterPaths.includes(location.pathname);
 
   return (
@@ -42,6 +43,7 @@ export default function App() {
               <Route path="/danh-sach/:typeSlug" element={<MovieListPage />} />
               <Route path="/phim/:movieSlug" element={<MovieInfoPage />} />
               <Route path="/phim/:movieSlug/:episodeSlug" element={<MovieWatchPage />} />
+              <Route path="nguoi-dung" element={<UserPage/>} />
             </Route>
           </Routes>
         </BrowserRouter>

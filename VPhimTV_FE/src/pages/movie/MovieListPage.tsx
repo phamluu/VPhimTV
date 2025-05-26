@@ -20,7 +20,6 @@ export default function MovieListPage() {
       return prev;
     });
   };
-
   const movieTypeMap = {
     series: 'phim-bo',
     single: 'phim-le',
@@ -46,7 +45,6 @@ export default function MovieListPage() {
   return (
     <div className="container mx-auto">
       <div className="space-y-5">
-        {/* BreadCrumb */}
         <BreadCrumb
           className="p-2 bg-base-100 rounded"
           items={[
