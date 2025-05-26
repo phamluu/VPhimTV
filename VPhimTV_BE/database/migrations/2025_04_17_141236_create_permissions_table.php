@@ -11,24 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permissions', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
-            $table->string('description')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('permissions')) {
+            Schema::create('permissions', function (Blueprint $table) {
+                $table->id();
+                $table->string('name')->unique();
+                $table->string('description')->nullable();
+                $table->timestamps();
+            });
+        }
 
-        Schema::create('role_user', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('role_id')->constrained()->onDelete('cascade');
-            $table->primary(['user_id', 'role_id']);
-        });
-        Schema::create('permission_role', function (Blueprint $table) {
-            $table->foreignId('role_id')->constrained()->onDelete('cascade');
-            $table->foreignId('permission_id')->constrained()->onDelete('cascade');
-            $table->primary(['role_id', 'permission_id']);
-        });
-                
+        if (!Schema::hasTable('role_user')) {
+            Schema::create('role_user', function (Blueprint $table) {
+                $table->foreignId('user_id')->constrained()->onDelete('cascade');
+                $table->foreignId('role_id')->constrained()->onDelete('cascade');
+                $table->primary(['user_id', 'role_id']);
+            });
+        }
+        if (!Schema::hasTable('permission_role')) {
+            Schema::create('permission_role', function (Blueprint $table) {
+                $table->foreignId('role_id')->constrained()->onDelete('cascade');
+                $table->foreignId('permission_id')->constrained()->onDelete('cascade');
+                $table->primary(['role_id', 'permission_id']);
+            });
+        }
     }
 
     /**

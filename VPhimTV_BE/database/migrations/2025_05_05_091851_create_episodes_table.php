@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('episodes', function (Blueprint $table) {
-            $table->id();
-            $table->integer('movie_id')->nullable();
-            $table->string('server_name')->nullable();
-            $table->string('episode_name')->nullable();
-            $table->string('slug')->nullable();
-            $table->text('file_name')->nullable();
-            $table->text('link_embed')->nullable();
-            $table->text('link_m3u8')->nullable();
-            $table->string('status')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('episodes')) {
+            Schema::create('episodes', function (Blueprint $table) {
+                $table->id();
+                $table->integer('movie_id')->nullable();
+                $table->string('server_name')->nullable();
+                $table->string('episode_name')->nullable();
+                $table->string('slug')->nullable();
+                $table->text('file_name')->nullable();
+                $table->text('link_embed')->nullable();
+                $table->text('link_m3u8')->nullable();
+                $table->string('status')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**
