@@ -10,6 +10,7 @@ import MovieListPage from './pages/movie/MovieListPage';
 import MovieWatchPage from './pages/movie/MovieWatchPage';
 import SearchPage from './pages/search/SearchPage';
 import LoginPage from './pages/user/LoginPage';
+import RegisterPage from './pages/user/RegisterPage';
 
 function MainLayout() {
   const location = useLocation();
@@ -36,6 +37,7 @@ export default function App() {
             <Route path="/" element={<MainLayout />}>
               <Route index element={<HomePage />} />
               <Route path="/dang-nhap" element={<LoginPage />} />
+              <Route path="/dang-ky" element={<RegisterPage />} />
               <Route path="/tim-kiem/" element={<SearchPage />} />
               <Route path="/danh-sach/:typeSlug" element={<MovieListPage />} />
               <Route path="/phim/:movieSlug" element={<MovieInfoPage />} />
