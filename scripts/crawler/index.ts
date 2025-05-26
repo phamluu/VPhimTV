@@ -118,8 +118,8 @@ async function handleCrawlerMovie() {
 }
 
 (async () => {
-  // await crawlerCategories();
-  // await crawlerCountries();
+  await crawlerCategories();
+  await crawlerCountries();
   await handleCrawlerMovie();
   exit(0);
 })();

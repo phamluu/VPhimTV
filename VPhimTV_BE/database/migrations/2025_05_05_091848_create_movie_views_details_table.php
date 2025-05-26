@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('movie_views_details', function (Blueprint $table) {
-            $table->id();
-            $table->integer('movie_id')->nullable();
-            $table->string('ip_address', 45)->nullable();
-            $table->text('user_agent')->nullable();
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('movie_views_details')) {
+            Schema::create('movie_views_details', function (Blueprint $table) {
+                $table->id();
+                $table->integer('movie_id')->nullable();
+                $table->string('ip_address', 45)->nullable();
+                $table->text('user_agent')->nullable();
+                $table->timestamps();
+            });
+        }
     }
 
     /**
