@@ -16,7 +16,7 @@
                 </a>
             </li>
             <li>
-                <a href="./icons.html">
+                <a href="{{ route('menu.index') }}">
                     <i class="now-ui-icons education_atom"></i>
                     <p>Menu</p>
                 </a>
