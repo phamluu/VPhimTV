@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\CategoryController;
 
 
 // Route::middleware(['auth', 'can:view-post'])->group(function () {
@@ -29,5 +30,14 @@ Route::prefix('admin')->group(function () {
         Route::get('edit/{id}', [MenuController::class, 'edit'])->name('menu.edit');
         Route::put('update/{id}', [MenuController::class, 'update'])->name('menu.update');
         Route::delete('delete/{id}', [MenuController::class, 'destroy'])->name('menu.destroy');
+    });
+    // Route CATEGORY
+    Route::prefix('category')->group(function () {
+        Route::get('/', [CategoryController::class, 'index'])->name('category.index');
+        Route::get('create', [CategoryController::class, 'create'])->name('category.create');
+        Route::post('store', [CategoryController::class, 'store'])->name('category.store');
+        Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+        Route::put('update/{id}', [CategoryController::class, 'update'])->name('category.update');
+        Route::delete('delete/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
     });
 });
