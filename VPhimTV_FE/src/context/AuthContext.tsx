@@ -3,7 +3,7 @@ import CryptoJS from 'crypto-js';
 import isEqual from 'lodash/isEqual';
 import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
-import { fetchUser } from '~/service/users/authApi';
+import { checkUser } from '~/service/auth/authApi';
 
 type AuthContextType = {
   user: any;
@@ -28,15 +28,15 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const { data } = useQuery({
-    queryKey: ['userAuth'],
-    queryFn: () => fetchUser(),
+    queryKey: ['checkUser'],
+    queryFn: () => checkUser(),
     refetchOnWindowFocus: false,
     retry: false,
   });
 
   useEffect(() => {
     if (user && data) {
-      if (!isEqual(user, data)) {
+      if (!data || !isEqual(user, data)) {
         console.log('User data has changed, updating localStorage');
         localStorage.removeItem('auth');
         setUser(null);
@@ -44,13 +44,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       try {
+        console.log('User data is the same, updating localStorage');
         const encrypted = CryptoJS.AES.encrypt(JSON.stringify(user), import.meta.env.VITE_APP_NAME).toString();
         localStorage.setItem('auth', encrypted);
       } catch (err) {
         console.error('An error when encrypted', err);
       }
-    } else {
-      localStorage.removeItem('auth');
     }
   }, [data, user]);
 

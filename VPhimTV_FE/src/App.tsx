@@ -5,13 +5,13 @@ import Header from './components/Header';
 import { AuthProvider } from './context/AuthContext';
 import { ConfirmProvider } from './context/ConfirmContext';
 import { ToastProvider } from './context/ToastContext';
+import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
 import HomePage from './pages/home/HomePage';
 import MovieInfoPage from './pages/movie/MovieInfoPage';
 import MovieListPage from './pages/movie/MovieListPage';
 import MovieWatchPage from './pages/movie/MovieWatchPage';
 import SearchPage from './pages/search/SearchPage';
-import LoginPage from './pages/user/LoginPage';
-import RegisterPage from './pages/user/RegisterPage';
 import UserPage from './pages/user/UserPage';
 
 function MainLayout() {

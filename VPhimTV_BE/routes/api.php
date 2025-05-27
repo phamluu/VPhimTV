@@ -10,6 +10,7 @@ Route::middleware(['web'])->prefix('auth')->name('auth.')->group(function () {
     Route::controller(AuthController::class)->group(function () {
         Route::get('/check', 'check')->name('check');
         Route::post('/login', 'login')->name('login');
+        Route::post('/register', 'register')->name('register');
         Route::post('/logout', 'logout')->name('logout');
     });
 });
