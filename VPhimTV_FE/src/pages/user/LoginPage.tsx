@@ -76,7 +76,11 @@ export default function LoginPage() {
         </div>
 
         <div className="w-full flex justify-end">
-          <Link to={''} className="link link-hover text-sm text-primary/80">
+          <Link
+            to={''}
+            onClick={() => toast({ type: 'info', message: 'Chức năng này đang được phát triển' })}
+            className="link link-hover text-sm text-primary/80"
+          >
             Quên mật khẩu?
           </Link>
         </div>

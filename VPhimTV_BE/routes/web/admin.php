@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\UserController;
+use App\Http\Controllers\Web\MenuController;
+use App\Http\Controllers\Web\CategoryController;
 
 
 // Route::middleware(['auth', 'can:view-post'])->group(function () {

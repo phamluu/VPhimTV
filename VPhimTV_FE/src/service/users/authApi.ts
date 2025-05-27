@@ -2,7 +2,7 @@ import http from '~/configs/httpService';
 
 const baseURL = 'api/auth';
 
-export const fetchUser = async () => {
+export const checkUser = async () => {
   const res = await http.get(`/${baseURL}/check`);
   return res.data;
 };
