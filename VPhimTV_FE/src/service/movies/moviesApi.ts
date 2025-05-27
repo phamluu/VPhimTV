@@ -2,6 +2,8 @@ import http from '~/configs/httpService';
 
 import { MovieQueryParams } from './moviesType';
 
+const baseUrl ='api/movie';
+
 export const fetchMovies = async (options: MovieQueryParams) => {
   const {
     limit = 10,
@@ -28,11 +30,11 @@ export const fetchMovies = async (options: MovieQueryParams) => {
   if (year) params.append('year', year);
   if (keyword) params.append('keyword', keyword);
 
-  const response = await http.get('/movies', { params });
+  const response = await http.get(baseUrl, { params });
   return response.data;
 };
 
 export const fetchMovieInfo = async (slug: string) => {
-  const response = await http.get(`/movies/${slug}`);
+  const response = await http.get(`${baseUrl}/${slug}`);
   return response.data;
 };

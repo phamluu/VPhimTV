@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -12,10 +12,6 @@ class CountryController extends Controller
     {
         $sortField = $request->input('sort_field', 'updated_at');
         $sortType = $request->input('sort_type', 'desc');
-
-        $countries = Country::query();
-        $countries->orderBy($sortField, $sortType);
-
-        return $countries->get();
+        return Country::orderBy($sortField, $sortType)->get();
     }
 }

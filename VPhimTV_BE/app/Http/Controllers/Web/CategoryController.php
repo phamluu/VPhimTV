@@ -1,24 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\Category;
+use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $categories = $this->getList($request);
+        $categories = Category::query()->get();
         return view('category.index', compact('categories'));
-    }
-
-    public function getList(Request $request)
-    {
-        $sortField = $request->input('sort_field', 'updated_at');
-        $sortType = $request->input('sort_type', 'desc');
-
-        return Category::orderBy($sortField, $sortType)->get();
     }
 
     public function create()
@@ -34,7 +28,7 @@ class CategoryController extends Controller
 
         Category::create([
             'name' => $request->name,
-            'slug' => \Str::slug($request->name),
+            'slug' => Str::slug($request->name),
         ]);
 
         return redirect()->route('category.index')->with('success', 'Thêm danh mục thành công.');
@@ -54,7 +48,7 @@ class CategoryController extends Controller
 
         $category = Category::findOrFail($id);
         $category->name = $request->name;
-        $category->slug = \Str::slug($request->name);
+        $category->slug = Str::slug($request->name);
         $category->save();
 
         return redirect()->route('category.index')->with('success', 'Cập nhật danh mục thành công.');
