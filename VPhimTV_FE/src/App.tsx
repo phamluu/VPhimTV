@@ -2,6 +2,7 @@ import { BrowserRouter, Outlet, Route, Routes, useLocation } from 'react-router-
 
 import Footer from './components/Footer';
 import Header from './components/Header';
+import { AuthProvider } from './context/AuthContext';
 import { ConfirmProvider } from './context/ConfirmContext';
 import { ToastProvider } from './context/ToastContext';
 import HomePage from './pages/home/HomePage';
@@ -15,7 +16,7 @@ import UserPage from './pages/user/UserPage';
 
 function MainLayout() {
   const location = useLocation();
-  const hiddenFooterPaths = ['/dang-nhap', '/dang-ky', /nguoi-dung/];
+  const hiddenFooterPaths = ['/dang-nhap', '/dang-ky'];
   const hideFooter = hiddenFooterPaths.includes(location.pathname);
 
   return (
@@ -31,23 +32,25 @@ function MainLayout() {
 
 export default function App() {
   return (
-    <ConfirmProvider>
-      <ToastProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<MainLayout />}>
-              <Route index element={<HomePage />} />
-              <Route path="/dang-nhap" element={<LoginPage />} />
-              <Route path="/dang-ky" element={<RegisterPage />} />
-              <Route path="/tim-kiem/" element={<SearchPage />} />
-              <Route path="/danh-sach/:typeSlug" element={<MovieListPage />} />
-              <Route path="/phim/:movieSlug" element={<MovieInfoPage />} />
-              <Route path="/phim/:movieSlug/:episodeSlug" element={<MovieWatchPage />} />
-              <Route path="nguoi-dung" element={<UserPage/>} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </ToastProvider>
-    </ConfirmProvider>
+    <AuthProvider>
+      <ConfirmProvider>
+        <ToastProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<MainLayout />}>
+                <Route index element={<HomePage />} />
+                <Route path="/dang-nhap" element={<LoginPage />} />
+                <Route path="/dang-ky" element={<RegisterPage />} />
+                <Route path="/tim-kiem/" element={<SearchPage />} />
+                <Route path="/danh-sach/:typeSlug" element={<MovieListPage />} />
+                <Route path="/phim/:movieSlug" element={<MovieInfoPage />} />
+                <Route path="/phim/:movieSlug/:episodeSlug" element={<MovieWatchPage />} />
+                <Route path="/nguoi-dung" element={<UserPage />} />
+              </Route>
+            </Routes>
+          </BrowserRouter>
+        </ToastProvider>
+      </ConfirmProvider>
+    </AuthProvider>
   );
 }
