@@ -7,10 +7,15 @@ use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
-
+    protected $service;
+    public function __construct()
+    {
+        $this->service = new UserService();
+    }
     public function index()
     {
         $users = User::with('roles')->get();

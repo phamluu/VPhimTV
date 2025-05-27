@@ -5,13 +5,14 @@ use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\MenuController;
 use App\Http\Controllers\Web\CategoryController;
-
+use App\Http\Controllers\Web\ProfileController;
 
 // Route::middleware(['auth', 'can:view-post'])->group(function () {
 //     Route::get('/dashboard', [DashboardController::class, 'index']);
 // });
 Route::get('/dashboard', [DashboardController::class, 'index']);
 Route::prefix('admin')->group(function () {
+    Route::get('/', [DashboardController::class, 'index']);
     // Route USER
     Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user.index');
@@ -21,7 +22,12 @@ Route::prefix('admin')->group(function () {
         Route::put('update/{id}', [UserController::class, 'update'])->name('user.update');
         Route::delete('delete/{id}', [UserController::class, 'destroy'])->name('user.destroy');
     });
-
+    Route::prefix('profile')->group(function () {
+        Route::controller(ProfileController::class)->group(function () {
+            Route::get('/show', 'show')->name('profile.show');
+            Route::get('/edit', 'edit')->name('profile.edit');
+        });
+    });
     // Route MENU
     Route::prefix('menu')->group(function () {
         Route::get('/', [MenuController::class, 'index'])->name('menu.index');
