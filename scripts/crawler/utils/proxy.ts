@@ -3,7 +3,7 @@ import { HttpProxyAgent } from 'http-proxy-agent';
 import chalk from 'chalk';
 import pLimit from 'p-limit';
 
-const limit = pLimit(10);
+const limit = pLimit(20);
 
 const testProxy = async (proxy: string): Promise<boolean> => {
   try {
