@@ -38,7 +38,7 @@ cd VPhimTV
 
 - **Khởi tạo database:**
     ```bash
-    npm run prepare
+    npm run setup
     ```
 
 ### 3. Chạy dự án
@@ -86,11 +86,11 @@ npm run start
 
 - **Lấy thông tin chi tiết phim:**
     ```
-    http://localhost:8000/movies/{slug}
+    http://localhost:8000/api/movies/{slug}
 
     Ví dụ: 
 
-    http://localhost:8000/movies/cuoc-doi-phi-thuong-cua-ibelin
+    http://localhost:8000/api/movies/cuoc-doi-phi-thuong-cua-ibelin
     ```
     
 
@@ -98,7 +98,7 @@ npm run start
 
 - **Lấy danh sách thể loại:**  
     ```
-    http://localhost:8000/category
+    http://localhost:8000/api/category
     ```
     - **Tham số hỗ trợ:**
         - `sort_field` Ví dụ: `?sort_field=updated_at`
@@ -108,8 +108,18 @@ npm run start
 
 - **Lấy danh sách quốc gia:**  
     ```
-    http://localhost:8000/country
+    http://localhost:8000/api/country
     ```
     - **Tham số hỗ trợ:**
         - `sort_field` Ví dụ: `?sort_field=updated_at`
         - `sort_type` Ví dụ: `?sort_type=desc`
+
+
+### Authenticate
+- **Đăng nhập**
+    ```
+    http://localhost:8000/api/login     --POST
+    ```
+    - **Data truyền lên**
+        - `email` Ví dụ: `abc@gmail.com`
+        - `password` Ví dụ: `123`

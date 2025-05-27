@@ -1,8 +1,35 @@
+import { useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import loginBackgroundImage from '~/assets/imgs/login-background.jpg';
+import { useAuth } from '~/hooks/useAuth';
+import { toast } from '~/hooks/utils/toast';
+import { loginUser } from '~/service/users/authApi';
 
 export default function LoginPage() {
+  const [username, setUsername] = useState('anle@gmail.com');
+  const [password, setPassword] = useState('anle');
+  const { setUser } = useAuth();
+
+  const mutationLogin = useMutation({
+    mutationKey: ['login'],
+    mutationFn: (data: any) => loginUser(data.username, data.password),
+    onSuccess: (data) => {
+      setUser(data.user);
+      window.location.href = '/';
+    },
+    onError: (error) => {
+      console.error('Login failed:', error);
+      toast({ type: 'error', message: 'Sai tên đăng nhập hoặc mật khẩu' });
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutationLogin.mutate({ username, password });
+  };
+
   return (
     <div
       className="relative flex justify-center items-center min-h-[calc(100vh-64px)] bg-cover bg-center"
@@ -10,28 +37,41 @@ export default function LoginPage() {
     >
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent z-0" />
 
-      <form className="relative z-10 flex flex-col justify-center items-center p-8 mb-20 shadow-xl rounded-box space-y-6 bg-base-200/90 w-[370px] backdrop-blur-sm">
+      <form
+        className="relative z-10 flex flex-col justify-center items-center p-8 mb-20 shadow-xl rounded-box space-y-6 bg-base-200/90 w-[370px] backdrop-blur-sm"
+        onSubmit={handleSubmit}
+      >
         <div className="flex flex-col items-center gap-2">
           <p className="text-3xl font-bold text-center text-primary">Đăng Nhập</p>
         </div>
 
         <div className="space-y-2 w-full">
-          <label className="label">
-            <span className="label-text">Tên đăng nhập</span>
-          </label>
+          <label className="label">Tên đăng nhập</label>
           <label className="input flex items-center gap-2">
             <i className="fa fa-user text-base-content/60" />
-            <input type="text" placeholder="example@gmail.com" className="grow" required />
+            <input
+              type="text"
+              placeholder="example@gmail.com"
+              className="grow"
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
           </label>
         </div>
 
         <div className="space-y-2 w-full">
-          <label className="label">
-            <span className="label-text">Mật khẩu</span>
-          </label>
+          <label className="label">Mật khẩu</label>
           <label className="input flex items-center gap-2">
             <i className="fa fa-lock text-base-content/60" />
-            <input type="password" placeholder="************" className="grow" required />
+            <input
+              type="password"
+              placeholder="************"
+              className="grow"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </label>
         </div>
 
@@ -45,8 +85,15 @@ export default function LoginPage() {
           <Link to={'/dang-ky'} className="btn btn-soft btn-accent flex-1">
             Đăng ký
           </Link>
-          <button className="btn btn-primary flex-2" type="submit">
-            Đăng Nhập
+          <button className="btn btn-primary flex-2" disabled={mutationLogin.isPending} type="submit">
+            {mutationLogin.isPending ? (
+              <>
+                <span className="loading loading-spinner loading-sm"></span>
+                Đang đăng nhập...
+              </>
+            ) : (
+              'Đăng Nhập'
+            )}
           </button>
         </div>
       </form>

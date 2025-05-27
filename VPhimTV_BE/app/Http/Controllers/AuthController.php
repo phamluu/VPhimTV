@@ -13,6 +13,7 @@ class AuthController extends Controller
     {
         return view('auth.register');
     }
+
     public function register(Request $request)
     {
         // $request->validate([
@@ -34,10 +35,12 @@ class AuthController extends Controller
 
         return redirect('/dashboard');
     }
+
     public function showlogin()
     {
         return view('auth.login');
     }
+
     public function login(Request $request)
     {
         $request->validate([
