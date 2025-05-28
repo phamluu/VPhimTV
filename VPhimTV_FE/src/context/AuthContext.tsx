@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import CryptoJS from 'crypto-js';
 import isEqual from 'lodash/isEqual';
 import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import { checkUser } from '~/service/auth/authApi';
+import { decryptObj } from '~/utils/utils';
 
 type AuthContextType = {
   user: any;
@@ -18,40 +18,30 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     if (!encrypted) return null;
 
     try {
-      const bytes = CryptoJS.AES.decrypt(encrypted, import.meta.env.VITE_APP_NAME);
-      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-      return JSON.parse(decrypted);
+      return decryptObj(encrypted);
     } catch (err) {
       console.error('An error when decrypted', err);
       return null;
     }
   });
 
-  const { data } = useQuery({
-    queryKey: ['checkUser'],
+  const { data, isLoading } = useQuery({
+    queryKey: ['checkLogin'],
     queryFn: () => checkUser(),
     refetchOnWindowFocus: false,
     retry: false,
+    enabled: !!user,
   });
 
   useEffect(() => {
-    if (user && data) {
-      if (!data || !isEqual(user, data)) {
-        console.log('User data has changed, updating localStorage');
-        localStorage.removeItem('auth');
+    if (!isLoading && user) {
+      if (!data || !isEqual(user, data.user)) {
+        console.log('User is not logged in, resetting user state');
         setUser(null);
-        return;
-      }
-
-      try {
-        console.log('User data is the same, updating localStorage');
-        const encrypted = CryptoJS.AES.encrypt(JSON.stringify(user), import.meta.env.VITE_APP_NAME).toString();
-        localStorage.setItem('auth', encrypted);
-      } catch (err) {
-        console.error('An error when encrypted', err);
+        localStorage.removeItem('auth');
       }
     }
-  }, [data, user]);
+  }, [data, isLoading, user]);
 
   return <AuthContext.Provider value={{ user, setUser }}>{children}</AuthContext.Provider>;
 };

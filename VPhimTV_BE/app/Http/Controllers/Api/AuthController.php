@@ -13,9 +13,14 @@ class AuthController extends Controller
 {
     public function check()
     {
-        return Auth::check()
-            ? response()->json(Auth::user())
-            : response()->json(['message' => 'Chưa đăng nhập'], 401);
+        if (Auth::check()) {
+            return response()->json([
+                'message' => 'Đã đăng nhập',
+                'user' => Auth::user()
+            ]);
+        } else {
+            return response()->json(['message' => 'Chưa đăng nhập'], 401);
+        }
     }
 
     public function login(Request $request)

@@ -1,3 +1,5 @@
+import CryptoJS from 'crypto-js';
+
 export function isValidUrl(str: string): boolean {
   try {
     new URL(str);
@@ -17,3 +19,11 @@ export function UniqueId() {
   const randomPart = Math.random().toString(16).slice(2, 16);
   return (timestamp + randomPart).slice(0, 24);
 }
+
+export const encryptObj = (dataObj: any) =>
+  CryptoJS.AES.encrypt(JSON.stringify(dataObj), import.meta.env.VITE_APP_NAME).toString();
+
+export const decryptObj = (encryptedObj: string) => {
+  const bytes = CryptoJS.AES.decrypt(encryptedObj, import.meta.env.VITE_APP_NAME);
+  return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+};

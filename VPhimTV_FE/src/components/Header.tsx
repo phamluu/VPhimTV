@@ -13,8 +13,6 @@ export default function Header() {
   const [searchParams, _setSearchParams] = useSearchParams();
   const { user, setUser } = useAuth();
 
-  console.log(user);
-
   const [category, country] = useQueries({
     queries: [
       {
@@ -61,13 +59,7 @@ export default function Header() {
               viewBox="0 0 24 24"
               className="inline-block h-5 w-5 stroke-current"
             >
-              {' '}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              ></path>{' '}
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>{' '}
             </svg>
           </button>
         </div>

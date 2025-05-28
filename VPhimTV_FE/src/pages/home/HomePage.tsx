@@ -2,7 +2,6 @@ import { Splide, SplideSlide } from '@splidejs/react-splide';
 import { useQueries } from '@tanstack/react-query';
 
 import MovieCard from '~/components/MovieCard';
-import { useAuth } from '~/hooks/useAuth';
 import { fetchMovies } from '~/service/movies/moviesApi';
 import { MoviesTypeEnum } from '~/service/movies/moviesType';
 
@@ -20,10 +19,6 @@ export default function HomePage() {
       { queryKey: ['tvShowsMovies'], queryFn: () => fetchMovies({ limit, typeList: MoviesTypeEnum.tvshows }) },
     ],
   });
-
-  const { user } = useAuth();
-
-  console.log(user);
 
   return (
     <div className="container mx-auto space-y-8">

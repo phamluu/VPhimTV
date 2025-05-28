@@ -6,6 +6,7 @@ import loginBackgroundImage from '~/assets/imgs/login-background.jpg';
 import { useAuth } from '~/hooks/useAuth';
 import { toast } from '~/hooks/utils/toast';
 import { loginUser } from '~/service/auth/authApi';
+import { encryptObj } from '~/utils/utils';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -17,6 +18,9 @@ export default function LoginPage() {
     mutationKey: ['login'],
     mutationFn: (data: any) => loginUser(data.username, data.password),
     onSuccess: (data) => {
+      const encrypted = encryptObj(data.user);
+      localStorage.setItem('auth', encrypted);
+
       setUser(data.user);
       navigate('/');
     },
