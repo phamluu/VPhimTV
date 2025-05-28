@@ -64,7 +64,9 @@
                                     </p>
                                 </a>
                             </li>
+
                             <li class="nav-item dropdown">
+                                @if(Auth::check())
                                 <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="now-ui-icons users_single-02"></i>@auth
                                     <p>Xin chào, {{ Auth::user()->name }}</p>
@@ -73,10 +75,14 @@
                                         <span class="d-lg-none d-md-block">Some Actions</span>
                                     </p>
                                 </a>
+
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                                     <a class="dropdown-item" href="/admin/profile/show">Profile</a>
                                     <a class="dropdown-item" href="/logout">Đăng xuất</a>
                                 </div>
+                                @else
+                                <a href="/login" class="nav-link">Đăng nhập</a>
+                                @endif
                             </li>
                         </ul>
                     </div>

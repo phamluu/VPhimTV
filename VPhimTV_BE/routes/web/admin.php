@@ -26,6 +26,7 @@ Route::prefix('admin')->group(function () {
         Route::controller(ProfileController::class)->group(function () {
             Route::get('/show', 'show')->name('profile.show');
             Route::get('/edit', 'edit')->name('profile.edit');
+            Route::post('update', [ProfileController::class, 'update'])->name('profile.update');
         });
     });
     // Route MENU
