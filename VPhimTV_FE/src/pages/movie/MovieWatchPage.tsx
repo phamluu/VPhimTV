@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 import ArtPlayer from '~/components/ArtPlayer';
 import BreadCrumb from '~/components/BreadCrumb';
 import { fetchMovieInfo, fetchMovies } from '~/service/movies/moviesApi';
+import { movieTypeMap } from '~/utils/classMap';
 
 import MovieContainer from '../home/components/MovieContainer';
 
@@ -21,7 +22,8 @@ export default function MovieWatchPage() {
   });
   const relatedMovies = useQuery({
     queryKey: ['relatedMovies', movieSlug],
-    queryFn: () => fetchMovies({ limit: 12, country: movieInfo.data?.country.slug, year: movieInfo.data?.year }),
+    queryFn: () =>
+      fetchMovies({ limit: 12, country: movieInfo.data?.data.country.slug, year: movieInfo.data?.data.year }),
     enabled: !!movieInfo.data,
   });
 
@@ -32,18 +34,11 @@ export default function MovieWatchPage() {
 
       if (decodedId) {
         setCurrentEpisode(
-          movieInfo.data.episodes?.flatMap((server: any) => server.server_data).find((ep: any) => ep.id === decodedId),
+          movieInfo.data?.data.episodes?.flatMap((server: any) => server.server_data).find((ep: any) => ep.id === decodedId),
         );
       }
     }
   }, [episodeSlug, hashids, movieInfo.data]);
-
-  const movieTypeMap = {
-    series: 'phim-bo',
-    single: 'phim-le',
-    hoathinhh: 'phim-hoat-hinh',
-    tvshows: 'phim-truyen-hinh',
-  };
 
   if (!movieInfo.isLoading && movieInfo.data && currentEpisode) {
     return (
@@ -59,22 +54,22 @@ export default function MovieWatchPage() {
                 className: 'space-x-2',
               },
               {
-                label: movieInfo?.data.type.name,
-                href: `/${movieTypeMap[movieInfo?.data.type.slug]}`,
+                label: movieInfo.data?.data.type.name,
+                href: `/${movieTypeMap[movieInfo.data?.data.type.slug]}`,
               },
               {
-                label: movieInfo?.data.year,
-                href: `/${movieTypeMap[movieInfo?.data.type.slug]}/${movieInfo?.data.year}`,
+                label: movieInfo.data?.data.year,
+                href: `/${movieTypeMap[movieInfo.data?.data.type.slug]}/${movieInfo.data?.data.year}`,
               },
               {
-                label: movieInfo?.data.country.name,
-                href: `/${movieTypeMap[movieInfo?.data.type.slug]}/${movieInfo?.data.year}/${
-                  movieInfo?.data.country.slug
+                label: movieInfo.data?.data.country.name,
+                href: `/${movieTypeMap[movieInfo.data?.data.type.slug]}/${movieInfo.data?.data.year}/${
+                  movieInfo.data?.data.country.slug
                 }`,
               },
               {
-                label: movieInfo?.data.name,
-                href: `/phim/${movieInfo?.data.slug}`,
+                label: movieInfo.data?.data.name,
+                href: `/phim/${movieInfo.data?.data.slug}`,
               },
               {
                 label:
@@ -86,13 +81,13 @@ export default function MovieWatchPage() {
           />
 
           {currentEpisode && (
-            <ArtPlayer url={currentEpisode.link_m3u8} poster={movieInfo.data.poster_url} height={650} />
+            <ArtPlayer url={currentEpisode.link_m3u8} poster={movieInfo.data?.data.poster_url} height={650} />
           )}
 
           <div className="bg-base-300 rounded p-3 space-y-4">
             <div className="bg-base-100 p-4 space-y-4">
               <p className="font-bold text-primary text-2xl">
-                {movieInfo?.data.name} - Tập {episodeSlug!.split('-')[1]}
+                {movieInfo.data?.data.name} - Tập {episodeSlug!.split('-')[1]}
               </p>
 
               <p className="font-bold text-primary text-xl">
@@ -100,7 +95,7 @@ export default function MovieWatchPage() {
                 <span> Danh sách tập</span>
               </p>
 
-              {movieInfo.data.episodes?.map((episode: any, i: number) => (
+              {movieInfo.data?.data.episodes?.map((episode: any, i: number) => (
                 <div key={i} className="space-y-2">
                   <p className="font-bold">
                     SERVER: <span className="text-info">{episode.server_name}</span>

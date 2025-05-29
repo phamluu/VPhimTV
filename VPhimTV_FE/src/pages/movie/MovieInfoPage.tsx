@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import BreadCrumb from '~/components/BreadCrumb';
 import { fetchMovieInfo, fetchMovies } from '~/service/movies/moviesApi';
+import { movieTypeMap } from '~/utils/classMap';
 
 import MovieContainer from '../home/components/MovieContainer';
 
@@ -19,16 +20,10 @@ export default function MovieInfoPage() {
   });
   const relatedMovies = useQuery({
     queryKey: ['relatedMovies', movieSlug],
-    queryFn: () => fetchMovies({ limit: 12, country: movieInfo.data?.country.slug, year: movieInfo.data?.year }),
+    queryFn: () =>
+      fetchMovies({ limit: 12, country: movieInfo.data?.data.country.slug, year: movieInfo.data?.data.year }),
     enabled: !!movieInfo.data,
   });
-
-  const movieTypeMap = {
-    series: 'phim-bo',
-    single: 'phim-le',
-    hoathinhh: 'phim-hoat-hinh',
-    tvshows: 'phim-truyen-hinh',
-  };
 
   if (!movieInfo.isLoading && movieInfo.data) {
     return (
@@ -44,45 +39,45 @@ export default function MovieInfoPage() {
                 className: 'space-x-2',
               },
               {
-                label: movieInfo.data?.type.name,
-                href: `/${movieTypeMap[movieInfo.data?.type.slug]}`,
+                label: movieInfo.data?.data.type.name,
+                href: `/${movieTypeMap[movieInfo.data?.data.type.slug]}`,
               },
               {
-                label: movieInfo.data?.year,
-                href: `/${movieTypeMap[movieInfo.data?.type.slug]}/${movieInfo.data?.year}`,
+                label: movieInfo.data?.data.year,
+                href: `/${movieTypeMap[movieInfo.data?.data.type.slug]}/${movieInfo.data?.data.year}`,
               },
               {
-                label: movieInfo.data?.country.name,
-                href: `/${movieTypeMap[movieInfo.data?.type.slug]}/${movieInfo.data?.year}/${
-                  movieInfo.data?.country.slug
+                label: movieInfo.data?.data.country.name,
+                href: `/${movieTypeMap[movieInfo.data?.data.type.slug]}/${movieInfo.data?.data.year}/${
+                  movieInfo.data?.data.country.slug
                 }`,
               },
               {
-                label: movieInfo.data?.name,
+                label: movieInfo.data?.data.name,
               },
             ]}
           />
 
-          <img className="min-h-[503px] brightness-75" src={movieInfo?.data?.thumb_url} />
+          <img className="min-h-[503px] brightness-75" src={movieInfo.data?.data.thumb_url} />
 
           <div className="absolute bottom-4 left-4 z-10 flex space-x-4">
-            <img src={movieInfo?.data?.thumb_url} className="w-[250px] object-cover border" />
+            <img src={movieInfo.data?.data.thumb_url} className="w-[250px] object-cover border" />
 
             <div className="flex flex-col justify-end space-y-3">
               <p className="text-3xl font-bold shadow">
-                {movieInfo?.data?.name} ({movieInfo?.data?.year})
+                {movieInfo.data?.data.name} ({movieInfo.data?.data.year})
               </p>
-              <p className="text-2xl font-bold shadow">{movieInfo?.data?.origin_name}</p>
+              <p className="text-2xl font-bold shadow">{movieInfo.data?.data.origin_name}</p>
               <div className="flex gap-4">
-                <Link className="btn btn-info w-32 font-bold" to={movieInfo?.data?.trailer_url} target="_blank">
+                <Link className="btn btn-info w-32 font-bold" to={movieInfo.data?.data.trailer_url} target="_blank">
                   <i className="fa-brands fa-youtube"></i>
                   Trailer
                 </Link>
                 <Link
                   className="btn btn-error w-32 font-bold"
-                  to={`/phim/${movieInfo?.data?.slug}/${
-                    movieInfo.data?.episodes[0].server_data[0].slug
-                  }-${hashids.encode(movieInfo.data?.episodes[0].server_data[0].id)}`}
+                  to={`/phim/${movieInfo.data?.data.slug}/${
+                    movieInfo.data?.data.episodes[0].server_data[0].slug
+                  }-${hashids.encode(movieInfo.data?.data.episodes[0].server_data[0].id)}`}
                 >
                   <i className="fa-regular fa-circle-play"></i>
                   Xem phim
@@ -104,7 +99,7 @@ export default function MovieInfoPage() {
                 {/* Status */}
                 <p className="font-bold">
                   <span>Trạng thái: </span>
-                  <span className="text-info">{movieInfo?.data?.episode_current}</span>
+                  <span className="text-info">{movieInfo.data?.data.episode_current}</span>
                 </p>
 
                 {/* Country */}
@@ -112,23 +107,23 @@ export default function MovieInfoPage() {
                   <span>Quốc gia: </span>
                   <Link
                     className="text-info hover:text-warning"
-                    to={`/tim-kiem?quoc-gia=${movieInfo?.data?.country?.slug}`}
+                    to={`/tim-kiem?quoc-gia=${movieInfo.data?.data.country?.slug}`}
                   >
-                    {movieInfo?.data?.country?.name}
+                    {movieInfo.data?.data.country?.name}
                   </Link>
                 </p>
 
                 {/* Quantity */}
                 <p className="font-bold">
                   <span>Chất lượng: </span>
-                  <span className="text-info">{movieInfo?.data?.quality}</span>
+                  <span className="text-info">{movieInfo.data?.data.quality}</span>
                 </p>
 
                 {/* Year */}
                 <p className="font-bold">
                   <span>Năm phát hành: </span>
-                  <Link className="text-info hover:text-warning" to={`/tim-kiem?nam=${movieInfo?.data?.year}`}>
-                    {movieInfo?.data?.year}
+                  <Link className="text-info hover:text-warning" to={`/tim-kiem?nam=${movieInfo.data?.data.year}`}>
+                    {movieInfo.data?.data.year}
                   </Link>
                 </p>
               </div>
@@ -137,26 +132,26 @@ export default function MovieInfoPage() {
                 {/* Total Episodes */}
                 <p className="font-bold">
                   <span>Tổng số tập: </span>
-                  <span className="text-warning">{movieInfo?.data?.episode_total}</span>
+                  <span className="text-warning">{movieInfo.data?.data.episode_total}</span>
                 </p>
 
                 {/* Duration */}
                 <p className="font-bold">
                   <span>Thời lượng: </span>
-                  <span className="text-info">{movieInfo?.data?.time}</span>
+                  <span className="text-info">{movieInfo.data?.data.time}</span>
                 </p>
 
                 {/* Category */}
                 <p className="font-bold">
                   <span>Thể loại: </span>
-                  {movieInfo?.data?.category.map((item: any, i: number) => (
+                  {movieInfo.data?.data.category.map((item: any, i: number) => (
                     <Link
                       key={i}
                       className="text-info hover:text-warning"
                       to={`/tim-kiem?the-loai=${item.slug}&trang=1`}
                     >
                       {item.name}
-                      {i < movieInfo?.data?.category.length - 1 ? ', ' : ''}
+                      {i < movieInfo.data?.data.category.length - 1 ? ', ' : ''}
                     </Link>
                   ))}
                 </p>
@@ -166,13 +161,13 @@ export default function MovieInfoPage() {
                 {/* Director */}
                 <p className="font-bold">
                   <span>Đạo diễn: </span>
-                  <span className="text-info">{movieInfo?.data?.director}</span>
+                  <span className="text-info">{movieInfo.data?.data.director}</span>
                 </p>
 
                 {/* Actor */}
                 <p className="font-bold">
                   <span>Diễn viên: </span>
-                  <span className="text-info">{movieInfo?.data?.actor}</span>
+                  <span className="text-info">{movieInfo.data?.data.actor}</span>
                 </p>
               </div>
             </div>
@@ -182,14 +177,14 @@ export default function MovieInfoPage() {
               <span> Nội dung</span>
             </p>
 
-            <p>{movieInfo.data?.content}</p>
+            <p>{movieInfo.data?.data.content}</p>
 
             <p className="font-bold text-primary text-xl">
               <i className="fa-regular fa-database"></i>
               <span> Danh sách tập</span>
             </p>
 
-            {movieInfo.data?.episodes?.map((episode: any, i: number) => (
+            {movieInfo.data?.data.episodes?.map((episode: any, i: number) => (
               <div key={i} className="space-y-2">
                 <p className="font-bold">
                   SERVER: <span className="text-info">{episode.server_name}</span>

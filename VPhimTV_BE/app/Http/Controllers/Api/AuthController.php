@@ -16,7 +16,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             return response()->json([
                 'message' => 'Đã đăng nhập',
-                'user' => Auth::user()
+                'data' => Auth::user()
             ]);
         } else {
             return response()->json(['message' => 'Chưa đăng nhập'], 401);
@@ -63,7 +63,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return response()->json(['message' => 'Đăng nhập thành công', 'user' => $user]);
+        return response()->json(['message' => 'Đăng nhập thành công', 'data' => $user]);
     }
 
 
@@ -103,6 +103,6 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        return response()->json(['message' => 'Đăng xuất thành công']);
+        return response()->json(["message" => "Đăng xuất thành công"]);
     }
 }
