@@ -25,6 +25,7 @@ export default function MovieListPage() {
     single: 'phim-le',
     hoathinh: 'hoat-hinh',
     tvshows: 'phim-truyen-hinh',
+    a: "a"
   };
   const reversedMovieTypeMap = Object.fromEntries(Object.entries(movieTypeMap).map(([key, value]) => [value, key]));
 
@@ -72,7 +73,7 @@ export default function MovieListPage() {
 
             <Pagination
               currentPage={Number(page)}
-              totalPage={movies.data?.total ?? 999}
+              totalPage={movies.data?.pagination.total ?? 999}
               onPageChange={handlePageChange}
             />
           </>

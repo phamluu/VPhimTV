@@ -15,6 +15,10 @@ export async function crawlerCategories() {
   const categories = result.data;
 
   for (const cat of categories) {
+    if (cat.slug === 'phim-18') {
+      continue;
+    }
+
     const [rows] = await db.execute('SELECT 1 FROM categories WHERE slug = ?', [
       cat.slug,
     ]);

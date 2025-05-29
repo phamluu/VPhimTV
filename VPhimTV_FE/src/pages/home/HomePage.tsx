@@ -1,5 +1,5 @@
 import { Splide, SplideSlide } from '@splidejs/react-splide';
-import { useQuery } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 
 import MovieCard from '~/components/MovieCard';
 import { fetchMovies } from '~/service/movies/moviesApi';
@@ -8,25 +8,16 @@ import { MoviesTypeEnum } from '~/service/movies/moviesType';
 import MovieContainer from './components/MovieContainer';
 
 export default function HomePage() {
-  const newMovies = useQuery({
-    queryKey: ['newMovies'],
-    queryFn: () => fetchMovies({ limit: 12, page: 1 }),
-  });
-  const seriesMovies = useQuery({
-    queryKey: ['seriesMovies'],
-    queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: MoviesTypeEnum.series }),
-  });
-  const singleMovies = useQuery({
-    queryKey: ['singleMovies'],
-    queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: MoviesTypeEnum.single }),
-  });
-  const animeMovies = useQuery({
-    queryKey: ['animeMovies'],
-    queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: MoviesTypeEnum.hoathinh }),
-  });
-  const tvShowsMovies = useQuery({
-    queryKey: ['tvShowsMovies'],
-    queryFn: () => fetchMovies({ limit: 12, page: 1, typeList: MoviesTypeEnum.tvshows }),
+  const limit = 12;
+
+  const [newMovies, seriesMovies, singleMovies, animeMovies, tvShowsMovies] = useQueries({
+    queries: [
+      { queryKey: ['newMovies'], queryFn: () => fetchMovies({ limit }) },
+      { queryKey: ['seriesMovies'], queryFn: () => fetchMovies({ limit, typeList: MoviesTypeEnum.series }) },
+      { queryKey: ['singleMovies'], queryFn: () => fetchMovies({ limit, typeList: MoviesTypeEnum.single }) },
+      { queryKey: ['animeMovies'], queryFn: () => fetchMovies({ limit, typeList: MoviesTypeEnum.hoathinh }) },
+      { queryKey: ['tvShowsMovies'], queryFn: () => fetchMovies({ limit, typeList: MoviesTypeEnum.tvshows }) },
+    ],
   });
 
   return (

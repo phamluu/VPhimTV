@@ -1,20 +1,13 @@
-import axios from 'axios';
-
-const MOVIE_API = import.meta.env.VITE_APP_API;
+import http from '~/configs/httpService';
 
 interface CategoryQueryParams {
   sortField?: string;
   sortType?: string;
 }
 
-export const fetchCategory = async (options?: CategoryQueryParams) => {
-  const url = `${MOVIE_API}/category`;
+const baseUrl = 'api/category';
 
-  try {
-    const result = await axios.get(url, { params: options });
-    return result.data;
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-    throw error;
-  }
+export const fetchCategory = async (options?: CategoryQueryParams) => {
+  const result = await http.get(baseUrl, { params: options });
+  return result.data;
 };

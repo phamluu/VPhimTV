@@ -37,8 +37,8 @@ export default function SearchPage() {
     });
   };
 
-  const categoryList = useQuery({ queryKey: ['categoryList'], queryFn: () => fetchCategory() });
-  const countryList = useQuery({ queryKey: ['countryList'], queryFn: () => fetchCountry() });
+  const categoryList = useQuery({ queryKey: ['category'], queryFn: () => fetchCategory() });
+  const countryList = useQuery({ queryKey: ['country'], queryFn: () => fetchCountry() });
   const searchMovies = useQuery({
     queryKey: ['searchMovies', keyword, category, country, year, language, sortType, page],
     queryFn: () =>
@@ -78,7 +78,7 @@ export default function SearchPage() {
             className="w-32"
             placeholder="Thể Loại"
             options={[{ label: 'Tất cả', value: '' }].concat(
-              categoryList.data?.map((item: any) => ({
+              categoryList.data?.data.map((item: any) => ({
                 label: item.name,
                 value: item.slug,
               })),
@@ -91,7 +91,7 @@ export default function SearchPage() {
             className="w-32"
             placeholder="Quốc Gia"
             options={[{ label: 'Tất cả', value: '' }].concat(
-              countryList.data?.map((item: any) => ({
+              countryList.data?.data.map((item: any) => ({
                 label: item.name,
                 value: item.slug,
               })),
@@ -152,7 +152,7 @@ export default function SearchPage() {
 
             <Pagination
               currentPage={Number(page)}
-              totalPage={searchMovies.data?.total ?? 999}
+              totalPage={searchMovies.data?.pagination.total ?? 999}
               onPageChange={handlePageChange}
             />
           </>

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class AuthController extends Controller
 {
@@ -13,6 +14,7 @@ class AuthController extends Controller
     {
         return view('auth.register');
     }
+
     public function register(Request $request)
     {
         // $request->validate([
@@ -34,10 +36,12 @@ class AuthController extends Controller
 
         return redirect('/dashboard');
     }
+
     public function showlogin()
     {
         return view('auth.login');
     }
+
     public function login(Request $request)
     {
         $request->validate([

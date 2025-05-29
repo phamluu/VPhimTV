@@ -1,25 +1,32 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
-use App\Models\RoleUser;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Controller;
+use App\Services\UserService;
 
 class UserController extends Controller
 {
-
+    protected $service;
+    public function __construct()
+    {
+        $this->service = new UserService();
+    }
     public function index()
     {
         $users = User::with('roles')->get();
         return view('users.index', compact('users'));
     }
+
     public function create()
     {
         return view('users.create');
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -38,12 +45,14 @@ class UserController extends Controller
         ]);
         return redirect()->route('user.index')->with('success', 'User created successfully.');
     }
+
     public function edit($id)
     {
         $user = User::findOrFail($id);
         $roles = Role::all();
         return view('users.edit', compact('user', 'roles'));
     }
+
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
@@ -67,6 +76,7 @@ class UserController extends Controller
 
         return redirect()->route('user.index')->with('success', 'User updated successfully.');
     }
+
     public function destroy($id)
     {
         $user = User::findOrFail($id);

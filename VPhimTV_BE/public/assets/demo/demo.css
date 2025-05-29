@@ -49,6 +49,11 @@
   z-index: 1;
 }
 
+.card-header .title span {
+  align-items: center;
+  display: flex;
+}
+
 @media all and (min-width: 992px) {
   .sidebar .nav>li.active-pro {
     position: absolute;

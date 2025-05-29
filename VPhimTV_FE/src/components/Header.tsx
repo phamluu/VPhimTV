@@ -1,14 +1,17 @@
-import { useQueries } from '@tanstack/react-query';
+import { useMutation, useQueries } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 
+import { useAuth } from '~/hooks/useAuth';
+import { logoutUser } from '~/service/auth/authApi';
 import { fetchCategory } from '~/service/category/categoryApi';
 import { fetchCountry } from '~/service/country/countryApi';
 
 export default function Header() {
-  const [value, setValue] = useState('');
   const navigate = useNavigate();
+  const [value, setValue] = useState('');
   const [searchParams, _setSearchParams] = useSearchParams();
+  const { user, setUser } = useAuth();
 
   const [category, country] = useQueries({
     queries: [
@@ -35,6 +38,16 @@ export default function Header() {
     }
   };
 
+  const mutationLogout = useMutation({
+    mutationKey: ['logout'],
+    mutationFn: () => logoutUser(),
+    onSuccess: () => {
+      setUser(null);
+      localStorage.removeItem('auth');
+      navigate('/');
+    },
+  });
+
   return (
     <div className="bg-base-100">
       <div className="container navbar shadow mx-auto">
@@ -46,13 +59,7 @@ export default function Header() {
               viewBox="0 0 24 24"
               className="inline-block h-5 w-5 stroke-current"
             >
-              {' '}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16M4 18h16"
-              ></path>{' '}
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>{' '}
             </svg>
           </button>
         </div>
@@ -109,7 +116,7 @@ export default function Header() {
                 tabIndex={0}
                 className="dropdown-content menu grid grid-cols-3 gap-1 bg-base-100 rounded-box z-1 w-96 p-2 shadow"
               >
-                {category.data?.map((item: any) => (
+                {category.data?.data.map((item: any) => (
                   <li key={item._id} className="hover:text-primary">
                     <Link to={`/tim-kiem?the-loai=${item.slug}`}>{item.name}</Link>
                   </li>
@@ -128,7 +135,7 @@ export default function Header() {
                 tabIndex={0}
                 className="dropdown-content menu grid grid-cols-3 gap-1 bg-base-100 rounded-box z-1 w-96 p-2 shadow"
               >
-                {country.data?.map((item: any) => (
+                {country.data?.data.map((item: any) => (
                   <li key={item._id} className="hover:text-primary">
                     <Link to={`/tim-kiem?quoc-gia=${item.slug}`}>{item.name}</Link>
                   </li>
@@ -150,34 +157,36 @@ export default function Header() {
             <i className="fa-solid fa-magnifying-glass"></i>
           </label>
 
-          <Link to={'/dang-nhap'} className="btn btn-soft btn-primary">
-            Đăng nhập
-          </Link>
-
-          {/* <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                />
+          {!user ? (
+            <Link to={'/dang-nhap'} className="btn btn-soft btn-primary">
+              Đăng nhập
+            </Link>
+          ) : (
+            <div className="dropdown dropdown-end">
+              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                <div className="w-10 rounded-full">
+                  <img
+                    alt="Tailwind CSS Navbar component"
+                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  />
+                </div>
               </div>
+              <ul tabIndex={0} className="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                <li>
+                  <a className="justify-between">
+                    Profile
+                    <span className="badge">New</span>
+                  </a>
+                </li>
+                <li>
+                  <a>Settings</a>
+                </li>
+                <li onClick={() => mutationLogout.mutate()}>
+                  <a>Đăng xuất</a>
+                </li>
+              </ul>
             </div>
-            <ul tabIndex={0} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-              <li>
-                <a className="justify-between">
-                  Profile
-                  <span className="badge">New</span>
-                </a>
-              </li>
-              <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <a>Logout</a>
-              </li>
-            </ul>
-          </div> */}
+          )}
         </div>
       </div>
     </div>
