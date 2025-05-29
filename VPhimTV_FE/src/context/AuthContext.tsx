@@ -20,7 +20,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       return decryptObj(encrypted);
     } catch (err) {
-      console.error('An error when decrypted', err);
+      console.log('An error when decrypted', err);
       return null;
     }
   });
@@ -33,9 +33,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     enabled: !!user,
   });
 
+  console.log(data, isLoading, user);
+
   useEffect(() => {
     if (!isLoading && user) {
-      if (!data || !isEqual(user, data.user)) {
+      if (!data || !isEqual(user, data.data)) {
         console.log('User is not logged in, resetting user state');
         setUser(null);
         localStorage.removeItem('auth');

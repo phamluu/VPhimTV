@@ -73,7 +73,7 @@ export default function MovieListPage() {
 
             <Pagination
               currentPage={Number(page)}
-              totalPage={movies.data?.total ?? 999}
+              totalPage={movies.data?.pagination.total ?? 999}
               onPageChange={handlePageChange}
             />
           </>

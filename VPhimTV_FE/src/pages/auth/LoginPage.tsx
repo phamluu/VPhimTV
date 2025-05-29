@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import loginBackgroundImage from '~/assets/imgs/login-background.jpg';
 import { useAuth } from '~/hooks/useAuth';
@@ -9,7 +9,6 @@ import { loginUser } from '~/service/auth/authApi';
 import { encryptObj } from '~/utils/utils';
 
 export default function LoginPage() {
-  const navigate = useNavigate();
   const [username, setUsername] = useState('anle@gmail.com');
   const [password, setPassword] = useState('anle');
   const { setUser } = useAuth();
@@ -18,11 +17,11 @@ export default function LoginPage() {
     mutationKey: ['login'],
     mutationFn: (data: any) => loginUser(data.username, data.password),
     onSuccess: (data) => {
-      const encrypted = encryptObj(data.user);
+      const encrypted = encryptObj(data.data);
       localStorage.setItem('auth', encrypted);
 
       setUser(data.user);
-      navigate('/');
+      window.location.href = '/';
     },
     onError: (error: any) => {
       if (error.errors && typeof error.errors === 'object') {

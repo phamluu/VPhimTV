@@ -10,8 +10,14 @@ class CountryController extends Controller
 {
     public function getList(Request $request)
     {
-        $sortField = $request->input('sort_field', 'updated_at');
-        $sortType = $request->input('sort_type', 'desc');
+        $validated = $request->validate([
+            'sort_field' => 'sometimes|string|in:id,name,created_at,updated_at',
+            'sort_type' => 'sometimes|string|in:asc,desc',
+        ]);
+
+        $sortField = $validated['sort_field'] ?? 'updated_at';
+        $sortType = $validated['sort_type'] ?? 'desc';
+
         return Country::orderBy($sortField, $sortType)->get();
     }
 }
