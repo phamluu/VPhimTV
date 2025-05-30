@@ -11,7 +11,7 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $categories = Category::query()->get();
+        $categories = Category::query()->orderBy('created_at', 'desc')->get();
         return view('category.index', compact('categories'));
     }
 
