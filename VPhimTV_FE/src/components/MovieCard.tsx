@@ -35,7 +35,6 @@ export default function MovieCard({
           </div>
         )}
 
-        {/* Real Image */}
         <img
           src={image}
           alt={title}
