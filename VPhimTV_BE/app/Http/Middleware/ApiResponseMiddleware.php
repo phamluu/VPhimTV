@@ -35,10 +35,13 @@ class ApiResponseMiddleware
     protected function wrapResponse(array $original): array
     {
         $wrapped = [
-            'success' => true,
+            'success' => $original['success'] ?? true,
             'message' => $original['message'] ?? 'Gọi API thành công',
-            'data' => array_key_exists('data', $original) ? $original['data'] : $original,
         ];
+
+        if (array_key_exists('data', $original)) {
+            $wrapped['data'] = $original['data'];
+        }
 
         if (isset($original['current_page'])) {
             $wrapped['pagination'] = [
