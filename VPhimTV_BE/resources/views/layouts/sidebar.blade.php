@@ -61,7 +61,7 @@
             <li class="active-pro">
                 <a href="./upgrade.html">
                     <i class="now-ui-icons arrows-1_cloud-download-93"></i>
-                    <p>Media</p>
+                    <p>Báo cáo thống kê</p>
                 </a>
             </li>
         </ul>

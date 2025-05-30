@@ -11,7 +11,7 @@ class MovieTypeController extends Controller
 {
     public function index(Request $request)
     {
-        $model = MovieType::query()->get();
+        $model = MovieType::query()->orderBy('created_at', 'desc')->get();
         return view('MovieType.index', compact('model'));
     }
 

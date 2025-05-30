@@ -22,6 +22,8 @@
                             <thead class=" text-primary">
                                 <th>STT</th>
                                 <th>Tên phim</th>
+                                <th>Lượt thích</th>
+                                <th>Lượt bình luận</th>
                                 <th class="text-right">Chức năng</th>
                             </thead>
                             <tbody>
@@ -29,6 +31,8 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $movie->name }}</td>
+                                    <td><a href="">10</a></td>
+                                    <td><a href="">3</a></td>
                                     <td class="text-right">
                                         <a href="{{ route('movie.edit', $movie->id) }}" class="btn btn-link btn-info btn-just-icon">
                                             <i class="now-ui-icons ui-2_settings-90"></i>
