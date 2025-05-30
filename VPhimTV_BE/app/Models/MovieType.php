@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class MovieType extends Model
 {
-    //
+    protected $fillable = ['name', 'slug'];
 }
