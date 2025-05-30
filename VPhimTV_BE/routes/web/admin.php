@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\MovieTypeController;
 use App\Http\Controllers\Web\MovieController;
+use App\Http\Controllers\Web\CountryController;
 
 // Route::middleware(['auth', 'can:view-post'])->group(function () {
 //     Route::get('/dashboard', [DashboardController::class, 'index']);
@@ -69,6 +70,17 @@ Route::prefix('admin')->group(function () {
             Route::get('edit/{id}',  'edit')->name('movie.edit');
             Route::put('update/{id}', 'update')->name('movie.update');
             Route::delete('delete/{id}',  'destroy')->name('movie.destroy');
+        });
+    });
+
+    Route::prefix('country')->group(function () {
+        Route::controller(CountryController::class)->group(function () {
+            Route::get('/', 'index')->name('country.index');
+            Route::get('create',  'create')->name('country.create');
+            Route::post('store',  'store')->name('country.store');
+            Route::get('edit/{id}',  'edit')->name('country.edit');
+            Route::put('update/{id}', 'update')->name('country.update');
+            Route::delete('delete/{id}',  'destroy')->name('country.destroy');
         });
     });
 });
