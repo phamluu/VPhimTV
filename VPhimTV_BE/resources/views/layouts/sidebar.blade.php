@@ -34,7 +34,7 @@
                 </a>
             </li>
             <li>
-                <a href="./tables.html">
+                <a href="{{ route('movie.index') }}">
                     <i class="now-ui-icons design_bullet-list-67"></i>
                     <p>Phim</p>
                 </a>

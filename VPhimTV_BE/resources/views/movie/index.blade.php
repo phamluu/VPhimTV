@@ -7,10 +7,10 @@
         <div class="col-md-12">
             <div class="card card-plain">
                 <div class="card-header">
-                    <h4 class="card-title">Danh sách thể loại phim</h4>
-                    <p class="movietype">Quản lý các thể loại phim</p>
+                    <h4 class="card-title">Danh sách phim</h4>
+                    <p class="movie">Quản lý các phim</p>
                 </div>
-                <a href="{{ route('movietype.create') }}" class="btn btn-round btn-primary">Thêm thể loại</a>
+                <a href="{{ route('movie.create') }}" class="btn btn-round btn-primary">Thêm phim</a>
                 @if (session('success'))
                 <div class="alert alert-success mt-2">
                     {{ session('success') }}
@@ -21,19 +21,19 @@
                         <table class="table">
                             <thead class=" text-primary">
                                 <th>STT</th>
-                                <th>Tên thể loại</th>
+                                <th>Tên phim</th>
                                 <th class="text-right">Chức năng</th>
                             </thead>
                             <tbody>
-                                @foreach ($model as $movietype)
+                                @foreach ($model as $movie)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $movietype->name }}</td>
+                                    <td>{{ $movie->name }}</td>
                                     <td class="text-right">
-                                        <a href="{{ route('movietype.edit', $movietype->id) }}" class="btn btn-link btn-info btn-just-icon">
+                                        <a href="{{ route('movie.edit', $movie->id) }}" class="btn btn-link btn-info btn-just-icon">
                                             <i class="now-ui-icons ui-2_settings-90"></i>
                                         </a>
-                                        <form action="{{ route('movietype.destroy', $movietype->id) }}" method="POST" style="display: inline;">
+                                        <form action="{{ route('movie.destroy', $movie->id) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-link btn-danger btn-just-icon">
@@ -46,7 +46,7 @@
                             </tbody>
                         </table>
                         @if ($model->isEmpty())
-                        <p class="text-center">Chưa có thể loại nào.</p>
+                        <p class="text-center">Chưa có phim nào.</p>
                         @endif
                     </div>
                 </div>
