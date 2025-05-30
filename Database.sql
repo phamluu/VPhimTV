@@ -27,6 +27,8 @@ CREATE TABLE IF NOT EXISTS movies(
     content TEXT,
     type_id INTEGER NOT NULL, -- Foreign Key movie_types.id,
     status VARCHAR(50),
+    is_active BOOLEAN DEFAULT TRUE,
+    is_deleted BOOLEAN DEFAULT FALSE,
     poster_url TEXT,
     thumb_url TEXT,
     time VARCHAR(100),
@@ -84,6 +86,8 @@ CREATE TABLE IF NOT EXISTS movie_favorites(
     user_id INTEGER NOT NULL, -- Foreign Key users.id,
     movie_id INTEGER NOT NULL, -- Foreign Key movies.id,
     status VARCHAR(50),
+    is_active BOOLEAN DEFAULT TRUE,
+    is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

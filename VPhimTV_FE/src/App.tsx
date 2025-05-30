@@ -33,7 +33,7 @@ function MainLayout() {
 
 export default function App() {
   return (
-    <><ConfirmProvider>
+    <><><ConfirmProvider>
       <ToastProvider>
         <BrowserRouter>
           <Routes>
@@ -65,6 +65,26 @@ export default function App() {
                   <Route path="/phim/:movieSlug" element={<MovieInfoPage />} />
                   <Route path="/phim/:movieSlug/:episodeSlug" element={<MovieWatchPage />} />
                   <Route path="/nguoi-dung" element={<UserPage />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </ToastProvider>
+        </ConfirmProvider>
+      </AuthProvider></><AuthProvider>
+        <ConfirmProvider>
+          <ToastProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<MainLayout />}>
+                  <Route index element={<HomePage />} />
+                  <Route path="/dang-nhap" element={<LoginPage />} />
+                  <Route path="/dang-ky" element={<RegisterPage />} />
+                  <Route path="/tim-kiem/" element={<SearchPage />} />
+                  <Route path="/danh-sach/:typeSlug" element={<MovieListPage />} />
+                  <Route path="/phim/:movieSlug" element={<MovieInfoPage />} />
+                  <Route path="/phim/:movieSlug/:episodeSlug" element={<MovieWatchPage />} />
+                  <Route path="/nguoi-dung" element={<UserPage />} />
+                  <Route path="binh-luan" element={<CommentPage />} />
                 </Route>
               </Routes>
             </BrowserRouter>

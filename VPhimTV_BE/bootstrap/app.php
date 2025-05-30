@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\ApiResponseMiddleware;
+use App\Http\Middleware\ApiAuthMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -19,7 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware
             ->validateCsrfTokens(except: ['api/*'])
-            ->appendToGroup('api', ApiResponseMiddleware::class);
+            ->appendToGroup('api', ApiResponseMiddleware::class)
+            ->alias([
+                'apiAuth' => ApiAuthMiddleware::class,
+            ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (Throwable $e, $request) {
