@@ -22,6 +22,12 @@
                 </a>
             </li>
             <li>
+                <a class="nav-link" href="{{ route('country.index') }}">
+                    <i class="now-ui-icons text_caps-small"></i>
+                    <p>Quốc gia</p>
+                </a>
+            </li>
+            <li>
                 <a class="nav-link" href="{{ route('category.index') }}">
                     <i class="now-ui-icons text_caps-small"></i>
                     <p>Danh mục phim</p>
