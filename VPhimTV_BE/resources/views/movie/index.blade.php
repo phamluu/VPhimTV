@@ -22,6 +22,7 @@
                             <thead class=" text-primary">
                                 <th>STT</th>
                                 <th>Tên phim</th>
+                                <th>Lượt xem</th>
                                 <th>Lượt thích</th>
                                 <th>Lượt bình luận</th>
                                 <th class="text-right">Chức năng</th>
@@ -31,6 +32,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $movie->name }}</td>
+                                    <td><a href="">10</a></td>
                                     <td><a href="">10</a></td>
                                     <td><a href="">3</a></td>
                                     <td class="text-right">
