@@ -12,11 +12,7 @@ import MovieInfoPage from './pages/movie/MovieInfoPage';
 import MovieListPage from './pages/movie/MovieListPage';
 import MovieWatchPage from './pages/movie/MovieWatchPage';
 import SearchPage from './pages/search/SearchPage';
-
 import CommentPage from './pages/user/CommentPage';
-import LoginPage from './pages/user/LoginPage';
-import RegisterPage from './pages/user/RegisterPage';
-
 import UserPage from './pages/user/UserPage';
 
 function MainLayout() {
@@ -37,8 +33,7 @@ function MainLayout() {
 
 export default function App() {
   return (
-
-    <ConfirmProvider>
+    <><ConfirmProvider>
       <ToastProvider>
         <BrowserRouter>
           <Routes>
@@ -50,32 +45,31 @@ export default function App() {
               <Route path="/danh-sach/:typeSlug" element={<MovieListPage />} />
               <Route path="/phim/:movieSlug" element={<MovieInfoPage />} />
               <Route path="/phim/:movieSlug/:episodeSlug" element={<MovieWatchPage />} />
-              <Route path="nguoi-dung" element={<UserPage/>} />
-              <Route path="binh-luan" element={<CommentPage/>} />
+              <Route path="nguoi-dung" element={<UserPage />} />
+              <Route path="binh-luan" element={<CommentPage />} />
             </Route>
           </Routes>
         </BrowserRouter>
       </ToastProvider>
-    </ConfirmProvider>
-    <AuthProvider>
-      <ConfirmProvider>
-        <ToastProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<MainLayout />}>
-                <Route index element={<HomePage />} />
-                <Route path="/dang-nhap" element={<LoginPage />} />
-                <Route path="/dang-ky" element={<RegisterPage />} />
-                <Route path="/tim-kiem/" element={<SearchPage />} />
-                <Route path="/danh-sach/:typeSlug" element={<MovieListPage />} />
-                <Route path="/phim/:movieSlug" element={<MovieInfoPage />} />
-                <Route path="/phim/:movieSlug/:episodeSlug" element={<MovieWatchPage />} />
-                <Route path="/nguoi-dung" element={<UserPage />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </ToastProvider>
-      </ConfirmProvider>
-    </AuthProvider>
+    </ConfirmProvider><AuthProvider>
+        <ConfirmProvider>
+          <ToastProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<MainLayout />}>
+                  <Route index element={<HomePage />} />
+                  <Route path="/dang-nhap" element={<LoginPage />} />
+                  <Route path="/dang-ky" element={<RegisterPage />} />
+                  <Route path="/tim-kiem/" element={<SearchPage />} />
+                  <Route path="/danh-sach/:typeSlug" element={<MovieListPage />} />
+                  <Route path="/phim/:movieSlug" element={<MovieInfoPage />} />
+                  <Route path="/phim/:movieSlug/:episodeSlug" element={<MovieWatchPage />} />
+                  <Route path="/nguoi-dung" element={<UserPage />} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </ToastProvider>
+        </ConfirmProvider>
+      </AuthProvider></>
   );
 }
