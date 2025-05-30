@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\MenuController;
 use App\Http\Controllers\Web\CategoryController;
 use App\Http\Controllers\Web\ProfileController;
+use App\Http\Controllers\Web\MovieTypeController;
 
 // Route::middleware(['auth', 'can:view-post'])->group(function () {
 //     Route::get('/dashboard', [DashboardController::class, 'index']);
@@ -46,5 +47,16 @@ Route::prefix('admin')->group(function () {
         Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('category.edit');
         Route::put('update/{id}', [CategoryController::class, 'update'])->name('category.update');
         Route::delete('delete/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
+    });
+
+    Route::prefix('movietype')->group(function () {
+        Route::controller(MovieTypeController::class)->group(function () {
+            Route::get('/', 'index')->name('movietype.index');
+            Route::get('create',  'create')->name('movietype.create');
+            Route::post('store',  'store')->name('movietype.store');
+            Route::get('edit/{id}',  'edit')->name('movietype.edit');
+            Route::put('update/{id}', 'update')->name('movietype.update');
+            Route::delete('delete/{id}',  'destroy')->name('movietype.destroy');
+        });
     });
 });

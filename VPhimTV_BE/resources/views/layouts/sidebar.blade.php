@@ -28,7 +28,7 @@
                 </a>
             </li>
             <li>
-                <a href="./map.html">
+                <a href="{{ route('movietype.index') }}">
                     <i class="now-ui-icons location_map-big"></i>
                     <p>Thể loại</p>
                 </a>
