@@ -22,12 +22,13 @@ class ApiResponseMiddleware
 
         if (
             isset($original['errors']) ||
-            (isset($original['success']) && array_key_exists('data', $original))
+            isset($original['success']) ||
+            array_key_exists('data', $original)
         ) {
             return $response;
         }
 
-        $wrapped = $this->wrapResponse($original);
+        $wrapped = $this->wrapResponse(['data' => $original]);
 
         return response()->json($wrapped, $response->getStatusCode());
     }
