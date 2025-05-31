@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\FavoriteController;
+use App\Http\Controllers\Api\UserController;
 
 Route::middleware(['web'])->group(function () {
     // API Authenticate
@@ -34,6 +36,14 @@ Route::middleware(['web'])->group(function () {
         });
     });
 
+    // API User
+    Route::prefix('user')->name('users.')->group(function () {
+        Route::controller(UserController::class)->group(function () {
+            Route::get('/{id}', 'getDetail')->name('getDetail');
+            Route::put('/update/{id}', 'update')->name('update');
+        });
+    });
+
     // API Category
     Route::prefix('category')->name('categories.')->group(function () {
         Route::get('/', [CategoryController::class, 'getList'])->name('getList');
@@ -41,6 +51,6 @@ Route::middleware(['web'])->group(function () {
 
     // API Country
     Route::prefix('country')->name('countries.')->group(function () {
-        Route::get('/', [CategoryController::class, 'getList'])->name('getList');
+        Route::get('/', [CountryController::class, 'getList'])->name('getList');
     });
 });
