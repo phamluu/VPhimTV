@@ -115,20 +115,12 @@ export default function Header() {
               <ul
                 tabIndex={0}
                 className="dropdown-content menu grid grid-cols-3 gap-1 bg-base-100 rounded-box z-1 w-96 p-2 shadow"
-
               >
-                {category.data?.data.map((item: any) => (
+                {category.data?.data?.map((item: any) => (
                   <li key={item._id} className="hover:text-primary">
                     <Link to={`/tim-kiem?the-loai=${item.slug}`}>{item.name}</Link>
                   </li>
                 ))}
-
-                  {Array.isArray(category.data?.data) && category.data.data.map((item: any) => (
-                    <li key={item._id} className="hover:text-primary">
-                      <Link to={`/tim-kiem?the-loai=${item.slug}`}>{item.name}</Link>
-                      </li>
-                    ))}
-
               </ul>
             </div>
             <div className="dropdown dropdown-end dropdown-hover xl:inline-block hidden">
@@ -143,7 +135,7 @@ export default function Header() {
                 tabIndex={0}
                 className="dropdown-content menu grid grid-cols-3 gap-1 bg-base-100 rounded-box z-1 w-96 p-2 shadow"
               >
-                {country.data?.data.map((item: any) => (
+                {country.data?.data?.map((item: any) => (
                   <li key={item._id} className="hover:text-primary">
                     <Link to={`/tim-kiem?quoc-gia=${item.slug}`}>{item.name}</Link>
                   </li>
