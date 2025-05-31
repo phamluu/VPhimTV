@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Movie;
 use App\Http\Controllers\Controller;
+use App\Models\Country;
+use App\Models\MovieType;
 
 class MovieController extends Controller
 {
@@ -17,7 +19,10 @@ class MovieController extends Controller
 
     public function create()
     {
-        return view('movie.create');
+        $model = new \App\Models\Movie();
+        $movie_type = MovieType::all();
+        $countries = Country::all();
+        return view('movie.create', compact('model', 'countries', 'movie_type'));
     }
 
     public function store(Request $request)
@@ -37,7 +42,9 @@ class MovieController extends Controller
     public function edit($id)
     {
         $model = Movie::findOrFail($id);
-        return view('movie.edit', compact('model'));
+        $movie_type = MovieType::all();
+        $countries = Country::all();
+        return view('movie.edit', compact('model', 'countries', 'movie_type'));
     }
 
     public function update(Request $request, $id)

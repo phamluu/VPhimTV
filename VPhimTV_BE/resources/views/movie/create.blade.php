@@ -3,35 +3,14 @@
 @section('content')
 <div class="panel-header panel-header-sm"></div>
 <div class="content">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="title">Thêm phim</h5>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('movie.store') }}" method="POST">
-                        @csrf
-                        @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        @endif
-
-                        <div class="form-group">
-                            <label for="name">Tên phim</label>
-                            <input type="text" name="name" class="form-control" placeholder="Nhập tên phim" value="{{ old('name') }}">
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-round">Thêm</button>
-                    </form>
-                </div>
-            </div>
+    <div class="card">
+        <div class="card-header">
+            <h5 class="title">Thêm phim mới</h5>
         </div>
     </div>
+    <form action="{{ route('movie.store')}}" method="POST">
+        @include('movie._field', ['model' => $model])
+
+    </form>
 </div>
 @endsection
