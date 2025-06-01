@@ -33,8 +33,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     enabled: !!user,
   });
 
-  console.log(data, isLoading, user);
-
   useEffect(() => {
     if (!isLoading && user) {
       if (!data || !isEqual(user, data.data)) {

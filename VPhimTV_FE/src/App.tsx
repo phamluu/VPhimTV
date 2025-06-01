@@ -13,7 +13,10 @@ import MovieListPage from './pages/movie/MovieListPage';
 import MovieWatchPage from './pages/movie/MovieWatchPage';
 import SearchPage from './pages/search/SearchPage';
 import CommentPage from './pages/user/CommentPage';
-import UserPage from './pages/user/UserPage';
+import UserLayout from './pages/user/layouts/UserLayout';
+import UserFavoritePage from './pages/user/UserFavoritePage';
+import UserProfilePage from './pages/user/UserProfilePage';
+import UserViewedPage from './pages/user/UserViewedPage';
 
 function MainLayout() {
   const location = useLocation();
@@ -44,9 +47,18 @@ export default function App() {
                 <Route path="/dang-ky" element={<RegisterPage />} />
                 <Route path="/tim-kiem/" element={<SearchPage />} />
                 <Route path="/danh-sach/:typeSlug" element={<MovieListPage />} />
-                <Route path="/phim/:movieSlug" element={<MovieInfoPage />} />
-                <Route path="/phim/:movieSlug/:episodeSlug" element={<MovieWatchPage />} />
-                <Route path="/nguoi-dung" element={<UserPage />} />
+
+                <Route path="/phim">
+                  <Route path=":movieSlug" element={<MovieInfoPage />} />
+                  <Route path=":movieSlug/:episodeSlug" element={<MovieWatchPage />} />
+                </Route>
+
+                <Route path="/ho-so" element={<UserLayout />}>
+                  <Route index element={<UserProfilePage />} />
+                  <Route path="yeu-thich" element={<UserFavoritePage />} />
+                  <Route path="lich-su" element={<UserViewedPage />} />
+                </Route>
+
                 <Route path="/binh-luan" element={<CommentPage />} />
               </Route>
             </Routes>
