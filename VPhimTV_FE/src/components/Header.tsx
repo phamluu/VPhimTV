@@ -70,40 +70,23 @@ export default function Header() {
           </Link>
 
           <div className="inline-flex">
-            <Link
-              className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary sm:inline-flex hidden"
-              to="/danh-sach/phim-moi?trang=1"
-            >
-              Phim Mới
-            </Link>
-            <Link
-              className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary sm:inline-flex hidden"
-              to="/danh-sach/phim-le?trang=1"
-            >
-              Phim Lẻ
-            </Link>
+            {[
+              { to: '/danh-sach/phim-moi?trang=1', label: 'Phim Mới', className: 'sm:inline-flex hidden' },
+              { to: '/danh-sach/phim-le?trang=1', label: 'Phim Lẻ', className: 'sm:inline-flex hidden' },
+              { to: '/danh-sach/phim-bo?trang=1', label: 'Phim Bộ', className: 'lg:inline-flex hidden' },
+              { to: '/danh-sach/tv-shows?trang=1', label: 'TV Shows', className: 'lg:inline-flex hidden' },
+              { to: '/danh-sach/hoat-hinh?trang=1', label: 'Hoạt Hình', className: 'lg:inline-flex hidden' },
+            ].map(({ to, label, className }) => (
+              <Link
+                key={to}
+                className={`btn btn-link !no-underline text-nowrap text-base-content hover:text-primary ${className}`}
+                to={to}
+              >
+                {label}
+              </Link>
+            ))}
 
-            <Link
-              className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary lg:inline-flex hidden"
-              to="/danh-sach/phim-bo?trang=1"
-            >
-              Phim Bộ
-            </Link>
-
-            <Link
-              className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary lg:inline-flex hidden"
-              to="/danh-sach/tv-shows?trang=1"
-            >
-              TV Shows
-            </Link>
-
-            <Link
-              className="btn btn-link !no-underline text-nowrap text-base-content hover:text-primary lg:inline-flex hidden"
-              to="/danh-sach/hoat-hinh?trang=1"
-            >
-              Hoạt Hình
-            </Link>
-
+            {/* Category List */}
             <div className="dropdown dropdown-end dropdown-hover xl:inline-block hidden">
               <div
                 tabIndex={0}
@@ -123,6 +106,8 @@ export default function Header() {
                 ))}
               </ul>
             </div>
+
+            {/* Country List */}
             <div className="dropdown dropdown-end dropdown-hover xl:inline-block hidden">
               <div
                 tabIndex={0}
@@ -146,6 +131,7 @@ export default function Header() {
         </div>
 
         <div className="navbar-end space-x-3">
+          {/* Search Input */}
           <label className="input w-20 sm:w-auto">
             <input
               type="text"
@@ -156,6 +142,8 @@ export default function Header() {
             />
             <i className="fa-solid fa-magnifying-glass"></i>
           </label>
+
+          {/* User Profile or Login Button */}
           {!user ? (
             <Link to={'/dang-nhap'} className="btn btn-soft btn-primary">
               Đăng nhập
@@ -164,24 +152,33 @@ export default function Header() {
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
-                  <img
-                    alt="Tailwind CSS Navbar component"
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                  />
+                  <img alt="Tailwind CSS Navbar component" src="/src/assets/imgs/defaultAvatar.png" />
                 </div>
               </div>
               <ul tabIndex={0} className="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                 <li>
-                  <a className="justify-between">
-                    Profile
-                    <span className="badge">New</span>
-                  </a>
+                  <Link to={'/ho-so'}>
+                    <i className="fa-regular fa-user"></i>
+                    Hồ sơ
+                  </Link>
                 </li>
                 <li>
-                  <a>Settings</a>
+                  <Link to={'/ho-so/yeu-thich'}>
+                    <i className="fa-regular fa-award-simple"></i>
+                    Phim yêu thích
+                  </Link>
+                </li>
+                <li>
+                  <Link to={'/ho-so/lich-su'}>
+                    <i className="fa-regular fa-clock"></i>
+                    Phim đã xem
+                  </Link>
                 </li>
                 <li onClick={() => mutationLogout.mutate()}>
-                  <a>Đăng xuất</a>
+                  <a>
+                    <i className="fa-regular fa-arrow-right-from-bracket"></i>
+                    Đăng xuất
+                  </a>
                 </li>
               </ul>
             </div>

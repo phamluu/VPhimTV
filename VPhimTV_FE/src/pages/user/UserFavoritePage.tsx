@@ -19,6 +19,7 @@ export default function UserFavoritePage() {
       <div className="grid grid-cols-4 gap-4">
         <div className="relative shadow rounded-xl group">
           <img
+            loading="lazy"
             src="https://phimimg.com/upload/vod/20250525-1/ee79000b91e915195428528c9ebbfe57.jpg"
             className="rounded-xl"
           />
