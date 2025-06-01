@@ -75,7 +75,13 @@ class MovieController extends Controller
 
     public function getDetail($slug)
     {
-        $movie = Movie::query()
+        $movie = Movie::with([
+            'country:id,name,slug',
+            'type:id,name,slug',
+            'categories:id,name,slug',
+            'episodes:id,movie_id,server_name,episode_name,slug,file_name,link_embed,link_m3u8,status'
+        ])
+            ->select('id', 'name', 'slug', 'content', 'type_id', 'country_id', 'thumb_url', 'poster_url', 'time', 'episode_current', 'episode_total', 'quality', 'language', 'year', 'actor', 'director')
             ->where('slug', $slug)
             ->first();
 
@@ -83,53 +89,42 @@ class MovieController extends Controller
             return response()->json(['error' => 'Movie not found'], 404);
         }
 
-        $categories = MovieCategory::query()
-            ->join('categories', 'movie_categories.category_id', '=', 'categories.id')
-            ->where('movie_categories.movie_id', $movie->id)
-            ->select('categories.name', 'categories.slug')
-            ->get()
-            ->toArray();
-
-        $country = Country::query()
-            ->where('id', $movie->country_id)
-            ->select('name', 'slug')
-            ->first();
-
-        $movieType = MovieType::query()
-            ->where('id', $movie->type_id)
-            ->select('name', 'slug')
-            ->first();
-
-        $episodes = Episode::where('movie_id', $movie->id)->get();
-        $groupedEpisodes = $episodes->groupBy('server_name');
-
-        $result = $movie->toArray();
-        unset($result['type_id'], $result['country_id']);
-
-        $result['type'] = $movieType;
-        $result['category'] = $categories;
-        $result['country'] = $country;
-        $result['episodes'] = [];
-
-        foreach ($groupedEpisodes as $serverName => $serverEpisodes) {
-            $serverData = $serverEpisodes->map(function ($episode) {
-                return [
-                    'id' => $episode->id,
-                    'episode_name' => $episode->episode_name,
-                    'slug' => $episode->slug,
-                    'file_name' => $episode->file_name,
-                    'link_embed' => $episode->link_embed,
-                    'link_m3u8' => $episode->link_m3u8,
-                    'status' => $episode->status,
-                ];
-            });
-
-            $result['episodes'][] = [
+        $groupedEpisodes = $movie->episodes->groupBy('server_name')->map(function ($episodes, $serverName) {
+            return [
                 'server_name' => $serverName,
-                'server_data' => $serverData,
+                'server_data' => $episodes->map(function ($ep) {
+                    return [
+                        'id' => $ep->id,
+                        'episode_name' => $ep->episode_name,
+                        'slug' => $ep->slug,
+                        'file_name' => $ep->file_name,
+                        'link_embed' => $ep->link_embed,
+                        'link_m3u8' => $ep->link_m3u8,
+                        'status' => $ep->status,
+                    ];
+                })->values()
             ];
-        }
+        })->values();
 
-        return response()->json($result);
+        return response()->json([
+            'id' => $movie->id,
+            'name' => $movie->name,
+            'slug' => $movie->slug,
+            'content' => $movie->content,
+            'thumb_url' => $movie->thumb_url,
+            'poster_url' => $movie->poster_url,
+            'time' => $movie->time,
+            'episode_current' => $movie->episode_current,
+            'episode_total' => $movie->episode_total,
+            'quality' => $movie->quality,
+            'language' => $movie->language,
+            'year' => $movie->year,
+            'actor' => $movie->actor,
+            'director' => $movie->director,
+            'type' => $movie->type,
+            'country' => $movie->country,
+            'category' => $movie->categories,
+            'episodes' => $groupedEpisodes
+        ]);
     }
 }
