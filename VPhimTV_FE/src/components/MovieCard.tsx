@@ -10,28 +10,16 @@ interface MovieCardProps {
   primary?: boolean;
 }
 
-export default function MovieCard({
-  status,
-  title,
-  image,
-  linkTo,
-  className = '',
-  primary,
-}: MovieCardProps) {
+export default function MovieCard({ status, title, image, linkTo, className = '', primary }: MovieCardProps) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   return (
-    <div
-      className={`shadow relative ${className} ${!isLoaded ? 'skeleton' : ''}`}
-    >
-      <Link to={linkTo || ''}>
+    <div className={`shadow relative ${className} ${!isLoaded ? 'skeleton' : ''}`}>
+      <Link to={linkTo || ''} className="block w-full h-full">
         {/* Placeholder Image */}
         {!isLoaded && (
-          <div className="skeleton">
-            <img
-              src="/src/assets/imgs/anh-mau.webp"
-              className="opacity-0 w-full h-full"
-            />
+          <div className="skeleton w-full h-full">
+            <img src="/src/assets/imgs/anh-mau.webp" className="opacity-0 w-full h-full" />
           </div>
         )}
 
@@ -55,9 +43,7 @@ export default function MovieCard({
             >
               {status}
             </p>
-            <p className="absolute bottom-0 left-0 p-2 bg-base-300/75 w-full text-sm truncate">
-              {title}
-            </p>
+            <p className="absolute bottom-0 left-0 p-2 bg-base-300/75 w-full text-sm truncate">{title}</p>
           </>
         )}
       </Link>
