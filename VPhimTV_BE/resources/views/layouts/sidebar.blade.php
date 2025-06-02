@@ -39,6 +39,14 @@
                     <p>Thể loại</p>
                 </a>
             </li>
+
+            <li>
+                <a href="{{ route('episode.index') }}">
+                    <i class="now-ui-icons location_map-big"></i>
+                    <p>Tập phim</p>
+                </a>
+            </li>
+            <li>
             <li class="{{ request()->routeIs('movie.index') ? 'active' : '' }}">
                 <a href="{{ route('movie.index') }}">
                     <i class="now-ui-icons design_bullet-list-67"></i>

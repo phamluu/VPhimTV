@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\MovieTypeController;
 use App\Http\Controllers\Web\MovieController;
 use App\Http\Controllers\Web\CountryController;
+use App\Http\Controllers\Web\EpisodeController;
 use App\Http\Controllers\Web\MovieCommentController;
 
 // Route::middleware(['auth', 'can:view-post'])->group(function () {
@@ -84,6 +85,16 @@ Route::prefix('admin')->group(function () {
             Route::delete('delete/{id}',  'destroy')->name('country.destroy');
         });
     });
+
+    Route::prefix('episode')->group(function () {
+        Route::controller(EpisodeController::class)->group(function () {
+            Route::get('/', 'index')->name('episode.index');
+            Route::get('create',  'create')->name('episode.create');
+            Route::post('store',  'store')->name('episode.store');
+            Route::get('edit/{id}',  'edit')->name('episode.edit');
+            Route::put('update/{id}', 'update')->name('episode.update');
+            Route::delete('delete/{id}',  'destroy')->name('episode.destroy');
+        });
 
     Route::prefix('movie_comments')->group(function () {
         Route::get('/', [MovieCommentController::class, 'index'])->name('movie_comments.index');
