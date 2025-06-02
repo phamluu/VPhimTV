@@ -40,12 +40,11 @@ class MovieController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $rs = $this->service->updateMovie($request, null);
+        $movie = $this->service->updateMovie($request, null);
 
-        if ($rs) {
-            return redirect()->route('movie.index')->with('success', 'Thêm phim thành công.');
+        if ($movie) {
+            return redirect()->route('movie.edit', ['id' => $movie->id])->with('success', 'Thêm phim thành công.');
         } else {
-
             return redirect()->back()->with('error', 'Thêm phim thất bại')->withInput();
         }
     }
@@ -66,7 +65,7 @@ class MovieController extends Controller
 
         $rs = $this->service->updateMovie($request, $id);
         if ($rs) {
-            return redirect()->route('movie.index')->with('success', 'Cập nhật phim thành công.');
+            return redirect()->back()->with('success', 'Cập nhật phim thành công');
         }
     }
 

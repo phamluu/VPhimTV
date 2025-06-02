@@ -13,6 +13,12 @@
                  </div>
                  @endif
 
+                 @if (session('success'))
+                 <div class="alert alert-success mt-2">
+                     {{ session('success') }}
+                 </div>
+                 @endif
+
                  <div class="form-group">
                      <label for="name">Tên phim</label>
                      <input type="text" name="name" class="form-control" value="{{ old('name', $model->name) }}">
