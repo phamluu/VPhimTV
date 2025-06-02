@@ -103,4 +103,3 @@ Route::prefix('admin')->group(function () {
             Route::delete('delete/{id}', [MovieCommentController::class, 'destroy'])->name('movie_comments.destroy');
         });
     });
-});
