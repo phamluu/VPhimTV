@@ -9,6 +9,7 @@
         </div>
     </div>
     <form action="{{ route('movie.update', $model->id) }}" method="POST">
+        @csrf
         @method('PUT')
         @include('movie._field')
 

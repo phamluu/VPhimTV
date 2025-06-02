@@ -3,9 +3,6 @@
          <div class="card">
              <div class="card-body">
 
-                 @csrf
-
-
                  @if ($errors->any())
                  <div class="alert alert-danger">
                      <ul>

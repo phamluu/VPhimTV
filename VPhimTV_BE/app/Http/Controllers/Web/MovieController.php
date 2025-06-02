@@ -8,9 +8,17 @@ use App\Models\Movie;
 use App\Http\Controllers\Controller;
 use App\Models\Country;
 use App\Models\MovieType;
+use App\Services\MovieService;
 
 class MovieController extends Controller
 {
+    protected $service;
+
+    public function __construct()
+    {
+        $this->service = new MovieService();
+    }
+
     public function index(Request $request)
     {
         $model = Movie::query()->orderBy('created_at', 'desc')->get();
@@ -31,12 +39,18 @@ class MovieController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        Movie::create([
-            'name' => $request->name,
-            'slug' => Str::slug($request->name),
-        ]);
+        // Movie::create([
+        //     'name' => $request->name,
+        //     'slug' => Str::slug($request->name),
+        // ]);
+        $rs = $this->service->updateMovie($request, null);
 
-        return redirect()->route('movie.index')->with('success', 'Thêm phim thành công.');
+        if ($rs) {
+            return redirect()->route('movie.index')->with('success', 'Thêm phim thành công.');
+        } else {
+
+            return redirect()->back()->with('error', 'Thêm phim thất bại')->withInput();
+        }
     }
 
     public function edit($id)
@@ -53,12 +67,10 @@ class MovieController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $model = Movie::findOrFail($id);
-        $model->name = $request->name;
-        $model->slug = Str::slug($request->name);
-        $model->save();
-
-        return redirect()->route('movie.index')->with('success', 'Cập nhật phim thành công.');
+        $rs = $this->service->updateMovie($request, $id);
+        if ($rs) {
+            return redirect()->route('movie.index')->with('success', 'Cập nhật phim thành công.');
+        }
     }
 
     public function destroy($id)
