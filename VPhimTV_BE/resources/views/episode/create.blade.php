@@ -10,7 +10,7 @@
                     <h5 class="title">Thêm danh mục phim</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('category.store') }}" method="POST">
+                    <form action="{{ route('episode.store') }}" method="POST">
                         @csrf
                         @if ($errors->any())
                         <div class="alert alert-danger">
@@ -21,7 +21,11 @@
                             </ul>
                         </div>
                         @endif
-
+                        @if (session('success'))
+                        <div class="alert alert-success mt-2">
+                            {{ session('success') }}
+                        </div>
+                        @endif
                         @include('episode._field', ['model' => $model])
 
                         <button type="submit" class="btn btn-primary btn-round">Thêm</button>

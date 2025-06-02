@@ -23,7 +23,11 @@
                             </ul>
                         </div>
                         @endif
-
+                        @if (session('success'))
+                        <div class="alert alert-success mt-2">
+                            {{ session('success') }}
+                        </div>
+                        @endif
                         @include('episode._field', ['model' => $model])
 
                         <button type="submit" class="btn btn-success btn-round">Cập nhật</button>

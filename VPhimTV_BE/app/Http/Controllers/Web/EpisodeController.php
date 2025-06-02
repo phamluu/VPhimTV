@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Episode;
 use App\Http\Controllers\Controller;
+use App\Models\Movie;
 use App\Services\MovieService;
 
 class EpisodeController extends Controller
@@ -25,7 +26,8 @@ class EpisodeController extends Controller
     public function create()
     {
         $model = new Episode();
-        return view('episode.create', compact('model'));
+        $movies = Movie::all();
+        return view('episode.create', compact('model', 'movies'));
     }
 
     public function store(Request $request)
@@ -43,7 +45,8 @@ class EpisodeController extends Controller
     public function edit($id)
     {
         $model = Episode::findOrFail($id);
-        return view('episode.edit', compact('model'));
+        $movies = Movie::all();
+        return view('episode.edit', compact('model', 'movies'));
     }
 
     public function update(Request $request, $id)
