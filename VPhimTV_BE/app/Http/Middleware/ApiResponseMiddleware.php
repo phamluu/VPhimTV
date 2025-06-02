@@ -21,9 +21,7 @@ class ApiResponseMiddleware
         $original = $response->getData(true);
 
         if (
-            isset($original['errors']) ||
-            isset($original['success']) ||
-            array_key_exists('data', $original)
+            isset($original['errors']) || (isset($original['success']) && array_key_exists('data', $original))
         ) {
             return $response;
         }
@@ -40,18 +38,22 @@ class ApiResponseMiddleware
             'message' => $original['message'] ?? 'Gọi API thành công',
         ];
 
-        if (array_key_exists('data', $original)) {
-            $wrapped['data'] = $original['data'];
+        if (isset($original['current_page']) || isset($original['data']['current_page'])) {
+            $wrapped['data'] = $original['data']['data'] ?? [];
+
+            $wrapped['pagination'] = [
+                'current_page' => $original['current_page'] ?? $original['data']['current_page'] ?? null,
+                'last_page' => $original['last_page'] ?? $original['data']['last_page'] ?? null,
+                'per_page' => $original['per_page'] ?? $original['data']['per_page'] ?? null,
+                'total' => $original['total'] ?? $original['data']['total'] ?? null,
+                'links' => $original['links'] ?? $original['data']['links'] ?? [],
+            ];
+
+            return $wrapped;
         }
 
-        if (isset($original['current_page'])) {
-            $wrapped['pagination'] = [
-                'current_page' => $original['current_page'] ?? null,
-                'last_page' => $original['last_page'] ?? null,
-                'per_page' => $original['per_page'] ?? null,
-                'total' => $original['total'] ?? null,
-                'links' => $original['links'] ?? [],
-            ];
+        if (array_key_exists('data', $original)) {
+            $wrapped['data'] = $original['data'];
         }
 
         return $wrapped;
