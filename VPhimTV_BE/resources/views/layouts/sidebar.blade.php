@@ -1,9 +1,9 @@
 <div class="sidebar" data-color="orange">
     <div class="logo">
-        <a href="/dashboard" class="simple-text logo-mini">
+        <a href="/admin" class="simple-text logo-mini">
             V
         </a>
-        <a href="/dashboard" class="simple-text logo-normal">
+        <a href="/admin" class="simple-text logo-normal">
             Phim TV
         </a>
     </div>

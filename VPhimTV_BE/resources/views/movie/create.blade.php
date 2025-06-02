@@ -8,7 +8,7 @@
             <h5 class="title">Thêm phim mới</h5>
         </div>
     </div>
-    <form action="{{ route('movie.store')}}" method="POST">
+    <form action="{{ route('movie.store')}}" method="POST" enctype="multipart/form-data">
         @csrf
         @include('movie._field', ['model' => $model])
 
