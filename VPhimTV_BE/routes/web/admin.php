@@ -52,7 +52,6 @@ Route::prefix('admin')->group(function () {
         Route::put('update/{id}', [CategoryController::class, 'update'])->name('category.update');
         Route::delete('delete/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
     });
-
     Route::prefix('movietype')->group(function () {
         Route::controller(MovieTypeController::class)->group(function () {
             Route::get('/', 'index')->name('movietype.index');
@@ -95,6 +94,7 @@ Route::prefix('admin')->group(function () {
             Route::put('update/{id}', 'update')->name('episode.update');
             Route::delete('delete/{id}',  'destroy')->name('episode.destroy');
         });
+    });
 
     Route::prefix('movie_comments')->group(function () {
         Route::get('/', [MovieCommentController::class, 'index'])->name('movie_comments.index');

@@ -9,6 +9,7 @@ import { fetchMovieInfo, fetchMovies } from '~/service/movies/moviesApi';
 import { movieTypeMap } from '~/utils/classMap';
 
 import MovieContainer from '../home/components/MovieContainer';
+import Comments from './CommentPage';
 
 export default function MovieWatchPage() {
   const { movieSlug, episodeSlug } = useParams();
@@ -128,6 +129,7 @@ export default function MovieWatchPage() {
               grid={4}
               imageType="poster"
             />
+            <Comments />
           </div>
         </div>
       </div>
