@@ -11,9 +11,9 @@ class MovieService
     public function getMoive($id) {}
     public function updateMovie(Request $request, $id)
     {
-        $model = Movie::findOrFail($id);
-        if ($model == null) {
-            // Thêm mới
+        if ($id) {
+            $model = Movie::findOrFail($id);
+        } else {
             $model = new Movie();
         }
         $model->name = $request->name;
@@ -34,6 +34,7 @@ class MovieService
         $model->country_id = $request->country_id;
         $model->actor = $request->actor;
         $model->director = $request->director;
+
         if ($model->save()) {
             return true;
         }
