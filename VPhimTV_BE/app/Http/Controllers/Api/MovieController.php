@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BaseRequest;
 use App\Models\Movie;
 use App\Http\Requests\MovieRequest;
 
@@ -69,8 +70,7 @@ class MovieController extends Controller
         ];
         $movies->select($selectFiles);
         $movies->groupBy($selectFiles);
-
-        return $movies->paginate($limit, ['*'], 'page', $page);
+        return response()->json($movies->paginate($limit, ['*'], 'page', $page));
     }
 
     public function getDetail($slug)
@@ -126,5 +126,27 @@ class MovieController extends Controller
             'category' => $movie->categories,
             'episodes' => $groupedEpisodes
         ]);
+    }
+
+    public function getListHot(BaseRequest $request)
+    {
+        $pagination = $request->paginationParams();
+
+        $movies = Movie::query()
+            ->select(
+                'movies.name',
+                'movies.slug',
+                'movies.original_name',
+                'movies.poster_url',
+                'movies.thumb_url',
+                'movies.episode_current',
+                'movies.language',
+                'movies.created_at',
+                'movies.updated_at'
+            )
+            ->inRandomOrder()
+            ->paginate($pagination['limit'], ['*'], 'page', $pagination['page']);
+
+        return response()->json($movies);
     }
 }

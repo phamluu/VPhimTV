@@ -10,15 +10,18 @@ import MovieContainer from './components/MovieContainer';
 export default function HomePage() {
   const limit = 12;
 
-  const [newMovies, seriesMovies, singleMovies, animeMovies, tvShowsMovies] = useQueries({
+  const [newMovies, seriesMovies, singleMovies, animeMovies, tvShowsMovies, hotMovies] = useQueries({
     queries: [
       { queryKey: ['newMovies'], queryFn: () => fetchMovies({ limit }) },
       { queryKey: ['seriesMovies'], queryFn: () => fetchMovies({ limit, typeList: MoviesTypeEnum.series }) },
       { queryKey: ['singleMovies'], queryFn: () => fetchMovies({ limit, typeList: MoviesTypeEnum.single }) },
       { queryKey: ['animeMovies'], queryFn: () => fetchMovies({ limit, typeList: MoviesTypeEnum.hoathinh }) },
       { queryKey: ['tvShowsMovies'], queryFn: () => fetchMovies({ limit, typeList: MoviesTypeEnum.tvshows }) },
+      { queryKey: ['hotMovies'], queryFn: () => fetchMovies({ limit: 10 }, true) },
     ],
   });
+
+  console.log(hotMovies.data);
 
   return (
     <div className="container mx-auto space-y-8">
@@ -40,17 +43,28 @@ export default function HomePage() {
             },
           }}
         >
-          {Array.from({ length: 10 }).map((_, i) => (
-            <SplideSlide key={i}>
-              <MovieCard
-                key={i}
-                status="Full | Vietsub + Lồng Tiếng"
-                title={`404 - Chạy ngay đi - ${i}`}
-                image="https://oamarense.com/wp-content/uploads/2025/04/404-chay-ngay-di-15356-poster.webp"
-                className="max-h-[137px]"
-              />
-            </SplideSlide>
-          ))}
+          {hotMovies.isLoading
+            ? Array.from({ length: 10 }).map((_, i) => (
+                <SplideSlide key={i}>
+                  <MovieCard
+                    key={i}
+                    status="Full | Vietsub + Lồng Tiếng"
+                    title={`404 - Chạy ngay đi - ${i}`}
+                    image="https://oamarense.com/wp-content/uploads/2025/04/404-chay-ngay-di-15356-poster.webp"
+                    className="max-h-[137px]"
+                  />
+                </SplideSlide>
+              ))
+            : hotMovies.data?.data.map((movie: any) => (
+                <SplideSlide key={movie.slug}>
+                  <MovieCard
+                    title={movie.name}
+                    status={`${movie.episode_current} | ${movie.language}`}
+                    className="max-h-[137px]"
+                    image={movie.thumb_url}
+                  />
+                </SplideSlide>
+              ))}
         </Splide>
       </div>
 

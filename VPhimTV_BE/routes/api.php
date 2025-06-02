@@ -26,6 +26,7 @@ Route::middleware(['web'])->group(function () {
     Route::prefix('movie')->name('movies.')->group(function () {
         Route::controller(MovieController::class)->group(function () {
             Route::get('/', 'getList')->name('getList');
+            Route::get('/hot', 'getListHot')->name('getListHot');
             Route::get('/{slug}', 'getDetail')->name('getDetail');
         });
     });

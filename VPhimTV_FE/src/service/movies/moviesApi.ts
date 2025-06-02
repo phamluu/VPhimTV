@@ -1,10 +1,12 @@
+import { AxiosResponse } from 'axios';
+
 import http from '~/configs/httpService';
 
 import { MovieQueryParams } from './moviesType';
 
-const baseUrl ='api/movie';
+const baseUrl = 'api/movie';
 
-export const fetchMovies = async (options: MovieQueryParams) => {
+export const fetchMovies = async (options: MovieQueryParams, random = false) => {
   const {
     limit = 10,
     page = 1,
@@ -30,8 +32,15 @@ export const fetchMovies = async (options: MovieQueryParams) => {
   if (year) params.append('year', year);
   if (keyword) params.append('keyword', keyword);
 
-  const response = await http.get(baseUrl, { params });
-  return response.data;
+  let res: AxiosResponse;
+
+  if (random) {
+    res = await http.get(`${baseUrl}/hot`, { params });
+  } else {
+    res = await http.get(baseUrl, { params });
+  }
+
+  return res.data;
 };
 
 export const fetchMovieInfo = async (slug: string) => {
