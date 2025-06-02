@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\ViewsController;
+use App\Http\Controllers\Api\HistoryController;
 
 Route::middleware(['web'])->group(function () {
     // API Authenticate
@@ -55,6 +56,15 @@ Route::middleware(['web'])->group(function () {
                 Route::put('/update/{id}', 'update')->name('update');
                 Route::post('/delete/{id}', 'delete')->name('delete');
             });
+        });
+    });
+
+    // API History
+    Route::prefix('history')->name('histories.')->middleware('apiAuth')->group(function () {
+        Route::controller(HistoryController::class)->group(function () {
+            Route::get('/', 'getList')->name('getList');
+            Route::post('/create', 'create')->name('create');
+            Route::post('/delete/{id}', 'delete')->name('delete');
         });
     });
 
