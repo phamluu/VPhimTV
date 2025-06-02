@@ -58,7 +58,16 @@
      <div class="col-md-4">
          <div class="card">
              <div class="card-body">
-
+                 <div class="form-group">
+                     <label for="thumb_url">Thumb URL</label>
+                     <input type="file" name="thumb_url" class="form-control-file">
+                     @if($model->thumb_url)
+                     <div class="mt-2">
+                         <img src="{{ asset( $model->thumb_url) }}" height="100">
+                     </div>
+                     @endif
+                     <!-- <input type="text" name="thumb_url" class="form-control" value="{{ old('thumb_url', $model->thumb_url) }}"> -->
+                 </div>
                  <div class="form-group">
                      <label for="type_id">Thể loại</label>
                      <select name="movie_type" class="form-control" value="{{ old('type_id', $model->type_id) }}">
@@ -78,10 +87,7 @@
 
 
 
-                 <div class="form-group">
-                     <label for="thumb_url">Thumb URL</label>
-                     <input type="text" name="thumb_url" class="form-control" value="{{ old('thumb_url', $model->thumb_url) }}">
-                 </div>
+
 
                  <div class="form-group">
                      <label for="time">Thời lượng</label>

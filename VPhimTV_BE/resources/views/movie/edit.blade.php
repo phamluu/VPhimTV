@@ -8,7 +8,7 @@
             <h5 class="title">Chỉnh sửa phim</h5>
         </div>
     </div>
-    <form action="{{ route('movie.update', $model->id) }}" method="POST">
+    <form action="{{ route('movie.update', $model->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         @include('movie._field')
