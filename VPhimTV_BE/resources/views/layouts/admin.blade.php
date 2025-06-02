@@ -17,6 +17,7 @@
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="{{asset('assets/demo/demo.css')}}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
 
     <script src="{{asset('assets/js/core/jquery.min.js')}}"></script>
 </head>
@@ -139,6 +140,7 @@
     <script src="{{asset('assets/js/now-ui-dashboard.min.js?v=1.5.0')}}" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
     <script src="{{asset('assets/demo/demo.js')}}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <script>
         $(document).ready(function() {
             // Javascript method's body can be found in assets/js/demos.js
@@ -146,7 +148,14 @@
 
         });
     </script>
-
+    <script>
+        $(document).ready(function() {
+            $('#content').summernote({
+                height: 300, // chiều cao khung soạn thảo
+                placeholder: 'Nhập nội dung phim ở đây...'
+            });
+        });
+    </script>
 </body>
 
 </html>
