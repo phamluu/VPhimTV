@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\MovieTypeController;
 use App\Http\Controllers\Web\MovieController;
 use App\Http\Controllers\Web\CountryController;
+use App\Http\Controllers\Web\MovieCommentController;
 
 // Route::middleware(['auth', 'can:view-post'])->group(function () {
 //     Route::get('/dashboard', [DashboardController::class, 'index']);
@@ -82,5 +83,12 @@ Route::prefix('admin')->group(function () {
             Route::put('update/{id}', 'update')->name('country.update');
             Route::delete('delete/{id}',  'destroy')->name('country.destroy');
         });
+    });
+
+    Route::prefix('movie_comments')->group(function () {
+        Route::get('/', [MovieCommentController::class, 'index'])->name('movie_comments.index');
+        Route::get('edit/{id}', [MovieCommentController::class, 'edit'])->name('movie_comments.edit');
+        Route::put('update/{id}', [MovieCommentController::class, 'update'])->name('movie_comments.update');
+        Route::delete('delete/{id}', [MovieCommentController::class, 'destroy'])->name('movie_comments.destroy');
     });
 });
