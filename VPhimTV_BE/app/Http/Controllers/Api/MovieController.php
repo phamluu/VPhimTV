@@ -3,27 +3,27 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Country;
-use Illuminate\Http\Request;
 use App\Models\Movie;
-use App\Models\Episode;
-use App\Models\MovieCategory;
-use App\Models\MovieType;
+use App\Http\Requests\MovieRequest;
 
 class MovieController extends Controller
 {
-    public function getList(Request $request)
+    public function getList(MovieRequest $request)
     {
-        $limit = $request->input('limit', 50);
-        $page = $request->input('page', 1);
-        $sortField = $request->input('sort_field', 'updated_at');
-        $sortType = $request->input('sort_type', 'desc');
-        $typeList = $request->input('type_list');
-        $sortLang = $request->input('sort_lang');
-        $category = $request->input('category');
-        $country = $request->input('country');
-        $year = $request->input('year');
-        $keyword = $request->input('keyword');
+        $pagination = $request->paginationParams();
+        $sorting = $request->sortingParams();
+        $filters = $request->filtersParams();
+
+        $limit = $pagination['limit'];
+        $page = $pagination['page'];
+        $sortField = $sorting['sort_field'];
+        $sortType = $sorting['sort_type'];
+        $typeList = $filters['type_list'];
+        $sortLang = $filters['sort_lang'];
+        $category = $filters['category'];
+        $country = $filters['country'];
+        $year = $filters['year'];
+        $keyword = $filters['keyword'];
 
         $movies = Movie::query();
 

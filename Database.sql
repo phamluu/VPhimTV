@@ -11,7 +11,7 @@ php artisan make:migration create_categories_table
 php artisan make:migration create_movie_categories_table
 php artisan make:migration create_episodes_table
 
-CREATE TABLE IF NOT EXISTS movie_types(
+CREATE TABLE IF NOT EXISTS movie_types (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255),
     slug VARCHAR(255) UNIQUE,
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS movie_types(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS movies(
+CREATE TABLE IF NOT EXISTS movies (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255),
     slug VARCHAR(255) UNIQUE NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS movies(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS movie_views(
+CREATE TABLE IF NOT EXISTS movie_views (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     movie_id INTEGER NOT NULL, -- Foreign Key movies.id,
     view_num INTEGER DEFAULT 0,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS movie_views(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS movie_views_details(
+CREATE TABLE IF NOT EXISTS movie_views_details (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     movie_id INTEGER NOT NULL, -- Foreign Key movies.id,
     ip_address VARCHAR(45),
@@ -61,27 +61,20 @@ CREATE TABLE IF NOT EXISTS movie_views_details(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS movie_comments(
+CREATE TABLE IF NOT EXISTS movie_comments (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    movie_id INTEGER NOT NULL, -- Foreign Key movies.id,
-    user_id INTEGER NOT NULL, -- Foreign Key users.id,
+    user_id INTEGER NOT NULL,
+    movie_id INTEGER NOT NULL,
+    reply_to INTEGER,
     content TEXT,
     status VARCHAR(50),
+    is_active BOOLEAN DEFAULT TRUE,
+    is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS movie_comment_replies(
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    comment_id INTEGER NOT NULL, -- Foreign Key movie_comments.id,
-    user_id INTEGER NOT NULL, -- Foreign Key users.id,
-    content TEXT,
-    status VARCHAR(50),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS movie_favorites(
+CREATE TABLE IF NOT EXISTS movie_favorites (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     user_id INTEGER NOT NULL, -- Foreign Key users.id,
     movie_id INTEGER NOT NULL, -- Foreign Key movies.id,
@@ -92,7 +85,7 @@ CREATE TABLE IF NOT EXISTS movie_favorites(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS movie_histories(
+CREATE TABLE IF NOT EXISTS movie_histories (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     user_id INTEGER NOT NULL, -- Foreign Key users.id,
     movie_id INTEGER NOT NULL, -- Foreign Key movies.id,
@@ -101,14 +94,14 @@ CREATE TABLE IF NOT EXISTS movie_histories(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS movie_categories(
+CREATE TABLE IF NOT EXISTS movie_categories (
     movie_id INTEGER NOT NULL, -- Foreign Key movies.id,
     category_id INTEGER NOT NULL, -- Foreign Key categories.id,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS countries(
+CREATE TABLE IF NOT EXISTS countries (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
@@ -116,7 +109,7 @@ CREATE TABLE IF NOT EXISTS countries(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS categories(
+CREATE TABLE IF NOT EXISTS categories (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
@@ -124,7 +117,7 @@ CREATE TABLE IF NOT EXISTS categories(
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS episodes(
+CREATE TABLE IF NOT EXISTS episodes (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     movie_id INTEGER, -- Foreign Key movies.id,
     server_name VARCHAR(100),

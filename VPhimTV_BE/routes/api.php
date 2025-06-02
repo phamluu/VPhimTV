@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CommentController;
 
 Route::middleware(['web'])->group(function () {
     // API Authenticate
@@ -40,7 +41,19 @@ Route::middleware(['web'])->group(function () {
     Route::prefix('user')->name('users.')->group(function () {
         Route::controller(UserController::class)->group(function () {
             Route::get('/{id}', 'getDetail')->name('getDetail');
-            Route::put('/update/{id}', 'update')->name('update');
+            Route::put('/update/{id}', 'update')->name('update')->middleware('apiAuth');
+        });
+    });
+
+    // API Comment
+    Route::prefix('comment')->name('comments.')->group(function () {
+        Route::controller(CommentController::class)->group(function () {
+            Route::get('/', 'getList')->name('getList');
+            Route::middleware('apiAuth')->group(function () {
+                Route::post('/create', 'create')->name('create');
+                Route::put('/update/{id}', 'update')->name('update');
+                Route::post('/delete/{id}', 'delete')->name('delete');
+            });
         });
     });
 
