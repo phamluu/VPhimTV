@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="card card-plain">
                 <div class="card-header">
-                    <h4 class="card-title"> Danh sách Menu</h4>
+                    <h4 class="card-title"> Danh sách Mnu</h4>
                     <p class="category"> Quản lý menu của hệ thống</p>
                 </div>
                 <a href="{{ route('menu.create') }}" class="btn btn-round btn-primary">Thêm Menu</a>
