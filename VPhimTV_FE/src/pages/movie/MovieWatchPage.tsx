@@ -5,11 +5,11 @@ import { Link, useParams } from 'react-router-dom';
 
 import ArtPlayer from '~/components/ArtPlayer';
 import BreadCrumb from '~/components/BreadCrumb';
+import Comments from '~/pages/movie/CommentPage';
 import { fetchMovieInfo, fetchMovies } from '~/service/movies/moviesApi';
 import { movieTypeMap } from '~/utils/classMap';
 
 import MovieContainer from '../home/components/MovieContainer';
-import Comments from './CommentPage';
 
 export default function MovieWatchPage() {
   const { movieSlug, episodeSlug } = useParams();
@@ -129,10 +129,10 @@ export default function MovieWatchPage() {
               grid={4}
               imageType="poster"
             />
-            <Comments />
+            <Comments/>
           </div>
         </div>
       </div>
     );
-  }
+}
 }

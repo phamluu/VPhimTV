@@ -131,7 +131,6 @@ export default function MovieInfoPage() {
           <span>Tổng số tập: </span>
           <span className="text-warning">{movieInfo.data?.data.episode_total}</span>
             </p>
-
             {/* Duration */}
             <p className="font-bold">
           <span>Thời lượng: </span>
@@ -204,20 +203,17 @@ export default function MovieInfoPage() {
         ))}
           </div>
 
-          <p className="mt-6 mb-6 text-xl font-bold">Có thể bạn thích:</p>
-          <MovieContainer
-        className="space-y-3"
-        movies={relatedMovies.data?.data || []}
-        placeholderCount={16}
-        primary={false}
-        grid={4}
-        imageType="poster"
-          />
+          <p className="font-bold text-xl mt-6 mb-6">Có thể bạn thích:</p>
 
-          <div className="mt-6 rounded bg-base-100 p-4">
-        <p className="mb-4 text-xl font-bold">Bình luận</p>
-        <Comments />
-          </div>
+          <MovieContainer
+            className="space-y-3"
+            movies={relatedMovies.data?.data || []}
+            placeholderCount={16}
+            primary={false}
+            grid={4}
+            imageType="poster"
+          />
+          <Comments />
         </div>
       </div>
     );
