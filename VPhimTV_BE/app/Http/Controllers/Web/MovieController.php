@@ -35,14 +35,11 @@ class MovieController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        // Movie::create([
-        //     'name' => $request->name,
-        //     'slug' => Str::slug($request->name),
-        // ]);
         $rs = $this->service->updateMovie($request, null);
 
         if ($rs) {
