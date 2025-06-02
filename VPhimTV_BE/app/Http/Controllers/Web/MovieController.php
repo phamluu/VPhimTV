@@ -38,6 +38,7 @@ class MovieController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
+            'thumb_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $movie = $this->service->updateMovie($request, null);
@@ -61,6 +62,7 @@ class MovieController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'thumb_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $rs = $this->service->updateMovie($request, $id);

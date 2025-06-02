@@ -1,16 +1,16 @@
 <div class="sidebar" data-color="orange">
     <div class="logo">
-        <a href="/dashboard" class="simple-text logo-mini">
+        <a href="/admin" class="simple-text logo-mini">
             V
         </a>
-        <a href="/dashboard" class="simple-text logo-normal">
+        <a href="/admin" class="simple-text logo-normal">
             Phim TV
         </a>
     </div>
     <div class="sidebar-wrapper" id="sidebar-wrapper">
         <ul class="nav">
             <li class="active ">
-                <a href="/dashboard">
+                <a href="/admin">
                     <i class="now-ui-icons design_app"></i>
                     <p>Dashboard</p>
                 </a>

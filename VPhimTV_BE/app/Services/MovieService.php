@@ -16,6 +16,20 @@ class MovieService
         } else {
             $model = new Movie();
         }
+
+        if ($request->hasFile('thumb_url')) {
+            $file = $request->file('thumb_url');
+
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $destinationPath = public_path('uploads/thumbs');
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            $file->move($destinationPath, $filename);
+            $model->thumb_url = 'uploads/thumbs/' . $filename;
+        }
+
         $model->name = $request->name;
         $model->slug = Str::slug($request->name);
         $model->original_name = $request->original_name;
@@ -24,7 +38,6 @@ class MovieService
         $model->status = $request->status;
         $model->trailer_url = $request->trailer_url;
         $model->poster_url = $request->poster_url;
-        $model->thumb_url = $request->thumb_url;
         $model->time = $request->time;
         $model->episode_current = $request->episode_current;
         $model->episode_total = $request->episode_total;

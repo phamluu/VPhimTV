@@ -1,6 +1,11 @@
 @extends('layouts.admin')
 
 @section('content')
+<style>
+    td img {
+        width: 100px;
+    }
+</style>
 <div class="panel-header panel-header-sm"></div>
 <div class="content">
     <div class="row">
@@ -21,6 +26,7 @@
                         <table class="table">
                             <thead class=" text-primary">
                                 <th>STT</th>
+                                <th>Hình</th>
                                 <th>Tên phim</th>
                                 <th>Lượt xem</th>
                                 <th>Lượt thích</th>
@@ -31,6 +37,7 @@
                                 @foreach ($model as $movie)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td><img src="{{ asset( $movie->thumb_url) }}" /></td>
                                     <td>{{ $movie->name }}</td>
                                     <td><a href="">10</a></td>
                                     <td><a href="">10</a></td>
