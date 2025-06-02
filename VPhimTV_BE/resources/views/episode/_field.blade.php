@@ -1,6 +1,14 @@
 <div class="form-group">
-    <label for="name">Tên phim</label>
+    <label for="name">Tập</label>
     <input type="text" name="episode_name" class="form-control" value="{{ old('episode_name', $model->episode_name) }}">
+</div>
+<div class="form-group">
+    <label for="type_id">Thuộc phim</label>
+    <select name="movie_id" class="form-control" value="{{ old('movie_id', $model->movie_id) }}">
+        @foreach($movies as $item)
+        <option value="{{$item -> id}}" {{ old('movie_id', $model->movie_id) == $item->id ? 'selected' : '' }}>{{$item->name}}</option>
+        @endforeach
+    </select>
 </div>
 <div class="form-group">
     <label for="name">Server name</label>
