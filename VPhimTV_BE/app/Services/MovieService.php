@@ -36,7 +36,7 @@ class MovieService
         $model->director = $request->director;
 
         if ($model->save()) {
-            return true;
+            return $model;
         }
         return false;
     }
