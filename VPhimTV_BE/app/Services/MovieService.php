@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use App\Models\Movie;
+use App\Models\Episode;
 use Illuminate\Support\Str;
 
 class MovieService
@@ -57,9 +58,9 @@ class MovieService
     public function updateEpisode(Request $request, $id)
     {
         if ($id) {
-            $model = Movie::findOrFail($id);
+            $model = Episode::findOrFail($id);
         } else {
-            $model = new Movie();
+            $model = new Episode();
         }
         $model->movie_id = $request->movie_id;
         $model->server_name = $request->server_name;

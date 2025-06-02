@@ -96,10 +96,11 @@ Route::prefix('admin')->group(function () {
         });
     });
 
-    Route::prefix('movie_comments')->group(function () {
-        Route::get('/', [MovieCommentController::class, 'index'])->name('movie_comments.index');
-        Route::get('edit/{id}', [MovieCommentController::class, 'edit'])->name('movie_comments.edit');
-        Route::put('update/{id}', [MovieCommentController::class, 'update'])->name('movie_comments.update');
-        Route::delete('delete/{id}', [MovieCommentController::class, 'destroy'])->name('movie_comments.destroy');
+        Route::prefix('movie_comments')->group(function () {
+            Route::get('/', [MovieCommentController::class, 'index'])->name('movie_comments.index');
+            Route::get('edit/{id}', [MovieCommentController::class, 'edit'])->name('movie_comments.edit');
+            Route::put('update/{id}', [MovieCommentController::class, 'update'])->name('movie_comments.update');
+            Route::delete('delete/{id}', [MovieCommentController::class, 'destroy'])->name('movie_comments.destroy');
+        });
     });
 });
