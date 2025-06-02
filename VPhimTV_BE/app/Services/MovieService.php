@@ -53,4 +53,24 @@ class MovieService
         }
         return false;
     }
+
+    public function updateEpisode(Request $request, $id)
+    {
+        if ($id) {
+            $model = Movie::findOrFail($id);
+        } else {
+            $model = new Movie();
+        }
+        $model->movie_id = $request->movie_id;
+        $model->server_name = $request->server_name;
+        $model->episode_name = $request->episode_name;
+        $model->file_name = $request->file_name;
+        $model->link_embed = $request->link_embed;
+        $model->link_m3u8 = $request->link_m3u8;
+        $model->status = $request->status;
+        if ($model->save()) {
+            return $model;
+        }
+        return false;
+    }
 }
