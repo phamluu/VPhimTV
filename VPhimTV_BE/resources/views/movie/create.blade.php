@@ -9,6 +9,7 @@
         </div>
     </div>
     <form action="{{ route('movie.store')}}" method="POST">
+        @csrf
         @include('movie._field', ['model' => $model])
 
     </form>
