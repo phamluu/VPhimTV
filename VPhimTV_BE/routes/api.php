@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CountryController;
 use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\ViewsController;
 
 Route::middleware(['web'])->group(function () {
     // API Authenticate
@@ -55,6 +56,11 @@ Route::middleware(['web'])->group(function () {
                 Route::post('/delete/{id}', 'delete')->name('delete');
             });
         });
+    });
+
+    // API View
+    Route::prefix('view')->name('views.')->group(function () {
+        Route::post('/create', [ViewsController::class, 'create'])->name('create');
     });
 
     // API Category
