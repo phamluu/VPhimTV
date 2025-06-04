@@ -129,7 +129,7 @@ export default function MovieWatchPage() {
               grid={4}
               imageType="poster"
             />
-            <Comments/>
+            <Comments movieId={1}/>
           </div>
         </div>
       </div>
