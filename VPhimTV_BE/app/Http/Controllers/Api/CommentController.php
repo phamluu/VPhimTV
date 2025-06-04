@@ -11,23 +11,23 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     public function getList(CommentRequest $request)
-    {
-        $pagination = $request->paginationParams();
-        $sorting = $request->sortingParams();
-        $filters = $request->filtersParams();
+{
+    $pagination = $request->paginationParams();
+    $sorting = $request->sortingParams();
+    $filters = $request->filtersParams();
 
-        $comments = MovieComment::query()
-            ->where('movie_id', $filters['movie_id'])
-            ->with(['user' => function ($query) {
-                $query->select('id', 'name', 'avatar');
-            }]);
+    $commentsQuery = MovieComment::query()
+        ->where('movie_id', $filters['movie_id'])
+        ->with(['user' => function ($query) {
+            $query->select('id', 'name', 'avatar');
+        }]);
 
+    $comments = $commentsQuery
+        ->orderBy($sorting['sort_field'], $sorting['sort_type'])
+        ->paginate($pagination['limit'], ['*'], 'page', $pagination['page']);
 
-        $comments = $comments->paginate($pagination['limit'], ['*'], 'page', $pagination['page'])
-            ->sortBy($sorting['sort_field'], $sorting['sort_type']);
-
-        return response()->json($comments);
-    }
+    return response()->json($comments);
+}
 
     public function create(Request $request)
     {

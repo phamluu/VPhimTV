@@ -1,142 +1,152 @@
-import { ChevronDown, MoreVertical,ThumbsDown, ThumbsUp } from 'lucide-react';
-import { useState } from 'react';
+import { ChevronDown, MoreVertical, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
 
-const Comments = () => {
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      user: '@FujiiKaze',
-      userInitials: 'F',
-      content: "I'm not okay with the fact that this masterpiece is so underrated.",
-      time: '5 năm trước',
-      likes: 19,
-      dislikes: 0,
-      replies: 128,
-      isLiked: false,
-      isDisliked: false,
-      repliesExpanded: false,
-      repliesList: [
-        {
-          id: 11,
-          user: '@musiclover123',
-          userInitials: 'M',
-          content: 'Totally agree! This deserves millions of views',
-          time: '4 năm trước',
-          likes: 5,
-          isLiked: false
-        },
-        {
-          id: 12,
-          user: '@vietnamesemusic',
-          userInitials: 'V',
-          content: 'Fujii Kaze is truly talented, hope more people discover his music',
-          time: '3 năm trước',
-          likes: 8,
-          isLiked: false
-        }
-      ]
-    },
-    {
-      id: 2,
-      user: '@lucey',
-      userInitials: 'L',
-      content: '"It\'s about a feeling I\'ve never had" lmaooo charlie really just said "u aint that special relax" to all his exes',
-      time: '5 năm trước',
-      likes: 12,
-      dislikes: 0,
-      replies: 45,
-      isLiked: false,
-      isDisliked: false,
-      repliesExpanded: false,
-      repliesList: []
-    },
-    {
-      id: 3,
-      user: '@justafawn',
-      userInitials: 'S',
-      content: '"This song is not about a person, it\'s about a feeling I\'ve never had"\nlol can relate right here, I can\'t cheat on anyone if I\'ve always been single-',
-      time: '5 năm trước',
-      likes: 2100,
-      dislikes: 0,
-      replies: 21,
-      isLiked: false,
-      isDisliked: false,
-      repliesExpanded: false,
-      repliesList: []
-    },
-    {
-      id: 4,
-      user: '@ahmedabas5370',
-      userInitials: 'A',
-      content: 'A beautiful feeling, his voice is beautiful and nostalgic',
-      time: '1 năm trước',
-      likes: 0,
-      dislikes: 0,
-      replies: 0,
-      isLiked: false,
-      isDisliked: false,
-      repliesExpanded: false,
-      repliesList: []
-    }
-  ]);
+import { createComment, createReply, dislikeComment, getComments, likeComment } from '../../service/movies/commentApi';
 
+interface Reply {
+  id: number;
+  user: string;
+  userInitials: string;
+  time: string;
+  content: string;
+  likes: number;
+  isLiked: boolean;
+}
+
+interface Comment {
+  id: number;
+  user: string;
+  userInitials: string;
+  time: string;
+  content: string;
+  likes: number;
+  dislikes: number;
+  replies: number;
+  isLiked: boolean;
+  isDisliked: boolean;
+  repliesExpanded?: boolean;
+  repliesList: Reply[];
+}
+
+const Comments = ({ movieId }: { movieId: number }) => {
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [newComment, setNewComment] = useState('');
   const [replyTo, setReplyTo] = useState<number | null>(null);
   const [replyText, setReplyText] = useState('');
 
-  const formatNumber = (num) => {
+  // Giả định token lấy từ localStorage hoặc context
+  const token = localStorage.getItem('authToken');
+    useEffect(() => {
+      console.log('movieId received in Comments:', movieId); // Debug ban đầu
+    }, [movieId]);
+
+  const fetchComments = useCallback(async () => {
+    setLoading(true);
+    try {
+      console.log('Gọi API với movieId:', movieId); // Debug trước khi gọi API
+      if (!movieId || movieId <= 0) {
+        console.error('movieId không hợp lệ:', movieId);
+        setError('movieId không hợp lệ. Vui lòng kiểm tra URL hoặc props.');
+        return;
+      }
+      const res = await getComments(movieId, 1, 10);
+      console.log('Phản hồi API:', res.data);
+      const formattedComments: Comment[] = res.data.data.map((comment: any) => ({
+        id: comment.id,
+        user: `@${comment.user?.name || 'unknown'}`,
+        userInitials: comment.user?.name?.charAt(0).toUpperCase() || 'U',
+        content: comment.content,
+        time: comment.created_at || 'Vừa xong',
+        likes: comment.likes || 0,
+        dislikes: comment.dislikes || 0,
+        replies: comment.replies || 0,
+        isLiked: comment.is_liked || false,
+        isDisliked: comment.is_disliked || false,
+        repliesExpanded: false,
+        repliesList: comment.replies_list || [],
+      }));
+      setComments(formattedComments);
+    } catch (err: any) {
+      console.error('Lỗi API:', err.response?.data || err.message);
+      setError(err.message || 'Không thể tải bình luận');
+    } finally {
+      setLoading(false);
+    }
+  }, [movieId]);
+
+  useEffect(() => {
+    fetchComments();
+  }, [fetchComments, movieId]);
+
+    useEffect(() => {
+      fetchComments();
+    }, [fetchComments, movieId]); // Thêm dependencies
+
+  const formatNumber = (num: number) => {
     if (num >= 1000) {
       return (num / 1000).toFixed(1).replace('.0', '') + ' N';
     }
     return num.toString();
   };
 
-  const handleLike = (commentId: number, isReply = false, parentId: number | null = null) => {
-    if (isReply) {
-      setComments(comments.map(comment =>
-        comment.id === parentId
-          ? {
-              ...comment,
-              repliesList: comment.repliesList.map(reply =>
-                reply.id === commentId
-                  ? {
-                      ...reply,
-                      likes: reply.isLiked ? reply.likes - 1 : reply.likes + 1,
-                      isLiked: !reply.isLiked
-                    }
-                  : reply
-              )
-            }
-          : comment
-      ));
-    } else {
+  const handleLike = async (commentId: number, isReply = false, parentId: number | null = null) => {
+    try {
+      await likeComment(commentId, token || '');
+      if (isReply) {
+        setComments(comments.map(comment =>
+          comment.id === parentId
+            ? {
+                ...comment,
+                repliesList: comment.repliesList.map(reply =>
+                  reply.id === commentId
+                    ? {
+                        ...reply,
+                        likes: reply.isLiked ? reply.likes - 1 : reply.likes + 1,
+                        isLiked: !reply.isLiked,
+                      }
+                    : reply
+                ),
+              }
+            : comment
+        ));
+      } else {
+        setComments(comments.map(comment =>
+          comment.id === commentId
+            ? {
+                ...comment,
+                likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1,
+                isLiked: !comment.isLiked,
+                isDisliked: false,
+              }
+            : comment
+        ));
+      }
+    } catch (err: any) {
+      alert(err.message || 'Không thể thích bình luận');
+    }
+  };
+
+  const handleDislike = async (commentId: number) => {
+    try {
+      await dislikeComment(commentId, token || '');
       setComments(comments.map(comment =>
         comment.id === commentId
           ? {
               ...comment,
-              likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1,
-              isLiked: !comment.isLiked,
-              isDisliked: false
+              isDisliked: !comment.isDisliked,
+              isLiked: false,
+              likes: comment.isLiked ? comment.likes - 1 : comment.likes,
             }
           : comment
       ));
+    } catch (err: any) {
+      alert(err.message || 'Không thể không thích bình luận');
     }
   };
 
-  const handleDislike = (commentId) => {
-    setComments(comments.map(comment =>
-      comment.id === commentId
-        ? {
-            ...comment,
-            isDisliked: !comment.isDisliked,
-            isLiked: false,
-            likes: comment.isLiked ? comment.likes - 1 : comment.likes
-          }
-        : comment
-    ));
-  };
-
-  const toggleReplies = (commentId) => {
+  const toggleReplies = (commentId: number) => {
     setComments(comments.map(comment =>
       comment.id === commentId
         ? { ...comment, repliesExpanded: !comment.repliesExpanded }
@@ -144,54 +154,78 @@ const Comments = () => {
     ));
   };
 
-  const handleSubmitComment = () => {
-    if (newComment.trim()) {
-      const comment = {
-        id: Date.now(),
-        user: '@yourhandle',
-        userInitials: 'Y',
-        content: newComment,
-        time: 'Vừa xong',
-        likes: 0,
-        dislikes: 0,
-        replies: 0,
-        isLiked: false,
-        isDisliked: false,
-        repliesExpanded: false,
-        repliesList: []
-      };
-      setComments([comment, ...comments]);
-      setNewComment('');
-    }
-  };
+const handleSubmitComment = async () => {
+  if (!newComment.trim()) return;
 
-  const handleSubmitReply = (commentId) => {
-    if (replyText.trim()) {
-      const reply = {
-        id: Date.now(),
-        user: '@yourhandle',
-        userInitials: 'Y',
-        content: replyText,
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    alert('Vui lòng đăng nhập để gửi bình luận!');
+    return;
+  }
+
+  try {
+    const data = { movie_id: movieId, content: newComment };
+    const res = await createComment(data, token);
+    console.log('Response from createComment:', res.data); // Debug response
+    const newCommentData: Comment = {
+      id: res.data.id,
+      user: `@${res.data.user?.name || 'yourhandle'}`,
+      userInitials: res.data.user?.name?.charAt(0).toUpperCase() || 'Y',
+      content: res.data.content,
+      time: 'Vừa xong',
+      likes: 0,
+      dislikes: 0,
+      replies: 0,
+      isLiked: false,
+      isDisliked: false,
+      repliesExpanded: false,
+      repliesList: [],
+    };
+    setComments([newCommentData, ...comments]); // Cập nhật state
+    setNewComment('');
+  } catch (err: any) {
+    console.error('Lỗi gửi bình luận:', err.response?.data || err.message);
+    alert(err.response?.data?.message || 'Không thể gửi bình luận');
+  }
+};
+
+  const handleSubmitReply = async (commentId: number) => {
+    if (!replyText.trim()) return;
+
+    try {
+      const data = { movie_id: movieId, content: replyText, reply_to: commentId };
+      const res = await createReply(commentId, data, token || '');
+      const newReply: Reply = {
+        id: res.data.id,
+        user: `@${res.data.user?.name || 'yourhandle'}`,
+        userInitials: res.data.user?.name?.charAt(0).toUpperCase() || 'Y',
+        content: res.data.content,
         time: 'Vừa xong',
         likes: 0,
-        isLiked: false
+        isLiked: false,
       };
       setComments(comments.map(comment =>
         comment.id === commentId
           ? {
               ...comment,
               replies: comment.replies + 1,
-              repliesList: [...comment.repliesList, reply]
+              repliesList: [...comment.repliesList, newReply],
+              repliesExpanded: true,
             }
           : comment
       ));
       setReplyText('');
       setReplyTo(null);
+    } catch (err: any) {
+      alert(err.message || 'Không thể gửi phản hồi');
     }
   };
 
+  if (loading) return <div>Đang tải bình luận...</div>;
+  if (error) return <div>Lỗi: {error}</div>;
+
   return (
-    <div className=" text-white min-h-screen">
+    <div className="text-white min-h-screen">
       <div className="max-w-4xl mx-auto p-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">

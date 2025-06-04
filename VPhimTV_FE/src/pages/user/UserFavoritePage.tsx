@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchMovies } from '~/service/movies/moviesApi';
 
 export default function UserFavoritePage() {
-  const { data } = useQuery({
+  useQuery({
     queryKey: ['movies'],
     queryFn: () => fetchMovies({}),
   });

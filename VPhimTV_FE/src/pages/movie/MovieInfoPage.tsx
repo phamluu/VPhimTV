@@ -213,7 +213,10 @@ export default function MovieInfoPage() {
             grid={4}
             imageType="poster"
           />
-          <Comments />
+          <div className="mt-6 rounded bg-base-100 p-4">
+        <p className="mb-4 text-xl font-bold">Bình luận</p>
+          </div>
+          <Comments movieId={1} />
         </div>
       </div>
     );
