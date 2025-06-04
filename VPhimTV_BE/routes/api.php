@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\ViewsController;
 use App\Http\Controllers\Api\HistoryController;
+use App\Http\Controllers\Api\EpisodeController;
 
 Route::middleware(['web'])->group(function () {
     // API Authenticate
@@ -31,7 +32,14 @@ Route::middleware(['web'])->group(function () {
         });
     });
 
-    // API Movie Favorite
+    // Api Episode
+    Route::prefix('episode')->name('episodes.')->group(function () {
+        Route::controller(EpisodeController::class)->group(function () {
+            Route::post('/test', 'test')->name('test'); // Test Drive Service
+        });
+    });
+
+    // API Favorite
     Route::prefix('favorite')->name('movie_favorites.')->middleware('apiAuth')->group(function () {
         Route::controller(FavoriteController::class)->group(function () {
             Route::get('/', 'getList')->name('getList');
