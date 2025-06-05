@@ -21,8 +21,6 @@ export default function HomePage() {
     ],
   });
 
-  console.log(hotMovies.data);
-
   return (
     <div className="container mx-auto space-y-8">
       <div className="space-y-3">
