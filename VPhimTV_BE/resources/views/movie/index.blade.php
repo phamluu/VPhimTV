@@ -41,7 +41,7 @@
                                     <td>{{ $movie->name }}</td>
                                     <td><a href="">10</a></td>
                                     <td><a href="">10</a></td>
-                                    <td><a href="">3</a></td>
+                                    <td><a href="#" class="" data-toggle="modal" data-target="#myModal-{{ $movie->id }}">3</a></td>
                                     <td class="text-right">
                                         <a href="{{ route('movie.edit', $movie->id) }}" class="btn btn-link btn-info btn-just-icon">
                                             <i class="now-ui-icons ui-2_settings-90"></i>
@@ -55,6 +55,7 @@
                                         </form>
                                     </td>
                                 </tr>
+
                                 @endforeach
                             </tbody>
                         </table>
@@ -67,4 +68,5 @@
         </div>
     </div>
 </div>
+@include('movie._modal')
 @endsection
