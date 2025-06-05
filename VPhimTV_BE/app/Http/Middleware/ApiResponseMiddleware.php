@@ -13,49 +13,83 @@ class ApiResponseMiddleware
     {
         $request->headers->set('Accept', 'application/json');
         $response = $next($request);
+        $statusCode = $response->getStatusCode();
 
         if (!$response instanceof JsonResponse) {
-            return $response;
+            $content = $response->getContent();
+            $decoded = json_decode($content, true);
+
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $data = $decoded;
+            } else {
+                $data = $content;
+            }
+
+            return response()->json(
+                $this->normalizeResponse($data, $statusCode),
+                $statusCode
+            );
         }
 
         $original = $response->getData(true);
 
-        if (
-            isset($original['errors']) || (isset($original['success']) && array_key_exists('data', $original))
-        ) {
+        return response()->json(
+            $this->normalizeResponse($original, $statusCode),
+            $statusCode
+        );
+    }
+
+    protected function normalizeResponse($original, int $statusCode): array
+    {
+        $isSuccess = $statusCode >= 200 && $statusCode < 300;
+
+        $response = [
+            'status' => $original['status'] ?? $isSuccess,
+            'message' => $original['message'] ?? 'Gọi API thành công',
+            'data' => [],
+        ];
+
+        if (!is_array($original)) {
+            $response['data'] = $original ?? [];
             return $response;
         }
 
-        $wrapped = $this->wrapResponse(['data' => $original]);
+        $hasOnlyMessage = isset($original['message']) && count($original) === 1;
+        $hasDataKey = array_key_exists('data', $original);
 
-        return response()->json($wrapped, $response->getStatusCode());
-    }
+        if ($hasDataKey) {
+            $response['data'] = $original['data'];
+        } else {
+            $response['data'] = $hasOnlyMessage ? [] : $original;
+        }
 
-    protected function wrapResponse(array $original): array
-    {
-        $wrapped = [
-            'success' => $original['success'] ?? true,
-            'message' => $original['message'] ?? 'Gọi API thành công',
-        ];
+        $isPaginationAtRoot = isset($original['current_page'], $original['last_page']);
 
-        if (isset($original['current_page']) || isset($original['data']['current_page'])) {
-            $wrapped['data'] = $original['data']['data'] ?? [];
+        $dataSection = $original['data'] ?? [];
+        $isPaginationInsideData = is_array($dataSection) && isset($dataSection['current_page'], $dataSection['last_page']);
 
-            $wrapped['pagination'] = [
-                'current_page' => $original['current_page'] ?? $original['data']['current_page'] ?? null,
-                'last_page' => $original['last_page'] ?? $original['data']['last_page'] ?? null,
-                'per_page' => $original['per_page'] ?? $original['data']['per_page'] ?? null,
-                'total' => $original['total'] ?? $original['data']['total'] ?? null,
-                'links' => $original['links'] ?? $original['data']['links'] ?? [],
+        if ($isPaginationAtRoot) {
+            $response['data'] = $original['data'] ?? $original['items'] ?? [];
+
+            $response['pagination'] = [
+                'current_page' => $original['current_page'],
+                'last_page' => $original['last_page'],
+                'per_page' => $original['per_page'] ?? null,
+                'total' => $original['total'] ?? null,
+                'links' => $original['links'] ?? [],
             ];
+        } elseif ($isPaginationInsideData) {
+            $response['data'] = $dataSection['data'] ?? [];
 
-            return $wrapped;
+            $response['pagination'] = [
+                'current_page' => $dataSection['current_page'],
+                'last_page' => $dataSection['last_page'],
+                'per_page' => $dataSection['per_page'] ?? null,
+                'total' => $dataSection['total'] ?? null,
+                'links' => $dataSection['links'] ?? [],
+            ];
         }
 
-        if (array_key_exists('data', $original)) {
-            $wrapped['data'] = $original['data'];
-        }
-
-        return $wrapped;
+        return $response;
     }
 }
