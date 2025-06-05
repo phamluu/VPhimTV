@@ -28,6 +28,8 @@ class MovieController extends Controller
 
         $movies = Movie::query();
 
+        $movies->where('is_deleted', 0);
+
         $movies->join('movie_categories', 'movies.id', '=', 'movie_categories.movie_id')
             ->join('categories', 'movie_categories.category_id', '=', 'categories.id')
             ->join('movie_types', 'movies.type_id', '=', 'movie_types.id')
@@ -83,6 +85,7 @@ class MovieController extends Controller
         ])
             ->select('id', 'name', 'slug', 'content', 'type_id', 'country_id', 'thumb_url', 'poster_url', 'time', 'episode_current', 'episode_total', 'quality', 'language', 'year', 'actor', 'director')
             ->where('slug', $slug)
+            ->where('is_deleted', 0)
             ->first();
 
         if (!$movie) {
@@ -145,6 +148,7 @@ class MovieController extends Controller
                 'movies.created_at',
                 'movies.updated_at'
             )
+            ->where('is_deleted', 0)
             ->inRandomOrder()
             ->paginate($pagination['limit'], ['*'], 'page', $pagination['page']);
 
