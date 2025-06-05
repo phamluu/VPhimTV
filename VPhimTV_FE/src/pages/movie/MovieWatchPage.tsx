@@ -35,7 +35,9 @@ export default function MovieWatchPage() {
 
       if (decodedId) {
         setCurrentEpisode(
-          movieInfo.data?.data.episodes?.flatMap((server: any) => server.server_data).find((ep: any) => ep.id === decodedId),
+          movieInfo.data?.data.episodes
+            ?.flatMap((server: any) => server.server_data)
+            .find((ep: any) => ep.id === decodedId),
         );
       }
     }
@@ -82,7 +84,11 @@ export default function MovieWatchPage() {
           />
 
           {currentEpisode && (
-            <ArtPlayer url={currentEpisode.link_m3u8} poster={movieInfo.data?.data.poster_url} height={650} />
+            <ArtPlayer
+              url={currentEpisode.link_mp4 ? currentEpisode.link_mp4 : currentEpisode.link_m3u8}
+              poster={movieInfo.data?.data.poster_url}
+              height={650}
+            />
           )}
 
           <div className="bg-base-300 rounded p-3 space-y-4">
@@ -129,10 +135,10 @@ export default function MovieWatchPage() {
               grid={4}
               imageType="poster"
             />
-            <Comments movieId={1}/>
+            <Comments movieId={1} />
           </div>
         </div>
       </div>
     );
-}
+  }
 }

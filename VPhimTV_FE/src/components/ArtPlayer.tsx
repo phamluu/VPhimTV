@@ -11,6 +11,7 @@ interface ArtPlayerProps {
 export default function ArtPlayer({ url, poster, height }: ArtPlayerProps) {
   const artRef = useRef<HTMLDivElement>(null);
   const playerRef = useRef<Artplayer | null>(null);
+  const videoType = url.includes('.m3u8') ? 'm3u8' : undefined;
 
   useEffect(() => {
     if (!artRef.current) return;
@@ -39,13 +40,13 @@ export default function ArtPlayer({ url, poster, height }: ArtPlayerProps) {
           }
         },
       },
-      type: 'm3u8',
+      ...(videoType ? { type: videoType } : {}),
     });
 
     return () => {
       playerRef.current?.destroy();
     };
-  }, [poster, url]);
+  }, [poster, url, videoType]);
 
   return <div ref={artRef} style={{ width: '100%', height: `${height}px` }} />;
 }

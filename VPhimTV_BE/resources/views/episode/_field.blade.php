@@ -26,6 +26,10 @@
     <label for="name">Link m3u8</label>
     <input type="text" name="link_m3u8" class="form-control" value="{{ old('link_m3u8', $model->link_m3u8) }}">
 </div>
+<div class="input-group">
+    <label class="input-group-text" for="mp4_upload">File Video Mp4</label>
+    <input id="mp4_upload" name="mp4_upload" type="file" class="form-control" accept="video/mp4">
+</div>
 <div class="form-group">
     <label for="name">status</label>
     <input type="text" name="status" class="form-control" value="{{ old('status', $model->status) }}">

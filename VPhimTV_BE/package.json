@@ -4,6 +4,7 @@
     "author": "An, Luu, Khanh, Dat",
     "license": "UNLICENSED",
     "scripts": {
+        "start": "php artisan serve",
         "build": "vite build",
         "dev": "vite"
     },
