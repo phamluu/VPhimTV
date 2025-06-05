@@ -11,11 +11,12 @@ import { encryptObj } from '~/utils/utils';
 export default function LoginPage() {
   const [username, setUsername] = useState('anle@gmail.com');
   const [password, setPassword] = useState('anle');
+  const [remember, setRemember] = useState(false);
   const { setUser } = useAuth();
 
   const mutationLogin = useMutation({
     mutationKey: ['login'],
-    mutationFn: (data: any) => loginUser(data.username, data.password),
+    mutationFn: (data: any) => loginUser(data.username, data.password, data.remember),
     onSuccess: (data) => {
       const encrypted = encryptObj(data.data);
       localStorage.setItem('auth', encrypted);
@@ -36,7 +37,7 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    mutationLogin.mutate({ username, password });
+    mutationLogin.mutate({ username, password, remember });
   };
 
   return (
@@ -84,7 +85,12 @@ export default function LoginPage() {
           </label>
         </div>
 
-        <div className="w-full flex justify-end">
+        <div className="w-full flex justify-between items-center">
+          <label className="label">
+            <input type="checkbox" onChange={(e) => setRemember(e.target.checked)} className="checkbox" />
+            Remember me
+          </label>
+
           <Link
             to={''}
             onClick={() => toast({ type: 'info', message: 'Chức năng này đang được phát triển' })}

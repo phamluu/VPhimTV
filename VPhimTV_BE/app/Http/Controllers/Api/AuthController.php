@@ -27,7 +27,7 @@ class AuthController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email'    => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ], [
             'email.required' => 'Email không được để trống',
             'email.email' => 'Email không hợp lệ',
@@ -42,6 +42,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
+        $remember = $request->remember ? true : false;
 
         if (! $user) {
             return response()->json([
@@ -61,11 +62,10 @@ class AuthController extends Controller
             ], 401);
         }
 
-        Auth::login($user);
+        Auth::login($user, $remember);
 
         return response()->json(['message' => 'Đăng nhập thành công', 'data' => $user]);
     }
-
 
     public function register(Request $request)
     {

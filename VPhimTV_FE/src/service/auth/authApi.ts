@@ -7,8 +7,8 @@ export const checkUser = async () => {
   return res.data;
 };
 
-export async function loginUser(username: string, password: string) {
-  const res = await http.post(`/${baseURL}/login`, { email: username, password });
+export async function loginUser(username: string, password: string, remember: boolean) {
+  const res = await http.post(`/${baseURL}/login`, { email: username, password, remember });
   return res.data;
 }
 
