@@ -13,7 +13,7 @@ class MovieService
 {
     protected $dropbox;
 
-    public function __construct(DropboxService $dropbox)
+    public function __construct(DropboxService $dropbox = null)
     {
         $this->dropbox = $dropbox;
     }
