@@ -7,16 +7,20 @@ use Illuminate\Support\Str;
 use App\Models\Episode;
 use App\Http\Controllers\Controller;
 use App\Models\Movie;
+use App\Services\DropboxService;
 use App\Services\MovieService;
 
 class EpisodeController extends Controller
 {
     protected $service;
+    protected $dropbox;
 
     public function __construct()
     {
-        $this->service = new MovieService();
+        $this->dropbox = new DropboxService();
+        $this->service = new MovieService($this->dropbox);
     }
+
     public function index(Request $request)
     {
         $model = Episode::query()->orderBy('created_at', 'desc')->get();

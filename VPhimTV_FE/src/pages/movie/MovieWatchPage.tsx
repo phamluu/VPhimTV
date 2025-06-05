@@ -84,7 +84,11 @@ export default function MovieWatchPage() {
           />
 
           {currentEpisode && (
-            <ArtPlayer url={currentEpisode.link_m3u8} poster={movieInfo.data?.data.poster_url} height={650} />
+            <ArtPlayer
+              url={currentEpisode.link_mp4 ? currentEpisode.link_mp4 : currentEpisode.link_m3u8}
+              poster={movieInfo.data?.data.poster_url}
+              height={650}
+            />
           )}
 
           <div className="bg-base-300 rounded p-3 space-y-4">

@@ -79,7 +79,7 @@ class MovieController extends Controller
             'country:id,name,slug',
             'type:id,name,slug',
             'categories:id,name,slug',
-            'episodes:id,movie_id,server_name,episode_name,slug,file_name,link_embed,link_m3u8,status'
+            'episodes:id,movie_id,server_name,episode_name,slug,file_name,link_embed,link_m3u8,link_mp4,status'
         ])
             ->select('id', 'name', 'slug', 'content', 'type_id', 'country_id', 'thumb_url', 'poster_url', 'time', 'episode_current', 'episode_total', 'quality', 'language', 'year', 'actor', 'director')
             ->where('slug', $slug)
@@ -100,6 +100,7 @@ class MovieController extends Controller
                         'file_name' => $ep->file_name,
                         'link_embed' => $ep->link_embed,
                         'link_m3u8' => $ep->link_m3u8,
+                        'link_mp4' => $ep->link_mp4,
                         'status' => $ep->status,
                     ];
                 })->values()

@@ -7,10 +7,10 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="title">Thêm danh mục phim</h5>
+                    <h5 class="title">Thêm tập phim</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('episode.store') }}" method="POST">
+                    <form action="{{ route('episode.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @if ($errors->any())
                         <div class="alert alert-danger">
@@ -36,3 +36,26 @@
     </div>
 </div>
 @endsection
+
+<script>
+    $('form').on('submit', function(e) {
+        e.preventDefault();
+
+        var form = this;
+        var formData = new FormData(form);
+
+        $.ajax({
+            url: $(form).attr('action'),
+            type: $(form).attr('method'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert('Upload thành công');
+            },
+            error: function(xhr) {
+                alert('Upload thất bại');
+            }
+        });
+    });
+</script>
