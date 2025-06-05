@@ -35,7 +35,9 @@ export default function MovieWatchPage() {
 
       if (decodedId) {
         setCurrentEpisode(
-          movieInfo.data?.data.episodes?.flatMap((server: any) => server.server_data).find((ep: any) => ep.id === decodedId),
+          movieInfo.data?.data.episodes
+            ?.flatMap((server: any) => server.server_data)
+            .find((ep: any) => ep.id === decodedId),
         );
       }
     }
@@ -129,10 +131,10 @@ export default function MovieWatchPage() {
               grid={4}
               imageType="poster"
             />
-            <Comments movieId={1}/>
+            <Comments movieId={1} />
           </div>
         </div>
       </div>
     );
-}
+  }
 }

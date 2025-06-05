@@ -122,6 +122,7 @@ CREATE TABLE IF NOT EXISTS episodes (
     file_name TEXT,
     link_embed TEXT,
     link_m3u8 TEXT,
+    link_mp4 TEXT,
     status VARCHAR(50),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

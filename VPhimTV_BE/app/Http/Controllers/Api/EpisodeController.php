@@ -5,14 +5,17 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\DriveService;
+use App\Services\DropboxService;
 
 class EpisodeController extends Controller
 {
     protected $driveService;
+    protected $dropbox;
 
-    public function __construct(DriveService $driveService)
+    public function __construct(DriveService $driveService, DropboxService $dropbox)
     {
         $this->driveService = $driveService;
+        $this->dropbox = $dropbox;
     }
 
     public function test(Request $request)
@@ -22,12 +25,25 @@ class EpisodeController extends Controller
         }
 
         $file = $request->file('file');
-        $filePath = $file->getPathname();
         $fileName = $file->getClientOriginalName();
-        $mimeType = $file->getMimeType();
+        $localPath = $file->getRealPath();
 
-        $result = $this->driveService->uploadFile($filePath, $fileName, $mimeType);
+        try {
+            $res = $this->dropbox->upload("/video/" . $fileName, $localPath);
 
-        return $result;
+            if (isset($res['error'])) {
+                return response()->json(['message' => 'Upload thất bại', 'error' => $res['error']], 500);
+            }
+
+            $sharedUrl = $this->dropbox->createSharedLink($res['path_lower']);
+            $streamUrl = $sharedUrl ? preg_replace('/(\?|&)dl=0/', '$1raw=1', $sharedUrl) : null;
+
+            return response()->json(['message' => 'Upload thành công', 'data' => [
+                'file_name' => $fileName,
+                'link_mp4' => $streamUrl,
+            ]], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Lỗi khi upload', 'error' => $e->getMessage()], 500);
+        }
     }
 }
