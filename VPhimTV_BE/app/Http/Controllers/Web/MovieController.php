@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use App\Models\Movie;
 use App\Http\Controllers\Controller;
 use App\Models\Country;
+use App\Models\Episode;
 use App\Models\MovieType;
 use App\Services\MovieService;
 
@@ -71,6 +72,21 @@ class MovieController extends Controller
         }
     }
 
+    public function detail($id)
+    {
+        $model = Movie::findOrFail($id);
+
+        $movie_type = MovieType::find($model->type_id);
+        if (!$movie_type) {
+            $movie_type = new MovieType();
+        }
+        $country = Country::find($model->country_id);
+        if (!$country) {
+            $country = new Country();
+        }
+        $episodes = Episode::where('movie_id', $id)->get();
+        return view('movie.detail', compact('model', 'country', 'movie_type', 'episodes'));
+    }
     public function destroy($id)
     {
         $model = Movie::findOrFail($id);
