@@ -5,9 +5,11 @@ import { Link, useParams } from 'react-router-dom';
 
 import ArtPlayer from '~/components/ArtPlayer';
 import BreadCrumb from '~/components/BreadCrumb';
+import { useAuth } from '~/hooks/useAuth';
 import Comments from '~/pages/movie/CommentPage';
 import { addHistory } from '~/service/history/historyApi';
 import { fetchMovieInfo, fetchMovies } from '~/service/movies/moviesApi';
+import { addView } from '~/service/view/viewApi';
 import { movieTypeMap } from '~/utils/classMap';
 
 import MovieContainer from '../home/components/MovieContainer';
@@ -18,6 +20,7 @@ export default function MovieWatchPage() {
   const appName = import.meta.env.VITE_APP_NAME;
   const hashids = useMemo(() => new Hashids(appName, 6), [appName]);
   const lastSavedTimeRef = useRef(0);
+  const { user } = useAuth();
 
   const movieInfo = useQuery({
     queryKey: ['movieInfo', movieSlug],
@@ -49,12 +52,14 @@ export default function MovieWatchPage() {
   const mutationAddHistory = useMutation({
     mutationFn: (data: { movie_id: number; episode_id: number; progress_seconds: number; duration_seconds: number }) =>
       addHistory(data),
-    onSuccess: () => {
-      console.log('Updated history');
-    },
-    onError: (error) => {
-      console.log('Error updating history:', error);
-    },
+    onSuccess: () => console.log('Updated history'),
+    onError: (error) => console.log('Error updating history:', error),
+  });
+
+  const mutationAddView = useMutation({
+    mutationFn: (episode_id: number) => addView(episode_id),
+    onSuccess: () => console.log('Added view history'),
+    onError: (error) => console.log('Error adding view history:', error),
   });
 
   if (!movieInfo.isLoading && movieInfo.data && currentEpisode) {
@@ -104,6 +109,9 @@ export default function MovieWatchPage() {
               height={650}
               on={{
                 'video:timeupdate': (event: Event) => {
+                  // If not logged in, do not save history
+                  if (!user) return;
+
                   const video = event.target as HTMLVideoElement;
                   const currentTime = video.currentTime;
                   const duration = video.duration;
@@ -122,7 +130,8 @@ export default function MovieWatchPage() {
               }}
               once={{
                 'video:play': () => {
-                  // console.log('Video started playing');
+                  // Add view count
+                  mutationAddView.mutate(currentEpisode.id);
                 },
               }}
             />
