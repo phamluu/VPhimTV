@@ -22,8 +22,6 @@ export default function UserFavoritePage() {
     queryFn: () => fetchFavorites(page, limit),
   });
 
-  console.log(favorites.data);
-
   const mutationDeleteFavorite = useMutation({
     mutationKey: ['deleteFavorite'],
     mutationFn: (movieId: number) => deleteFavorite(movieId),
