@@ -1,14 +1,15 @@
+<input type="hidden" name="movie_id" value="{{$model->movie_id}}" />
 <div class="form-group">
-    <label for="name">Tập</label>
+    <label>Tập</label>
     <input type="text" name="episode_name" class="form-control" value="{{ old('episode_name', $model->episode_name) }}">
 </div>
 
 <div class="form-group">
-    <label for="name">Server name</label>
+    <label>Server name</label>
     <input type="text" name="server_name" class="form-control" value="{{ old('server_name', $model->server_name) }}">
 </div>
 <div class="form-group">
-    <label for="name">File name</label>
+    <label>File name</label>
     <input type="text" name="file_name" class="form-control" value="{{ old('file_name', $model->file_name) }}">
 </div>
 <div class="input-group">
