@@ -41,6 +41,7 @@
             </li>
 
             <li>
+                <li class="{{ request()->routeIs('episode.index') ? 'active' : '' }}">
                 <a href="{{ route('episode.index') }}">
                     <i class="now-ui-icons location_map-big"></i>
                     <p>Tập phim</p>
