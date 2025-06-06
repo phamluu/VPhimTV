@@ -77,10 +77,10 @@ class FavoriteController extends Controller
                     ->orWhere('movies.original_name', 'like', '%' . $keyword . '%');
             });
         }
-        $sortType = strtolower($sortType) === 'asc' ? 'asc' : 'desc';
         $movies->orderBy('movies.' . $sortField, $sortType);
 
         $selectFiles = [
+            'movies.id',
             'movies.name',
             'movies.slug',
             'movies.original_name',
@@ -101,15 +101,10 @@ class FavoriteController extends Controller
     {
         $user = Auth::user();
 
+        $request->validate([
+            'movie_id' => 'required|exists:movies,id',
+        ]);
         $movieId = $request->input('movie_id');
-
-        if (empty($movieId)) {
-            return response()->json(['message' => 'Thiếu thông tin movie_id'], 400);
-        }
-
-        $movie = Movie::find($movieId);
-
-        if (!$movie) return response()->json(['message' => 'Phim không tồn tại'], 404);
 
         $favorite = MovieFavorite::where('user_id', $user->id)
             ->where('movie_id', $movieId)
@@ -133,11 +128,11 @@ class FavoriteController extends Controller
     public function delete(Request $request)
     {
         $user = Auth::user();
-        $movieId = $request->input('movie_id');
 
-        if (empty($movieId)) {
-            return response()->json(['message' => 'Thiếu thông tin movie_id'], 400);
-        }
+        $request->validate([
+            'movie_id' => 'required|exists:movies,id',
+        ]);
+        $movieId = $request->input('movie_id');
 
         $favorite = MovieFavorite::where('user_id', $user->id)
             ->where('movie_id', $movieId)
