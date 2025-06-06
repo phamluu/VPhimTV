@@ -40,9 +40,15 @@ class EpisodeController extends Controller
         $movie = $this->service->updateEpisode($request, null);
 
         if ($movie) {
-            return redirect()->route('episode.edit', ['id' => $movie->id])->with('success', 'Thêm tập phim thành công.');
+            return response()->json([
+                'status' => true,
+                'message' => 'Thêm thành công'
+            ]);
         } else {
-            return redirect()->back()->with('error', 'Thêm tập phim thất bại')->withInput();
+            return response()->json([
+                'status' => false,
+                'message' => 'Thêm thất bại'
+            ]);
         }
     }
 
