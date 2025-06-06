@@ -9,37 +9,51 @@ class DropboxService
 {
     protected $apiClient;
     protected $contentClient;
-    protected $accessToken;
 
     public function __construct()
     {
-        $this->accessToken = env('DROPBOX_ACCESS_TOKEN');
-
-        $this->apiClient = new Client([
-            'base_uri' => 'https://api.dropboxapi.com/2/',
-            'headers' => [
-                'Authorization' => "Bearer {$this->accessToken}",
-                'Content-Type' => 'application/json',
-            ],
-        ]);
-
-        $this->contentClient = new Client([
-            'base_uri' => 'https://content.dropboxapi.com/2/',
-            'headers' => [
-                'Authorization' => "Bearer {$this->accessToken}",
-            ],
-        ]);
+        $refreshToken = env('DROPBOX_REFRESH_TOKEN');
+        $this->initialize(
+            env('DROPBOX_CLIENT_ID'),
+            env('DROPBOX_CLIENT_SECRET'),
+            $refreshToken
+        );
     }
 
-    public function getList(string $path = ""): array
+    protected function initialize($clientId, $clientSecret, $refreshToken)
     {
+        $client = new Client(['base_uri' => 'https://api.dropbox.com/']);
+        $accessToken = null;
+
         try {
-            $response = $this->apiClient->post('files/list_folder', [
-                'json' => ['path' => $path],
+            $response = $client->post('oauth2/token', [
+                'form_params' => [
+                    'grant_type' => 'refresh_token',
+                    'refresh_token' => $refreshToken,
+                    'client_id' => $clientId,
+                    'client_secret' => $clientSecret,
+                ],
             ]);
-            return json_decode($response->getBody(), true);
+
+            $data = json_decode($response->getBody(), true);
+            $accessToken = $data['access_token'];
+
+            $this->apiClient = new Client([
+                'base_uri' => 'https://api.dropboxapi.com/2/',
+                'headers' => [
+                    'Authorization' => "Bearer {$accessToken}",
+                    'Content-Type' => 'application/json',
+                ],
+            ]);
+
+            $this->contentClient = new Client([
+                'base_uri' => 'https://content.dropboxapi.com/2/',
+                'headers' => [
+                    'Authorization' => "Bearer {$accessToken}",
+                ],
+            ]);
         } catch (RequestException $e) {
-            return ['error' => $e->getMessage()];
+            throw new \Exception("Lỗi khi lấy access token từ Dropbox: " . $e->getMessage());
         }
     }
 
@@ -87,6 +101,18 @@ class DropboxService
         try {
             $response = $this->apiClient->post('files/delete_v2', [
                 'json' => ['path' => $dropboxPath],
+            ]);
+            return json_decode($response->getBody(), true);
+        } catch (RequestException $e) {
+            return ['error' => $e->getMessage()];
+        }
+    }
+
+    public function getList(string $path = ""): array
+    {
+        try {
+            $response = $this->apiClient->post('files/list_folder', [
+                'json' => ['path' => $path],
             ]);
             return json_decode($response->getBody(), true);
         } catch (RequestException $e) {

@@ -30,7 +30,6 @@ class ViewsController extends Controller
             ->where('created_at', '>=', now()->subMinutes(5))
             ->exists();
 
-
         if ($alreadyViewed) {
             return response()->json(['message' => 'Already viewed recently'], 200);
         }
