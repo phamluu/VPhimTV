@@ -126,5 +126,12 @@
         </div>
     </div>
 </div>
-@include('episode.create')
+<?php
+
+use App\Models\Episode;
+
+$episode = new Episode();
+$episode->movie_id = $model->id;
+?>
+@include('episode.create', ['model' => $episode])
 @endsection
