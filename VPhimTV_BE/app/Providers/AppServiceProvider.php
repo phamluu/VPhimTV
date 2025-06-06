@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
-        Gate::define('view-post', function ($user) {
+        Gate::define('admin', function ($user) {
             return $user->id;
         });
     }

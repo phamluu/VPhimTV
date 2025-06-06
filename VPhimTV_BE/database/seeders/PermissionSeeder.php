@@ -14,6 +14,10 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         Permission::factory()->create([
+            'name' => 'admin',
+            'description' => 'Allows full',
+        ]);
+        Permission::factory()->create([
             'name' => 'view-post',
             'description' => 'Allows viewing posts',
         ]);
