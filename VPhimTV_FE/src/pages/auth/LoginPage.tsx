@@ -20,9 +20,11 @@ export default function LoginPage() {
     onSuccess: (data) => {
       const encrypted = encryptObj(data.data);
       localStorage.setItem('auth', encrypted);
+      const redirect = localStorage.getItem('redirect') ?? '/';
+      localStorage.removeItem('redirect');
 
       setUser(data.user);
-      window.location.href = '/';
+      window.location.href = redirect;
     },
     onError: (error: any) => {
       if (error.errors && typeof error.errors === 'object') {
