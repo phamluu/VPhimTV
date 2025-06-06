@@ -71,6 +71,7 @@ Route::prefix('admin')->group(function () {
             Route::get('edit/{id}',  'edit')->name('movie.edit');
             Route::put('update/{id}', 'update')->name('movie.update');
             Route::delete('delete/{id}',  'destroy')->name('movie.destroy');
+            Route::get('detail/{id}',  'detail')->name('movie.detail');
         });
     });
 
