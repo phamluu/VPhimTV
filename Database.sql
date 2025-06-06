@@ -80,9 +80,10 @@ CREATE TABLE IF NOT EXISTS movie_favorites (
 
 CREATE TABLE IF NOT EXISTS movie_histories (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    user_id INTEGER NOT NULL, -- Foreign Key users.id,
-    movie_id INTEGER NOT NULL, -- Foreign Key movies.id,
-    episode_id INTEGER, -- Foreign Key episodes.id,
+    user_id INTEGER NOT NULL,
+    movie_id INTEGER NOT NULL,
+    episode_id INTEGER,
+    duration_seconds INTEGER DEFAULT 0,
     progress_seconds INTEGER DEFAULT 0,
     status VARCHAR(50),
     is_deleted BOOLEAN DEFAULT FALSE,
