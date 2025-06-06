@@ -36,7 +36,6 @@ class EpisodeController extends Controller
 
     public function store(Request $request)
     {
-
         $movie = $this->service->updateEpisode($request, null);
 
         if ($movie) {
