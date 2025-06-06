@@ -37,15 +37,14 @@ const Comments = ({ movieId }: { movieId: number }) => {
   const [replyText, setReplyText] = useState('');
 
   // Giả định token lấy từ localStorage hoặc context
-  const token = localStorage.getItem('authToken');
-    useEffect(() => {
-      console.log('movieId received in Comments:', movieId); // Debug ban đầu
-    }, [movieId]);
+  useEffect(() => {
+    console.log('movieId received in Comments:', movieId); // Debug ban đầu
+  }, [movieId]);
 
   const fetchComments = useCallback(async () => {
     setLoading(true);
     try {
-      console.log('Gọi API với movieId:', movieId); // Debug trước khi gọi API
+      console.log('Gọi API với movieId:', movieId);
       if (!movieId || movieId <= 0) {
         console.error('movieId không hợp lệ:', movieId);
         setError('movieId không hợp lệ. Vui lòng kiểm tra URL hoặc props.');
@@ -76,13 +75,14 @@ const Comments = ({ movieId }: { movieId: number }) => {
     }
   }, [movieId]);
 
-  useEffect(() => {
+useEffect(() => {
+  const token = localStorage.getItem('auth');
+  if (movieId > 0 && token) {
     fetchComments();
-  }, [fetchComments, movieId]);
-
-    useEffect(() => {
-      fetchComments();
-    }, [fetchComments, movieId]); // Thêm dependencies
+  } else if (!token) {
+    setError('Vui lòng đăng nhập để xem hoặc gửi bình luận!');
+  }
+}, [fetchComments, movieId]);
 
   const formatNumber = (num: number) => {
     if (num >= 1000) {
@@ -90,7 +90,8 @@ const Comments = ({ movieId }: { movieId: number }) => {
     }
     return num.toString();
   };
-
+const token = localStorage.getItem('auth');
+console.log('Token before sending:', token);
   const handleLike = async (commentId: number, isReply = false, parentId: number | null = null) => {
     try {
       await likeComment(commentId, token || '');
@@ -134,11 +135,11 @@ const Comments = ({ movieId }: { movieId: number }) => {
       setComments(comments.map(comment =>
         comment.id === commentId
           ? {
-              ...comment,
-              isDisliked: !comment.isDisliked,
-              isLiked: false,
-              likes: comment.isLiked ? comment.likes - 1 : comment.likes,
-            }
+            ...comment,
+            isDisliked: !comment.isDisliked,
+            isLiked: false,
+            likes: comment.isLiked ? comment.likes - 1 : comment.likes,
+          }
           : comment
       ));
     } catch (err: any) {
@@ -157,16 +158,16 @@ const Comments = ({ movieId }: { movieId: number }) => {
 const handleSubmitComment = async () => {
   if (!newComment.trim()) return;
 
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem('auth');
+  console.log('Token before sending:', token);
   if (!token) {
     alert('Vui lòng đăng nhập để gửi bình luận!');
     return;
   }
-
   try {
     const data = { movie_id: movieId, content: newComment };
     const res = await createComment(data, token);
-    console.log('Response from createComment:', res.data); // Debug response
+    console.log('Response:', res.data);
     const newCommentData: Comment = {
       id: res.data.id,
       user: `@${res.data.user?.name || 'yourhandle'}`,
@@ -181,10 +182,10 @@ const handleSubmitComment = async () => {
       repliesExpanded: false,
       repliesList: [],
     };
-    setComments([newCommentData, ...comments]); // Cập nhật state
+    setComments([newCommentData, ...comments]);
     setNewComment('');
   } catch (err: any) {
-    console.error('Lỗi gửi bình luận:', err.response?.data || err.message);
+    console.error('Lỗi:', err.response?.data || err.message);
     alert(err.response?.data?.message || 'Không thể gửi bình luận');
   }
 };
@@ -207,11 +208,11 @@ const handleSubmitComment = async () => {
       setComments(comments.map(comment =>
         comment.id === commentId
           ? {
-              ...comment,
-              replies: comment.replies + 1,
-              repliesList: [...comment.repliesList, newReply],
-              repliesExpanded: true,
-            }
+            ...comment,
+            replies: comment.replies + 1,
+            repliesList: [...comment.repliesList, newReply],
+            repliesExpanded: true,
+          }
           : comment
       ));
       setReplyText('');
@@ -287,18 +288,16 @@ const handleSubmitComment = async () => {
                 <div className="flex items-center gap-4 text-sm">
                   <button
                     onClick={() => handleLike(comment.id)}
-                    className={`flex items-center gap-1 hover:bg-gray-800 px-2 py-1 rounded ${
-                      comment.isLiked ? 'text-blue-400' : 'text-gray-300'
-                    }`}
+                    className={`flex items-center gap-1 hover:bg-gray-800 px-2 py-1 rounded ${comment.isLiked ? 'text-blue-400' : 'text-gray-300'
+                      }`}
                   >
                     <ThumbsUp className="w-4 h-4" />
                     {comment.likes > 0 && formatNumber(comment.likes)}
                   </button>
                   <button
                     onClick={() => handleDislike(comment.id)}
-                    className={`flex items-center gap-1 hover:bg-gray-800 px-2 py-1 rounded ${
-                      comment.isDisliked ? 'text-blue-400' : 'text-gray-300'
-                    }`}
+                    className={`flex items-center gap-1 hover:bg-gray-800 px-2 py-1 rounded ${comment.isDisliked ? 'text-blue-400' : 'text-gray-300'
+                      }`}
                   >
                     <ThumbsDown className="w-4 h-4" />
                   </button>
@@ -377,9 +376,8 @@ const handleSubmitComment = async () => {
                           <div className="flex items-center gap-4 text-sm">
                             <button
                               onClick={() => handleLike(reply.id, true, comment.id)}
-                              className={`flex items-center gap-1 hover:bg-gray-800 px-2 py-1 rounded ${
-                                reply.isLiked ? 'text-blue-400' : 'text-gray-300'
-                              }`}
+                              className={`flex items-center gap-1 hover:bg-gray-800 px-2 py-1 rounded ${reply.isLiked ? 'text-blue-400' : 'text-gray-300'
+                                }`}
                             >
                               <ThumbsUp className="w-3 h-3" />
                               {reply.likes > 0 && reply.likes}

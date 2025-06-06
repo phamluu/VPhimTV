@@ -1,29 +1,30 @@
-import axios from 'axios';
+import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:8000/api/comment',
+  baseURL: 'http://localhost:8000/api',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Lấy danh sách comment theo movie_id, pagination, sorting
-export const getComments = (movie_id: number, page: number = 1, limit: number = 10) => {
-  return apiClient.get('/', {
-    params: { movie_id, page, limit },
+export const getComments = (movieId: number, page: number = 1, limit: number = 10, token?: string) => {
+  console.log('Token:', token);
+  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+  return apiClient.get('/comment', {
+    params: { movie_id: movieId, page, limit },
+    headers,
   });
 };
 
-// Tạo comment mới (phải có token xác thực)
 export const createComment = (data: { movie_id: number; content: string }, token: string) => {
-  return apiClient.post('/create', data, {
+  console.log('Sending request with token:', token);
+  return apiClient.post('/comment/create', data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 
-// Tạo reply mới
 export const createReply = (_commentId: number, data: { movie_id: number; content: string; reply_to: number }, token: string) => {
-  return apiClient.post('/create', data, {
+  return apiClient.post('/comment/create', data, { // Có thể cần endpoint riêng cho reply, ví dụ: /comment/reply
     headers: { Authorization: `Bearer ${token}` },
   });
 };

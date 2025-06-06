@@ -35,8 +35,9 @@ class HistoryController extends Controller
 
         $request->validate([
             'movie_id' => 'required|exists:movies,id',
-            'episode_id' => 'nullable|exists:episodes,id',
+            'episode_id' => 'required|exists:episodes,id',
             'progress_seconds' => 'nullable|integer|min:0',
+            'duration_seconds' => 'required|integer|min:0',
         ]);
 
         $history = MovieHistory::updateOrCreate(
@@ -47,6 +48,7 @@ class HistoryController extends Controller
             ],
             [
                 'progress_seconds' => $request->progress_seconds ?? 0,
+                'duration_seconds' => $request->duration_seconds ?? 0,
             ]
         );
 

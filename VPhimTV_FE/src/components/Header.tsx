@@ -1,6 +1,6 @@
 import { useMutation, useQueries } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useAuth } from '~/hooks/useAuth';
 import { logoutUser } from '~/service/auth/authApi';
@@ -9,6 +9,7 @@ import { fetchCountry } from '~/service/country/countryApi';
 
 export default function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [value, setValue] = useState('');
   const [searchParams, _setSearchParams] = useSearchParams();
   const { user, setUser } = useAuth();
@@ -145,9 +146,15 @@ export default function Header() {
 
           {/* User Profile or Login Button */}
           {!user ? (
-            <Link to={'/dang-nhap'} className="btn btn-soft btn-primary">
+            <button
+              className="btn btn-soft btn-primary"
+              onClick={() => {
+                localStorage.setItem('redirect', location.pathname + location.search);
+                navigate('/dang-nhap');
+              }}
+            >
               Đăng nhập
-            </Link>
+            </button>
           ) : (
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">

@@ -43,6 +43,7 @@ Route::middleware(['web'])->group(function () {
     Route::prefix('favorite')->name('movie_favorites.')->middleware('apiAuth')->group(function () {
         Route::controller(FavoriteController::class)->group(function () {
             Route::get('/', 'getList')->name('getList');
+            Route::get('/check', 'checkExist')->name('checkExist');
             Route::post('/create', 'create')->name('create');
             Route::post('/delete', 'delete')->name('delete');
         });

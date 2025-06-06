@@ -31,7 +31,7 @@
                                 <th>Lượt xem</th>
                                 <th>Lượt thích</th>
                                 <th>Lượt bình luận</th>
-                                <th class="text-right">Chức năng</th>
+                                <th class="text-right" style="width:130px;">Chức năng</th>
                             </thead>
                             <tbody>
                                 @foreach ($model as $movie)
@@ -43,6 +43,9 @@
                                     <td><a href="">10</a></td>
                                     <td><a href="#" class="" data-toggle="modal" data-target="#myModal-{{ $movie->id }}">3</a></td>
                                     <td class="text-right">
+                                        <a href="{{ route('movie.detail', $movie->id) }}" class="btn btn-link btn-info btn-just-icon">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
                                         <a href="{{ route('movie.edit', $movie->id) }}" class="btn btn-link btn-info btn-just-icon">
                                             <i class="now-ui-icons ui-2_settings-90"></i>
                                         </a>
