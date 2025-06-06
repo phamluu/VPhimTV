@@ -10,6 +10,23 @@ use App\Models\MovieFavorite;
 
 class FavoriteController extends Controller
 {
+    public function checkExist(Request $request)
+    {
+        $user = Auth::user();
+        $movieId = $request->input('movie_id');
+
+        $favorite = MovieFavorite::where('user_id', $user->id)
+            ->where('movie_id', $movieId)
+            ->where('is_active', 1)
+            ->where('is_deleted', 0)
+            ->exists();
+
+        return response()->json([
+            'data' => $favorite,
+            'message' => $favorite ? 'Phim đã có trong danh sách yêu thích' : 'Phim không có trong danh sách yêu thích'
+        ]);
+    }
+
     public function getList(Request $request)
     {
         $user = Auth::user();
