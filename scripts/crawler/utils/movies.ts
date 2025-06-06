@@ -17,7 +17,7 @@ async function findIdMovieType(slug: string) {
           ? 'Phim Bộ'
           : slug === 'single'
           ? 'Phim Lẻ'
-          : slug === 'tvshow'
+          : slug === 'tvshows'
           ? 'Phim Truyền Hình'
           : slug === 'hoathinh'
           ? 'Hoạt Hình'
