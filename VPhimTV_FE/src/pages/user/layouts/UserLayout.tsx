@@ -1,10 +1,16 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+
+import { useAuth } from '~/hooks/useAuth';
+import { logoutUser } from '~/service/auth/authApi';
 
 export default function UserLayout() {
   const location = useLocation();
   const pathSegments = location.pathname.split('/').filter(Boolean);
   const rootPath = pathSegments[0] || '';
   const lastPath = pathSegments[1] || '';
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const menuItems = [
     {
@@ -26,6 +32,16 @@ export default function UserLayout() {
       isActive: rootPath === 'ho-so' && lastPath === 'lich-su',
     },
   ];
+
+  const mutationLogout = useMutation({
+    mutationKey: ['logout'],
+    mutationFn: () => logoutUser(),
+    onSuccess: () => {
+      setUser(null);
+      localStorage.removeItem('auth');
+      navigate('/');
+    },
+  });
 
   return (
     <div className="container mx-auto mt-12 mb-12">
@@ -55,7 +71,7 @@ export default function UserLayout() {
             </div>
 
             <div className="space-y-6 p-6 border-t border-neutral-content/10">
-              <button className="btn btn-soft w-full rounded-xl">
+              <button className="btn btn-soft w-full rounded-xl" onClick={() => mutationLogout.mutate()}>
                 <i className="fa-regular fa-arrow-right-from-bracket"></i>
                 Đăng xuất
               </button>

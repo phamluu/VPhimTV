@@ -33,7 +33,7 @@
             <div class="col-md-4">
                 <div class="card card-user">
                     <div class="image">
-                        <img src="{{asset('assets/img/bg5.jpg')}}" alt="...">
+                        <img src="assets/img/bg5.jpg" alt="...">
                     </div>
                     <div class="card-body">
                         <div class="row">
