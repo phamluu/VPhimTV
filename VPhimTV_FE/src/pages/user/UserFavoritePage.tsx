@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link, useSearchParams } from 'react-router-dom';
 
+import Loading from '~/components/Loading';
 import Pagination from '~/components/Pagination';
 import { toast } from '~/hooks/utils/toast';
 import { deleteFavorite, fetchFavorites } from '~/service/favorite/favoriteApi';
@@ -39,9 +40,9 @@ export default function UserFavoritePage() {
         <p className="rounded-xl bg-base-content/10 p-2">{favorites.data?.pagination.total || 0} phim</p>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
-        {!favorites.isLoading &&
-          favorites.data?.data.map((item: any, idx: any) => (
+      {!favorites.isLoading ? (
+        <div className="grid grid-cols-4 gap-4">
+          {favorites.data?.data.map((item: any, idx: any) => (
             <div className="relative shadow rounded-xl group" key={idx}>
               <img loading="lazy" src={item.poster_url} className="rounded-xl" />
 
@@ -65,7 +66,10 @@ export default function UserFavoritePage() {
               </p>
             </div>
           ))}
-      </div>
+        </div>
+      ) : (
+        <Loading type="dots" size="xl" />
+      )}
 
       {!favorites.isLoading && favorites.data?.pagination?.totalPage > 10 && (
         <Pagination
