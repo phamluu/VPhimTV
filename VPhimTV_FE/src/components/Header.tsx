@@ -101,7 +101,7 @@ export default function Header() {
                 className="dropdown-content menu grid grid-cols-3 gap-1 bg-base-100 rounded-box z-1 w-96 p-2 shadow"
               >
                 {category.data?.data?.map((item: any) => (
-                  <li key={item._id} className="hover:text-primary">
+                  <li key={item.id} className="hover:text-primary">
                     <Link to={`/tim-kiem?the-loai=${item.slug}`}>{item.name}</Link>
                   </li>
                 ))}
@@ -122,7 +122,7 @@ export default function Header() {
                 className="dropdown-content menu grid grid-cols-3 gap-1 bg-base-100 rounded-box z-1 w-96 p-2 shadow"
               >
                 {country.data?.data?.map((item: any) => (
-                  <li key={item._id} className="hover:text-primary">
+                  <li key={item.id} className="hover:text-primary">
                     <Link to={`/tim-kiem?quoc-gia=${item.slug}`}>{item.name}</Link>
                   </li>
                 ))}

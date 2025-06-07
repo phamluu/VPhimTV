@@ -41,7 +41,7 @@ export default function MovieContainer({
       <div className={`grid ${gridClassMap[grid]} gap-4`}>
         {(isLoading ? placeholders : movies).map((movie: any, i) => (
           <MovieCard
-            key={isLoading ? i : movie._id}
+            key={isLoading ? i : movie.slug}
             className={`${primary && i === 0 ? 'col-span-2 row-span-2' : ''} ${
               imageType === 'thumb'
                 ? primary && i === 0
