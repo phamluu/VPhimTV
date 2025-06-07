@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
 import { useAuth } from '~/hooks/useAuth';
 import { logoutUser } from '~/service/auth/authApi';
@@ -9,7 +9,6 @@ export default function UserLayout() {
   const pathSegments = location.pathname.split('/').filter(Boolean);
   const rootPath = pathSegments[0] || '';
   const lastPath = pathSegments[1] || '';
-  const navigate = useNavigate();
   const { setUser } = useAuth();
 
   const menuItems = [
@@ -39,7 +38,7 @@ export default function UserLayout() {
     onSuccess: () => {
       setUser(null);
       localStorage.removeItem('auth');
-      navigate('/');
+      window.location.href = '/';
     },
   });
 
