@@ -82,17 +82,15 @@ export default function MovieInfoPage() {
               },
               {
                 label: movieInfo.data?.data.type.name,
-                href: `/${movieTypeMap[movieInfo.data?.data.type.slug]}`,
+                href: `/danh-sach/${movieTypeMap[movieInfo.data?.data.type.slug]}`,
               },
               {
                 label: movieInfo.data?.data.year,
-                href: `/${movieTypeMap[movieInfo.data?.data.type.slug]}/${movieInfo.data?.data.year}`,
+                href: `/tim-kiem?&nam=${movieInfo.data?.data.year}`,
               },
               {
                 label: movieInfo.data?.data.country.name,
-                href: `/${movieTypeMap[movieInfo.data?.data.type.slug]}/${movieInfo.data?.data.year}/${
-                  movieInfo.data?.data.country.slug
-                }`,
+                href: `/tim-kiem?&nam=${movieInfo.data?.data.year}&quoc-gia=${movieInfo.data?.data.country.slug}`,
               },
               {
                 label: movieInfo.data?.data.name,
