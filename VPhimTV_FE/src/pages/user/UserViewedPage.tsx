@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import Hashids from 'hashids';
 import { useMemo } from 'react';
@@ -6,17 +6,18 @@ import { Link, useSearchParams } from 'react-router-dom';
 
 import Loading from '~/components/Loading';
 import Pagination from '~/components/Pagination';
-import { fetchHistory } from '~/service/history/historyApi';
+import { toast } from '~/hooks/utils/toast';
+import { deleteHistory, fetchHistory } from '~/service/history/historyApi';
 
-function formatDuration(duration_seconds: number): string {
-  const hours = Math.floor(duration_seconds / 3600);
-  const minutes = Math.floor((duration_seconds % 3600) / 60);
+function formatDuration(seconds: number): string {
+  const d = dayjs.duration(seconds, 'seconds');
+  const h = d.hours();
+  const m = d.minutes();
 
-  const parts: string[] = [];
-  if (hours > 0) parts.push(`${hours}h`);
-  if (minutes > 0) parts.push(`${minutes}p`);
-
-  return parts.join(' ') || '0p';
+  if (h > 0 && m > 0) return `${h} giờ ${m} phút`;
+  if (h > 0) return `${h} giờ`;
+  if (m > 0) return `${m} phút`;
+  return '0 phút';
 }
 
 function timeAgo(updatedAt: Date | string) {
@@ -50,12 +51,20 @@ export default function UserViewedPage() {
     });
   };
 
+  const mutationDeleteHistory = useMutation({
+    mutationFn: (episodeId?: number) => deleteHistory(episodeId),
+    onSuccess: () => {
+      toast({ type: 'success', message: 'Đã xoá lịch sử xem thành công' });
+      viewedMovies.refetch();
+    },
+  });
+
   return (
     <div className="rounded-xl bg-base-100 shadow border border-neutral-content/10 p-6 space-y-6 min-h-[460px]">
       <div className="flex items-center justify-between">
         <p className="font-bold text-2xl">Lịch sử xem gần đây</p>
 
-        <button className="btn btn-soft rounded-xl">
+        <button className="btn btn-soft rounded-xl" onClick={() => mutationDeleteHistory.mutate(undefined)}>
           <i className="fa-regular fa-trash-can"></i>
           Xoá tất cả
         </button>
@@ -72,6 +81,7 @@ export default function UserViewedPage() {
 
                 <div className="flex items-center gap-4 text-base-content/60">
                   <p className="rounded-xl bg-base-content/10 p-2 px-4">{formatDuration(item.duration_seconds)}</p>
+                  <p className="rounded-xl bg-base-content/10 p-2 px-4">{item.episode_name}</p>
                   <p className="rounded-xl bg-base-content/10 p-2 px-4">Lần cuối xem: {timeAgo(item.updated_at)}</p>
                 </div>
 
@@ -93,7 +103,10 @@ export default function UserViewedPage() {
                     Xem tiếp
                   </Link>
 
-                  <button className="btn btn-soft w-32 rounded-xl">
+                  <button
+                    className="btn btn-soft w-32 rounded-xl"
+                    onClick={() => mutationDeleteHistory.mutate(item.episode_id)}
+                  >
                     <i className="fa-regular fa-trash-can"></i>
                     Xoá lịch sử
                   </button>

@@ -74,7 +74,7 @@ Route::middleware(['web'])->group(function () {
         Route::controller(HistoryController::class)->group(function () {
             Route::get('/', 'getList')->name('getList');
             Route::post('/create', 'create')->name('create');
-            Route::post('/delete/{id}', 'delete')->name('delete');
+            Route::post('/delete', 'delete')->name('delete');
         });
     });
 

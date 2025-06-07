@@ -64,19 +64,26 @@ class HistoryController extends Controller
         return response()->json($history, 201);
     }
 
-    public function delete($id)
+    public function delete(Request $request)
     {
         $user = Auth::user();
 
-        $history = MovieHistory::where('user_id', $user->id)
-            ->where('movie_id', $id)
-            ->first();
+        $episodeId = $request->input('episode_id');
 
-        if ($history) {
-            $history->delete();
-            return response()->json(['message' => 'History deleted successfully.'], 200);
+        if ($episodeId) {
+            $history = MovieHistory::where('user_id', $user->id)
+                ->where('episode_id', $episodeId)
+                ->first();
+
+            if ($history) {
+                $history->delete();
+                return response()->json(['message' => 'History deleted successfully.'], 200);
+            } else {
+                return response()->json(['message' => 'History not found.'], 404);
+            }
+        } else {
+            MovieHistory::where('user_id', $user->id)->delete();
+            return response()->json(['message' => 'All history deleted successfully.'], 200);
         }
-
-        return response()->json(['message' => 'History not found.'], 404);
     }
 }

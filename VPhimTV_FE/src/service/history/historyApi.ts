@@ -16,3 +16,8 @@ export const addHistory = async (payload: {
   const response = await http.post(`${baseUrl}/create`, payload);
   return response.data;
 };
+
+export const deleteHistory = async (id?: number) => {
+  const response = await http.post(`${baseUrl}/delete`, { episode_id: id });
+  return response.data;
+};
