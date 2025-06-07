@@ -21,7 +21,16 @@ class HistoryController extends Controller
 
         $movies = Movie::query()
             ->join('movie_histories', 'movies.id', '=', 'movie_histories.movie_id')
-            ->select('movie_histories.*', 'movies.name', 'movies.slug', 'movies.poster_url', 'movies.time')
+            ->join('episodes', 'movie_histories.episode_id', '=', 'episodes.id')
+            ->select(
+                'movie_histories.*',
+                'movies.name as movie_name',
+                'movies.slug',
+                'movies.poster_url',
+                'episodes.episode_name',
+                'episodes.slug as episode_slug',
+                'episodes.id as episode_id',
+            )
             ->where('movie_histories.user_id', $user->id)
             ->orderBy($sorting['sort_field'], $sorting['sort_type'])
             ->paginate($pagination['limit'], ['*'], 'page', $pagination['page']);
