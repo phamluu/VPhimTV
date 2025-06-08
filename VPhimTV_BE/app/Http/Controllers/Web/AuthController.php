@@ -76,7 +76,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         // Redirect to the intended URL or fallback to the dashboard
-        return redirect()->intended('/dashboard');
+        return redirect()->intended('/');
     }
 
     public function logout()
