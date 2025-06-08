@@ -28,6 +28,7 @@
 <body class="">
     <div class="wrapper ">
 
+
         @include('layouts.sidebar')
 
         <div class="main-panel" id="main-panel">
