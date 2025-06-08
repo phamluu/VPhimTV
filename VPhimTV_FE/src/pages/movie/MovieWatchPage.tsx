@@ -77,17 +77,15 @@ export default function MovieWatchPage() {
               },
               {
                 label: movieInfo.data?.data.type.name,
-                href: `/${movieTypeMap[movieInfo.data?.data.type.slug]}`,
+                href: `/danh-sach/${movieTypeMap[movieInfo.data?.data.type.slug]}`,
               },
               {
                 label: movieInfo.data?.data.year,
-                href: `/${movieTypeMap[movieInfo.data?.data.type.slug]}/${movieInfo.data?.data.year}`,
+                href: `/tim-kiem?&nam=${movieInfo.data?.data.year}`,
               },
               {
                 label: movieInfo.data?.data.country.name,
-                href: `/${movieTypeMap[movieInfo.data?.data.type.slug]}/${movieInfo.data?.data.year}/${
-                  movieInfo.data?.data.country.slug
-                }`,
+                href: `/tim-kiem?&nam=${movieInfo.data?.data.year}&quoc-gia=${movieInfo.data?.data.country.slug}`,
               },
               {
                 label: movieInfo.data?.data.name,
@@ -127,10 +125,19 @@ export default function MovieWatchPage() {
                     });
                   }
                 },
+                'video:ended': () => {
+                  mutationAddHistory.mutate({
+                    movie_id: movieInfo.data?.data.id,
+                    episode_id: currentEpisode.id,
+                    progress_seconds: Math.floor(currentEpisode.duration_seconds),
+                    duration_seconds: Math.floor(currentEpisode.duration_seconds),
+                  });
+                },
               }}
               once={{
                 'video:play': () => {
                   // Add view count
+                  console.log('Adding view for episode:', currentEpisode.id);
                   mutationAddView.mutate(currentEpisode.id);
                 },
               }}

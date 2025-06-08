@@ -53,28 +53,28 @@ Route::middleware(['web'])->group(function () {
     Route::prefix('user')->name('users.')->group(function () {
         Route::controller(UserController::class)->group(function () {
             Route::get('/{id}', 'getDetail')->name('getDetail');
-            Route::put('/update/{id}', 'update')->name('update')->middleware('apiAuth');
+            Route::post('/update/{id}', 'update')->name('update')->middleware('apiAuth');
         });
     });
 
     // API Comment
     Route::prefix('comment')->name('comments.')->group(function () {
-        Route::controller(CommentController::class)->group(function () {
-            Route::get('/', 'getList')->name('getList');
-            Route::middleware('apiAuth')->group(function () {
-                Route::post('/create', 'create')->name('create');
-                Route::put('/update/{id}', 'update')->name('update');
-                Route::post('/delete/{id}', 'delete')->name('delete');
-            });
+    Route::controller(CommentController::class)->group(function () {
+        Route::get('/', 'getList')->name('getList');
+        Route::middleware('apiAuth')->group(function () {
+            Route::post('/create', 'create')->name('create'); 
+            Route::put('/update/{id}', 'update')->name('update');
+            Route::post('/delete/{id}', 'delete')->name('delete');
         });
     });
+});
 
     // API History
     Route::prefix('history')->name('histories.')->middleware('apiAuth')->group(function () {
         Route::controller(HistoryController::class)->group(function () {
             Route::get('/', 'getList')->name('getList');
             Route::post('/create', 'create')->name('create');
-            Route::post('/delete/{id}', 'delete')->name('delete');
+            Route::post('/delete', 'delete')->name('delete');
         });
     });
 

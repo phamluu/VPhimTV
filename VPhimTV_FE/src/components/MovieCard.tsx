@@ -23,15 +23,17 @@ export default function MovieCard({ status, title, image, linkTo, className = ''
           </div>
         )}
 
-        <img
-          src={image}
-          alt={title}
-          loading="lazy"
-          onLoad={() => setIsLoaded(true)}
-          className={`w-full h-full object-cover transition-opacity duration-500 ${
-            isLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
+        {image && (
+          <img
+            src={image}
+            alt={title}
+            loading="lazy"
+            onLoad={() => setIsLoaded(true)}
+            className={`w-full h-full object-cover transition-opacity duration-500 ${
+              isLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+          />
+        )}
 
         {/* Status and Title */}
         {isLoaded && (

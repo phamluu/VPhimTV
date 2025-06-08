@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Middleware\CheckRole;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,10 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Schema::defaultStringLength(191);
-        // Gate::define('admin', function ($user) {
-        //     return $user->roles()->where('name', 'admin')->exists();
-        // });
         app('router')->aliasMiddleware('role', CheckRole::class);
+
+        if (request()->isSecure()) {
+            URL::forceScheme('https');
+        }
     }
 }

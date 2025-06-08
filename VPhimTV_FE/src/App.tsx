@@ -2,13 +2,13 @@ import { BrowserRouter, Outlet, Route, Routes, useLocation } from 'react-router-
 
 import Footer from './components/Footer';
 import Header from './components/Header';
+import { RequireAuth } from './components/RequireAuth';
 import { AuthProvider } from './context/AuthContext';
 import { ConfirmProvider } from './context/ConfirmContext';
 import { ToastProvider } from './context/ToastContext';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import HomePage from './pages/home/HomePage';
-import CommentPage from './pages/movie/CommentPage';
 import MovieInfoPage from './pages/movie/MovieInfoPage';
 import MovieListPage from './pages/movie/MovieListPage';
 import MovieWatchPage from './pages/movie/MovieWatchPage';
@@ -54,12 +54,10 @@ export default function App() {
                 </Route>
 
                 <Route path="/ho-so" element={<UserLayout />}>
-                  <Route index element={<UserProfilePage />} />
-                  <Route path="yeu-thich" element={<UserFavoritePage />} />
-                  <Route path="lich-su" element={<UserViewedPage />} />
+                  <Route index element={<RequireAuth children={<UserProfilePage />} />} />
+                  <Route path="yeu-thich" element={<RequireAuth children={<UserFavoritePage />} />} />
+                  <Route path="lich-su" element={<RequireAuth children={<UserViewedPage />} />} />
                 </Route>
-
-                <Route path="/binh-luan" element={<CommentPage />} />
               </Route>
             </Routes>
           </BrowserRouter>
