@@ -11,23 +11,23 @@ use Illuminate\Support\Facades\Auth;
 class CommentController extends Controller
 {
     public function getList(CommentRequest $request)
-{
-    $pagination = $request->paginationParams();
-    $sorting = $request->sortingParams();
-    $filters = $request->filtersParams();
+    {
+        $pagination = $request->paginationParams();
+        $sorting = $request->sortingParams();
+        $filters = $request->filtersParams();
 
-    $commentsQuery = MovieComment::query()
-        ->where('movie_id', $filters['movie_id'])
-        ->with(['user' => function ($query) {
-            $query->select('id', 'name', 'avatar');
-        }]);
+        $commentsQuery = MovieComment::query()
+            ->where('movie_id', $filters['movie_id'])
+            ->with(['user' => function ($query) {
+                $query->select('id', 'name', 'avatar');
+            }]);
 
-    $comments = $commentsQuery
-        ->orderBy($sorting['sort_field'], $sorting['sort_type'])
-        ->paginate($pagination['limit'], ['*'], 'page', $pagination['page']);
+        $comments = $commentsQuery
+            ->orderBy($sorting['sort_field'], $sorting['sort_type'])
+            ->paginate($pagination['limit'], ['*'], 'page', $pagination['page']);
 
-    return response()->json($comments);
-}
+        return response()->json($comments);
+    }
 
     public function create(Request $request)
     {
@@ -42,7 +42,7 @@ class CommentController extends Controller
         $comment = MovieComment::create([
             'user_id' => $user->id,
             'movie_id' => $data['movie_id'],
-            'reply_to' => $data['reply_to'],
+            'reply_to' => $data['reply_to'] ?? null,
             'content' => $data['content'],
         ]);
 
@@ -68,7 +68,8 @@ class CommentController extends Controller
         return response()->json($comment);
     }
 
-    public function delete(Request $request, $id) {
+    public function delete(Request $request, $id)
+    {
         $user = Auth::user();
 
         $comment = MovieComment::where('id', $id)->where('user_id', $user->id)->firstOrFail();

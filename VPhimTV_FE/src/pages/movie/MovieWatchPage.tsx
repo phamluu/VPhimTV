@@ -5,14 +5,15 @@ import { Link, useParams } from 'react-router-dom';
 
 import ArtPlayer from '~/components/ArtPlayer';
 import BreadCrumb from '~/components/BreadCrumb';
+import Select from '~/components/Select';
 import { useAuth } from '~/hooks/useAuth';
-import Comments from '~/pages/movie/CommentPage';
 import { addHistory } from '~/service/history/historyApi';
 import { fetchMovieInfo, fetchMovies } from '~/service/movies/moviesApi';
 import { addView } from '~/service/view/viewApi';
 import { movieTypeMap } from '~/utils/classMap';
 
 import MovieContainer from '../home/components/MovieContainer';
+import MovieComment from './Components/MovieComment';
 
 export default function MovieWatchPage() {
   const { movieSlug, episodeSlug } = useParams();
@@ -30,7 +31,7 @@ export default function MovieWatchPage() {
   const relatedMovies = useQuery({
     queryKey: ['relatedMovies', movieSlug],
     queryFn: () =>
-      fetchMovies({ limit: 12, country: movieInfo.data?.data.country.slug, year: movieInfo.data?.data.year }),
+      fetchMovies({ limit: 10, country: movieInfo.data?.data.country.slug, year: movieInfo.data?.data.year }),
     enabled: !!movieInfo.data,
   });
 
@@ -178,17 +179,39 @@ export default function MovieWatchPage() {
               ))}
             </div>
 
-            <p className="font-bold text-xl mt-6 mb-6">Có thể bạn thích:</p>
+            {/* Form comments */}
+            <>
+              <div className="flex justify-between items-center">
+                <p className="font-bold text-xl mt-6 mb-6">0 Bình luận</p>
 
-            <MovieContainer
-              className="space-y-3"
-              movies={relatedMovies.data?.data || []}
-              placeholderCount={16}
-              primary={false}
-              grid={4}
-              imageType="poster"
-            />
-            <Comments movieId={1} />
+                <div className="flex items-center gap-2">
+                  <p className="text-nowrap">Sắp xếp theo</p>
+                  <Select
+                    options={[
+                      { label: 'Mới nhất', value: 'desc' },
+                      { label: 'Cũ nhất', value: 'asc' },
+                    ]}
+                    defaultOption="desc"
+                  />
+                </div>
+              </div>
+
+              <MovieComment />
+            </>
+
+            {/* Form related movies */}
+            <>
+              <p className="font-bold text-xl mt-6 mb-6">Có thể bạn thích:</p>
+
+              <MovieContainer
+                className="space-y-3"
+                movies={relatedMovies.data?.data || []}
+                placeholderCount={10}
+                primary={false}
+                grid={5}
+                imageType="poster"
+              />
+            </>
           </div>
         </div>
       </div>
