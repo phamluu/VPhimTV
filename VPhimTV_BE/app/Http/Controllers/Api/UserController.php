@@ -118,22 +118,38 @@ class UserController extends Controller
     {
         if (!User::where('id', $id)->exists()) {
             return response()->json([
-                'success' => false,
                 'message' => 'Người dùng không tồn tại',
             ], 404);
         }
 
-        $validate = $request->validate([
-            'full_name' => 'required|string|max:255',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        $request->validate([
+            'full_name' => 'sometimes|string|max:255',
+            'avatar' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        $data = [];
+
+        if ($request->has('full_name')) {
+            $data['full_name'] = $request->input('full_name');
+        }
+
+        if ($request->hasFile('avatar')) {
+            $destinationPath = public_path('uploads/avatars');
+            $file = $request->file('avatar');
+            $fileName = 'avatar_' . $id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            $file->move($destinationPath, $fileName);
+            $data['avatar'] = '/uploads/avatars/' . $fileName;
+        }
+
+        if (empty($data)) {
+            return response()->json([
+                'message' => 'Không có dữ liệu để cập nhật',
+            ], 400);
+        }
 
         $userInfo = UserInfo::updateOrCreate(
             ['user_id' => $id],
-            [
-                'full_name' => $validate['full_name'],
-                'avatar' => $request->file('avatar') ? $request->file('avatar')->store('avatars', 'public') : null,
-            ]
+            $data
         );
 
         return response()->json([

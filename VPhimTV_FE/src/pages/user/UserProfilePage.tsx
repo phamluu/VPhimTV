@@ -1,19 +1,45 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useAuth } from '~/hooks/useAuth';
-import { fetchUser } from '~/service/user/userApi';
+import { toast } from '~/hooks/utils/toast';
+import { fetchUser, updateUser } from '~/service/user/userApi';
 import { timeAgo } from '~/utils/utils';
 
 export default function UserProfilePage() {
   const apiUrl = import.meta.env.VITE_APP_API;
   const { user } = useAuth();
+  const [formEdit, setFormEdit] = useState(false);
+  const [fullName, setFullName] = useState(user.full_name || user.name);
 
   const userQuery = useQuery({
     queryKey: ['userProfile'],
     queryFn: async () => fetchUser(user.id),
   });
+
+  const mutationUpdateUser = useMutation({
+    mutationFn: (payload: { id: number; full_name?: string; avatar?: File }) => updateUser(payload),
+    onSuccess: () => {
+      userQuery.refetch();
+      toast({ type: 'success', message: 'Cập nhật thông tin thành công' });
+    },
+    onError: (error: any) => {
+      console.log(error);
+      toast({ type: 'error', message: error.message || 'Cập nhật thông tin thất bại' });
+    },
+  });
+
+  const handleUpdateName = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (fullName.trim() === '') {
+      toast({ type: 'error', message: 'Tên không được để trống' });
+      return;
+    }
+    mutationUpdateUser.mutate({ id: user.id, full_name: fullName });
+    setFormEdit(false);
+  };
 
   return (
     <>
@@ -30,11 +56,21 @@ export default function UserProfilePage() {
               />
             )}
           </div>
-          <span
-            className={`absolute bottom-0 right-0 bg-base-300 p-2 w-10 h-10 flex items-center justify-center rounded-full`}
+          <label
+            className={`absolute bottom-0 right-0 bg-base-300 p-2 w-10 h-10 flex items-center justify-center rounded-full hover:cursor-pointer hover:bg-base-content/10 transition-all duration-200`}
           >
+            <input
+              type="file"
+              className="hidden"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) mutationUpdateUser.mutate({ id: user.id, avatar: file });
+                e.target.value = '';
+              }}
+            />
             <i className="fa-regular fa-camera"></i>
-          </span>
+          </label>
         </div>
 
         <div className="m-6 flex flex-col justify-between">
@@ -46,7 +82,34 @@ export default function UserProfilePage() {
             </>
           ) : (
             <>
-              <p className="text-3xl font-bold">{userQuery.data?.data?.full_name ?? userQuery.data?.data?.name}</p>
+              <div>
+                {!formEdit ? (
+                  <div className="flex gap-2 items-center group">
+                    <p className="text-3xl font-bold">
+                      {userQuery.data?.data?.full_name ?? userQuery.data?.data?.name}
+                    </p>
+
+                    <button
+                      className="text-xl hidden group-hover:block transition-opacity duration-200 hover:cursor-pointer"
+                      onClick={() => setFormEdit(true)}
+                    >
+                      <i className="fa-regular fa-pen-to-square"></i>
+                    </button>
+                  </div>
+                ) : (
+                  <form onSubmit={handleUpdateName} className="join">
+                    <input
+                      type="text"
+                      className="input join-item"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                    />
+                    <button className="btn btn-soft btn-success join-item" type="submit" onClick={handleUpdateName}>
+                      <i className="fa-regular fa-floppy-disk"></i>
+                    </button>
+                  </form>
+                )}
+              </div>
               <p>
                 Yêu thích phim {userQuery.data?.data?.top_categories[0]?.name} và{' '}
                 {userQuery.data?.data?.top_categories[1]?.name}
