@@ -42,18 +42,13 @@ export default function HomePage() {
           }}
         >
           {hotMovies.isLoading
-            ? Array.from({ length: 10 }).map((_, i) => (
+            ? Array.from({ length: 5 }).map((_, i) => (
                 <SplideSlide key={i}>
-                  <MovieCard
-                    key={i}
-                    status="Full | Vietsub + Lồng Tiếng"
-                    title={`404 - Chạy ngay đi - ${i}`}
-                    image="https://oamarense.com/wp-content/uploads/2025/04/404-chay-ngay-di-15356-poster.webp"
-                    className="max-h-[137px]"
-                  />
+                  <div className="h-[137px] w-full skeleton"></div>
                 </SplideSlide>
               ))
-            : hotMovies.data?.data.map((movie: any) => (
+            : hotMovies.data &&
+              hotMovies.data.data.map((movie: any) => (
                 <SplideSlide key={movie.slug}>
                   <MovieCard
                     title={movie.name}

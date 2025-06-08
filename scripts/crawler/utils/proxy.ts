@@ -25,7 +25,6 @@ const testProxy = async (proxy: string): Promise<boolean> => {
 export async function getProxy(): Promise<string[]> {
   const timeout = 500;
   const url = `https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&protocol=http&proxy_format=protocolipport&format=text&timeout=${timeout}`;
-  // const url = `https://api.proxyscrape.com/v4/free-proxy-list/get?request=display_proxies&country=vn&protocol=http&proxy_format=protocolipport&format=text&timeout=${timeout}`;
   const response = await axios.get(url);
 
   if (response.status !== 200) {
@@ -38,7 +37,8 @@ export async function getProxy(): Promise<string[]> {
   const rawProxies = response.data
     .split('\n')
     .map((p: string) => p.trim())
-    .filter(Boolean);
+    .filter(Boolean)
+    .slice(0, 50); // just take the first 50 proxies
 
   const results = await Promise.all(
     rawProxies.map((proxy) =>

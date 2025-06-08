@@ -1,4 +1,5 @@
 import CryptoJS from 'crypto-js';
+import dayjs from 'dayjs';
 
 export function isValidUrl(str: string): boolean {
   try {
@@ -27,3 +28,7 @@ export const decryptObj = (encryptedObj: string) => {
   const bytes = CryptoJS.AES.decrypt(encryptedObj, import.meta.env.VITE_APP_NAME);
   return JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 };
+
+export function timeAgo(updatedAt: Date | string) {
+  return dayjs(updatedAt).fromNow();
+}

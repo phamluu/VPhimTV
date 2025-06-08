@@ -1,4 +1,4 @@
-import { useMutation, useQueries } from '@tanstack/react-query';
+import { useMutation, useQueries, useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -6,6 +6,7 @@ import { useAuth } from '~/hooks/useAuth';
 import { logoutUser } from '~/service/auth/authApi';
 import { fetchCategory } from '~/service/category/categoryApi';
 import { fetchCountry } from '~/service/country/countryApi';
+import { fetchUser } from '~/service/user/userApi';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -47,6 +48,11 @@ export default function Header() {
       localStorage.removeItem('auth');
       navigate('/');
     },
+  });
+
+  const userQuery = useQuery({
+    queryKey: ['userProfile'],
+    queryFn: async () => fetchUser(user.id),
   });
 
   return (
@@ -101,7 +107,7 @@ export default function Header() {
                 className="dropdown-content menu grid grid-cols-3 gap-1 bg-base-100 rounded-box z-1 w-96 p-2 shadow"
               >
                 {category.data?.data?.map((item: any) => (
-                  <li key={item._id} className="hover:text-primary">
+                  <li key={item.id} className="hover:text-primary">
                     <Link to={`/tim-kiem?the-loai=${item.slug}`}>{item.name}</Link>
                   </li>
                 ))}
@@ -122,7 +128,7 @@ export default function Header() {
                 className="dropdown-content menu grid grid-cols-3 gap-1 bg-base-100 rounded-box z-1 w-96 p-2 shadow"
               >
                 {country.data?.data?.map((item: any) => (
-                  <li key={item._id} className="hover:text-primary">
+                  <li key={item.id} className="hover:text-primary">
                     <Link to={`/tim-kiem?quoc-gia=${item.slug}`}>{item.name}</Link>
                   </li>
                 ))}
@@ -159,7 +165,11 @@ export default function Header() {
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                 <div className="w-10 rounded-full">
-                  <img alt="Tailwind CSS Navbar component" src="/src/assets/imgs/defaultAvatar.png" />
+                  {userQuery.isLoading ? (
+                    <div className="skeleton w-full h-full"></div>
+                  ) : (
+                    <img loading="lazy" src={`${import.meta.env.VITE_APP_API}${userQuery.data?.data.avatar}`} />
+                  )}
                 </div>
               </div>
               <ul tabIndex={0} className="menu dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">

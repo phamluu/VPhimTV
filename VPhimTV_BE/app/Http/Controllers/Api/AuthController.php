@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\UserInfo;
 
 class AuthController extends Controller
 {
@@ -94,9 +95,15 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        UserInfo::create([
+            'user_id' => $user->id,
+            'avatar'  => '/images/avatar/defaultAvatar.png',
+            'full_name' => $request->name
+        ]);
+
         Auth::login($user);
 
-        return response()->json(['message' => 'Đăng ký thành công', 'user' => $user]);
+        return response()->json(['message' => 'Đăng ký thành công', 'data' => $user]);
     }
 
 

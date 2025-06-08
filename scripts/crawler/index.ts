@@ -48,6 +48,8 @@ async function handleCrawlerMovie() {
   const proxies = await getProxy();
   const useProxy = proxies.length > 0;
 
+  console.log(chalk.blue('Tổng số proxy:', proxies.length));
+
   const history = await readHistory();
 
   if (history) {
