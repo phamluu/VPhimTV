@@ -1,15 +1,22 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 import { useAuth } from '~/hooks/useAuth';
 import { logoutUser } from '~/service/auth/authApi';
+import { fetchUser } from '~/service/user/userApi';
 
 export default function UserLayout() {
+  const apiUrl = import.meta.env.VITE_APP_API;
   const location = useLocation();
   const pathSegments = location.pathname.split('/').filter(Boolean);
   const rootPath = pathSegments[0] || '';
   const lastPath = pathSegments[1] || '';
-  const { setUser } = useAuth();
+  const { user, setUser } = useAuth();
+
+  const userQuery = useQuery({
+    queryKey: ['userProfile'],
+    queryFn: async () => fetchUser(user.id),
+  });
 
   const menuItems = [
     {
@@ -48,14 +55,29 @@ export default function UserLayout() {
         {/* Slider Menu */}
         <div className="flex-1/4">
           <div className="rounded-xl bg-base-100 shadow border border-neutral-content/10 sticky top-10">
-            <div className="space-y-6 p-6">
-              <div className="avatar w-full justify-center">
+            <div className="p-6">
+              <div className="avatar w-full justify-center mb-4">
                 <div className="w-20 rounded-full border-2 border-neutral/30">
-                  <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
+                  <img
+                    loading="lazy"
+                    src={`${apiUrl}${userQuery.data?.data?.avatar ?? '/images/avatar/defaultAvatar.png'}`}
+                  />
                 </div>
               </div>
 
-              <p className="text-xl font-bold text-center">Nguyễn Văn A</p>
+              {userQuery.isLoading ? (
+                <>
+                  <div className="skeleton h-7 mb-4"></div>
+                  <div className="skeleton h-6 mb-4"></div>
+                </>
+              ) : (
+                <>
+                  <p className="text-xl font-bold text-center mb-2">
+                    {userQuery.data?.data?.full_name ?? userQuery.data?.data?.name}
+                  </p>
+                  <p className="font-bold text-center mb-4">{userQuery.data?.data?.email}</p>
+                </>
+              )}
 
               <ul className="menu w-full space-y-2">
                 {menuItems.map((item) => (

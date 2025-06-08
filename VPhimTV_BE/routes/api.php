@@ -53,7 +53,7 @@ Route::middleware(['web'])->group(function () {
     Route::prefix('user')->name('users.')->group(function () {
         Route::controller(UserController::class)->group(function () {
             Route::get('/{id}', 'getDetail')->name('getDetail');
-            Route::put('/update/{id}', 'update')->name('update')->middleware('apiAuth');
+            Route::post('/update/{id}', 'update')->name('update')->middleware('apiAuth');
         });
     });
 

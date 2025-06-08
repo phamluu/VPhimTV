@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Models\UserInfo;
 
 class AuthController extends Controller
 {
@@ -32,6 +33,13 @@ class AuthController extends Controller
             'email'    => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        UserInfo::create([
+            'user_id' => $user->id,
+            'avatar'  => '/images/avatar/defaultAvatar.png',
+            'full_name' => $request->name
+        ]);
+
         Auth::login($user);
 
         return redirect('/dashboard');

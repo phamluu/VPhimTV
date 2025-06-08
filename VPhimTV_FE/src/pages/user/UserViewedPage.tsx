@@ -8,6 +8,7 @@ import Loading from '~/components/Loading';
 import Pagination from '~/components/Pagination';
 import { toast } from '~/hooks/utils/toast';
 import { deleteHistory, fetchHistory } from '~/service/history/historyApi';
+import { timeAgo } from '~/utils/utils';
 
 function formatDuration(seconds: number): string {
   const d = dayjs.duration(seconds, 'seconds');
@@ -18,10 +19,6 @@ function formatDuration(seconds: number): string {
   if (h > 0) return `${h} giờ`;
   if (m > 0) return `${m} phút`;
   return '0 phút';
-}
-
-function timeAgo(updatedAt: Date | string) {
-  return dayjs(updatedAt).fromNow();
 }
 
 function calculateProgressPercent(progress_seconds: number, duration_seconds: number): number {
