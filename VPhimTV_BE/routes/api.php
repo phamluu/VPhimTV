@@ -59,15 +59,15 @@ Route::middleware(['web'])->group(function () {
 
     // API Comment
     Route::prefix('comment')->name('comments.')->group(function () {
-        Route::controller(CommentController::class)->group(function () {
-            Route::get('/', 'getList')->name('getList');
-            Route::middleware('apiAuth')->group(function () {
-                Route::post('/create', 'create')->name('create');
-                Route::put('/update/{id}', 'update')->name('update');
-                Route::post('/delete/{id}', 'delete')->name('delete');
-            });
+    Route::controller(CommentController::class)->group(function () {
+        Route::get('/', 'getList')->name('getList');
+        Route::middleware('apiAuth')->group(function () {
+            Route::post('/create', 'create')->name('create'); 
+            Route::put('/update/{id}', 'update')->name('update');
+            Route::post('/delete/{id}', 'delete')->name('delete');
         });
     });
+});
 
     // API History
     Route::prefix('history')->name('histories.')->middleware('apiAuth')->group(function () {
