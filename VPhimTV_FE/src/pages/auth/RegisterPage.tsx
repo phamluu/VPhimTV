@@ -1,14 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import loginBackgroundImage from '~/assets/imgs/login-background.jpg';
 import { useAuth } from '~/hooks/useAuth';
 import { toast } from '~/hooks/utils/toast';
 import { registerUser } from '~/service/auth/authApi';
+import { encryptObj } from '~/utils/utils';
 
 export default function RegisterPage() {
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -19,10 +19,13 @@ export default function RegisterPage() {
     mutationKey: ['login'],
     mutationFn: (data: any) => registerUser(data.username, data.email, data.password),
     onSuccess: (data) => {
-      setUser(data.user);
-      navigate('/');
+      const encrypted = encryptObj(data.data);
+      localStorage.setItem('auth', encrypted);
+      const redirect = localStorage.getItem('redirect') ?? '/';
+      localStorage.removeItem('redirect');
 
-      console.log(data);
+      setUser(data.user);
+      window.location.href = redirect;
     },
     onError: (error: any) => {
       if (error.errors && typeof error.errors === 'object') {

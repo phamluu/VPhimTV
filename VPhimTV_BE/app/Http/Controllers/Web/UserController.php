@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
+use App\Models\UserInfo;
 use App\Services\UserService;
 
 class UserController extends Controller
@@ -43,6 +44,13 @@ class UserController extends Controller
             'email'    => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        UserInfo::create([
+            'user_id' => $user->id,
+            'avatar'  => '/images/avatar/defaultAvatar.png',
+            'full_name' => $request->name
+        ]);
+
         return redirect()->route('user.index')->with('success', 'User created successfully.');
     }
 
