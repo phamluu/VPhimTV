@@ -90,4 +90,15 @@ class CommentController extends Controller
 
         return response()->json(['message' => 'Comment deleted successfully']);
     }
+
+    public function countAll(Request $request)
+    {
+        $movieId = $request->input('movie_id');
+
+        $count = MovieComment::where('movie_id', $movieId)
+            ->where('is_deleted', false)
+            ->count();
+
+        return response()->json(['data' => $count]);
+    }
 }

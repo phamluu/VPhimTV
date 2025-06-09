@@ -65,6 +65,7 @@ Route::middleware(['web'])->group(function () {
                 Route::post('/create', 'create')->name('create');
                 Route::put('/update/{id}', 'update')->name('update');
                 Route::post('/delete/{id}', 'delete')->name('delete');
+                Route::get('/count', 'countAll')->name('getCount');
             });
         });
     });

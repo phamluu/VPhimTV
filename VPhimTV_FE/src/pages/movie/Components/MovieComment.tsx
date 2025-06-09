@@ -9,17 +9,18 @@ import { createComment, fetchComments } from '~/service/comment/commentApi';
 
 interface MovieCommentProps {
   movieId: number;
+  sortBy?: 'desc' | 'asc';
 }
 
-export default function MovieComment({ movieId }: MovieCommentProps) {
+export default function MovieComment({ movieId, sortBy }: MovieCommentProps) {
   const { user } = useAuth();
   const [expandedComments, setExpandedComments] = useState<Record<number, boolean>>({});
-  const [replies, setReplies] = useState<Record<number, any[]>>({});
+  const [commentReplies, setCommentReplies] = useState<Record<number, any[]>>({});
   const [replyingToCommentId, setReplyingToCommentId] = useState<number | undefined>(undefined);
 
   const queryComments = useQuery({
-    queryKey: ['comments', movieId],
-    queryFn: () => fetchComments({ movie_id: movieId }),
+    queryKey: ['comments', movieId, sortBy],
+    queryFn: () => fetchComments({ movie_id: movieId, sort_type: sortBy }),
   });
 
   const repliesMutation = useMutation({
@@ -36,9 +37,9 @@ export default function MovieComment({ movieId }: MovieCommentProps) {
 
   const handleToggleReplies = async (commentId: number) => {
     const isExpanded = expandedComments[commentId];
-    if (!isExpanded && !replies[commentId]) {
+    if (!isExpanded && !commentReplies[commentId]) {
       const { data } = await repliesMutation.mutateAsync(commentId);
-      setReplies((prev) => ({ ...prev, [commentId]: data }));
+      setCommentReplies((prev) => ({ ...prev, [commentId]: data }));
     }
     setExpandedComments((prev) => ({ ...prev, [commentId]: !isExpanded }));
   };
@@ -53,7 +54,7 @@ export default function MovieComment({ movieId }: MovieCommentProps) {
 
       <CommentList
         comments={queryComments.data?.data || []}
-        replies={replies}
+        replies={commentReplies}
         expandedComments={expandedComments}
         onToggleReplies={handleToggleReplies}
         onSubmitReply={async (parentId, content) => {

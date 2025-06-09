@@ -7,6 +7,7 @@ import ArtPlayer from '~/components/ArtPlayer';
 import BreadCrumb from '~/components/BreadCrumb';
 import Select from '~/components/Select';
 import { useAuth } from '~/hooks/useAuth';
+import { fetchCountComments } from '~/service/comment/commentApi';
 import { addHistory } from '~/service/history/historyApi';
 import { fetchMovieInfo, fetchMovies } from '~/service/movies/moviesApi';
 import { addView } from '~/service/view/viewApi';
@@ -17,6 +18,7 @@ import MovieComment from './Components/MovieComment';
 
 export default function MovieWatchPage() {
   const { movieSlug, episodeSlug } = useParams();
+  const [commentSortDir, setCommentSortDir] = useState<'desc' | 'asc'>('desc');
   const [currentEpisode, setCurrentEpisode] = useState<any>();
   const appName = import.meta.env.VITE_APP_NAME;
   const hashids = useMemo(() => new Hashids(appName, 6), [appName]);
@@ -61,6 +63,12 @@ export default function MovieWatchPage() {
     mutationFn: (episode_id: number) => addView(episode_id),
     onSuccess: () => console.log('Added view history'),
     onError: (error) => console.log('Error adding view history:', error),
+  });
+
+  const countCommentQuery = useQuery({
+    queryKey: ['countComments', movieInfo.data?.data.id],
+    queryFn: () => fetchCountComments(movieInfo.data?.data.id),
+    enabled: !!movieInfo.data?.data.id,
   });
 
   if (!movieInfo.isLoading && movieInfo.data && currentEpisode) {
@@ -185,7 +193,7 @@ export default function MovieWatchPage() {
             {/* Form comments */}
             <>
               <div className="flex justify-between items-center">
-                <p className="font-bold text-xl mt-6 mb-6">0 Bình luận</p>
+                <p className="font-bold text-xl mt-6 mb-6">{countCommentQuery.data?.data ?? 0} Bình luận</p>
 
                 <div className="flex items-center gap-2">
                   <p className="text-nowrap">Sắp xếp theo</p>
@@ -195,11 +203,12 @@ export default function MovieWatchPage() {
                       { label: 'Cũ nhất', value: 'asc' },
                     ]}
                     defaultOption="desc"
+                    onChange={(value) => setCommentSortDir(value as 'desc' | 'asc')}
                   />
                 </div>
               </div>
 
-              <MovieComment movieId={movieInfo.data?.data?.id} />
+              <MovieComment movieId={movieInfo.data?.data?.id} sortBy={commentSortDir} />
             </>
 
             {/* Form related movies */}
