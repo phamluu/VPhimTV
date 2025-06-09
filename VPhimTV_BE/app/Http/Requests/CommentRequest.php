@@ -13,6 +13,7 @@ class CommentRequest extends BaseRequest
     {
         return array_merge(parent::rules(), [
             'movie_id' => 'required|integer|exists:movies,id',
+            'reply_to' => 'nullable|integer|exists:movie_comments,id',
         ]);
     }
 
@@ -20,6 +21,7 @@ class CommentRequest extends BaseRequest
     {
         return [
             'movie_id' => $this->input('movie_id'),
+            'reply_to' => $this->input('reply_to'),
         ];
     }
 }

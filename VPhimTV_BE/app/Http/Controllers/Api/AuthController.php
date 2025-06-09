@@ -14,10 +14,22 @@ class AuthController extends Controller
 {
     public function check()
     {
-        if (Auth::check()) {
+        $user = Auth::user();
+
+        if ($user) {
+            $userInfo = UserInfo::where('user_id', $user->id)->first();
+
+            if ($userInfo) {
+                $user->avatar = $userInfo->avatar;
+                $user->full_name = $userInfo->full_name;
+            } else {
+                $user->avatar = '/images/avatar/defaultAvatar.png';
+                $user->full_name = $user->name;
+            }
+
             return response()->json([
                 'message' => 'Đã đăng nhập',
-                'data' => Auth::user()
+                'data' => $user
             ]);
         } else {
             return response()->json(['message' => 'Chưa đăng nhập'], 401);
@@ -63,6 +75,16 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $userInfo = UserInfo::where('user_id', $user->id)->first();
+
+        if ($userInfo) {
+            $user->avatar = $userInfo->avatar;
+            $user->full_name = $userInfo->full_name;
+        } else {
+            $user->avatar = '/images/avatar/defaultAvatar.png';
+            $user->full_name = $user->name;
+        }
+
         Auth::login($user, $remember);
 
         return response()->json(['message' => 'Đăng nhập thành công', 'data' => $user]);
@@ -95,11 +117,14 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        UserInfo::create([
+        $userInfo = UserInfo::create([
             'user_id' => $user->id,
             'avatar'  => '/images/avatar/defaultAvatar.png',
             'full_name' => $request->name
         ]);
+
+        $user->avatar = $userInfo->avatar;
+        $user->full_name = $userInfo->full_name;
 
         Auth::login($user);
 

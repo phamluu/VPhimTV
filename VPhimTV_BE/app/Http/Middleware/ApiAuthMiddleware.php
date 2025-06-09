@@ -10,18 +10,10 @@ use Illuminate\Auth\AuthenticationException;
 
 class ApiAuthMiddleware
 {
-    public function handle(Request $request, Closure $next)
-{
-    $token = $request->header('Authorization');
-    if (!$token || !str_starts_with($token, 'Bearer ')) {
-        return response()->json(['message' => 'Unauthorized'], 401);
+    public function handle(Request $request, Closure $next): Response
+    {
+        if (!Auth::check())
+            throw new AuthenticationException();
+        return $next($request);
     }
-
-    $token = str_replace('Bearer ', '', $token);
-    if (!Auth::guard('sanctum')->check()) {
-        return response()->json(['message' => 'Không có quyền truy cập'], 401);
-    }
-
-    return $next($request);
-}
 }
