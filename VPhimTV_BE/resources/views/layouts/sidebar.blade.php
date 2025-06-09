@@ -1,16 +1,17 @@
 <div class="sidebar" data-color="orange">
     <div class="logo">
-        <a href="/admin" class="simple-text logo-mini">
+        <a href="/" class="simple-text logo-mini">
             V
         </a>
-        <a href="/admin" class="simple-text logo-normal">
+        <a href="/" class="simple-text logo-normal">
             Phim TV
         </a>
     </div>
     <div class="sidebar-wrapper" id="sidebar-wrapper">
         <ul class="nav">
+            @if (Auth::check() && Auth::user()->hasRole('admin'))
             <li class="{{ request()->is('dashboard') ? 'active' : '' }}">
-                <a href="/dashboard">
+                <a href="/">
                     <i class="now-ui-icons design_app"></i>
                     <p>Dashboard</p>
                 </a>
@@ -61,7 +62,7 @@
                 </a>
             </li>
             <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
-                <a href="/admin/user">
+                <a href="/user">
                     <i class="now-ui-icons users_single-02"></i>
                     <p>Người dùng</p>
                 </a>
@@ -73,6 +74,7 @@
                     <p>Báo cáo thống kê</p>
                 </a>
             </li>
+            @endif
         </ul>
     </div>
 </div>

@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\UnauthorizedController;
 
 Route::middleware(['web', 'auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/unauthorized', [UnauthorizedController::class, 'index'])->name('unauthorized.index');
 });

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -40,9 +41,18 @@ class AuthController extends Controller
             'full_name' => $request->name
         ]);
 
+        $count = User::count();
+        if ($count == 1) {
+            // Đăng ký với vai trò admin
+            $adminRole = Role::firstOrCreate(['name' => 'admin']);
+            if ($adminRole) {
+                $user->roles()->attach($adminRole);
+            }
+        }
+
         Auth::login($user);
 
-        return redirect('/dashboard');
+        return redirect('/');
     }
 
     public function showlogin()
@@ -66,7 +76,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         // Redirect to the intended URL or fallback to the dashboard
-        return redirect()->intended('/dashboard');
+        return redirect()->intended('/');
     }
 
     public function logout()

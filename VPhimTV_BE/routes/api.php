@@ -70,6 +70,7 @@ Route::middleware(['web'])->group(function () {
         });
     });
 
+
     // API History
     Route::prefix('history')->name('histories.')->middleware('apiAuth')->group(function () {
         Route::controller(HistoryController::class)->group(function () {
