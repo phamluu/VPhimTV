@@ -53,6 +53,7 @@ class EpisodeController extends Controller
 
     public function edit($id)
     {
+        // dd(1);
         $model = Episode::findOrFail($id);
         $movies = Movie::all();
         return view('episode.edit', compact('model', 'movies'));

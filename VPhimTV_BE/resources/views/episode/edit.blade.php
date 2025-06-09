@@ -1,40 +1,46 @@
-@extends('layouts.admin')
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Thêm mới tập phim</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
-@section('content')
-<div class="panel-header panel-header-sm"></div>
-<div class="content">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="title">Chỉnh sửa tập phim</h5>
-                </div>
-                <div class="card-body">
-                    <form action="{{ route('episode.update', $model->id) }}" method="POST">
-                        @csrf
-                        @method('PUT')
+        <form action="{{ route('episode.update', $model->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div class="modal-body">
+                <div class="content">
+                    <div class="card">
+                        <div class="card-body">
 
-                        @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+                            @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
+                            @if (session('success'))
+                            <div class="alert alert-success mt-2">
+                                {{ session('success') }}
+                            </div>
+                            @endif
+                            @include('episode._field', ['model' => $model])
                         </div>
-                        @endif
-                        @if (session('success'))
-                        <div class="alert alert-success mt-2">
-                            {{ session('success') }}
-                        </div>
-                        @endif
-                        @include('episode._field', ['model' => $model])
+                    </div>
 
-                        <button type="submit" class="btn btn-success btn-round">Cập nhật</button>
-                    </form>
                 </div>
             </div>
-        </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary btn-round">Cập nhật</button>
+                <button type="button" class="btn">Xóa</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </form>
     </div>
+
 </div>
-@endsection
