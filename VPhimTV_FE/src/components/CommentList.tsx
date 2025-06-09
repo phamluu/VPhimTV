@@ -54,6 +54,7 @@ export default function CommentList({
                 onCancel={() => setReplyingToCommentId(undefined)}
                 avatar={`${import.meta.env.VITE_APP_API}${comment.avatar}`}
                 hiddenButton={false}
+                initialContent={`@${comment.full_name.replace(' ', '')} `}
               />
             </div>
           )}

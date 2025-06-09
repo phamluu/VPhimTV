@@ -7,6 +7,7 @@ interface CommentInputProps {
   avatar?: string;
   className?: string;
   hiddenButton?: boolean;
+  initialContent?: string;
 }
 
 export default function CommentInput({
@@ -16,15 +17,16 @@ export default function CommentInput({
   avatar,
   className,
   hiddenButton = true,
+  initialContent,
 }: CommentInputProps) {
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(initialContent || '');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (autoFocus && textareaRef.current) {
       textareaRef.current.focus();
     }
-  }, [autoFocus]);
+  }, [autoFocus, initialContent]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
