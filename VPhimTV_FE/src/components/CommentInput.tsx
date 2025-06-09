@@ -1,3 +1,4 @@
+import EmojiPicker, { Theme } from 'emoji-picker-react';
 import { useEffect, useRef, useState } from 'react';
 
 interface CommentInputProps {
@@ -20,6 +21,8 @@ export default function CommentInput({
   initialContent,
 }: CommentInputProps) {
   const [content, setContent] = useState(initialContent || '');
+  const [isFocused, setIsFocused] = useState(false);
+  const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -47,6 +50,7 @@ export default function CommentInput({
   const handleCancel = () => {
     setContent('');
     onCancel?.();
+    setIsFocused(false);
   };
 
   return (
@@ -64,6 +68,7 @@ export default function CommentInput({
           ref={textareaRef}
           value={content}
           onChange={handleInputChange}
+          onFocus={() => setIsFocused(true)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
@@ -74,19 +79,39 @@ export default function CommentInput({
           placeholder="Viết bình luận..."
           className="flex-1 border-b border-base-content/30 focus:border-primary bg-transparent outline-none resize-none py-2"
           rows={1}
-        ></textarea>
+        />
       </div>
 
-      {(content.trim() || !hiddenButton) && (
-        <div className="flex justify-end gap-2 mt-2">
-          {onCancel && (
+      {(isFocused || content.trim() || !hiddenButton) && (
+        <div className="flex justify-between mt-2 relative">
+          <button
+            className="text-2xl ms-16 hover:bg-gray-500 w-10 h-10 rounded-full cursor-pointer"
+            type="button"
+            onClick={() => setIsEmojiPickerOpen(!isEmojiPickerOpen)}
+          >
+            <i className="fa-regular fa-face-smile"></i>
+          </button>
+
+          <div className="absolute top-10 left-15 z-10" tabIndex={0} onBlur={() => setIsEmojiPickerOpen(false)}>
+            <EmojiPicker
+              theme={Theme.DARK}
+              searchDisabled={true}
+              lazyLoadEmojis={true}
+              open={isEmojiPickerOpen}
+              onEmojiClick={(emoji) => {
+                setContent((prev) => prev + emoji.emoji);
+              }}
+            />
+          </div>
+
+          <div className="flex gap-2">
             <button type="button" onClick={handleCancel} className="btn btn-ghost hover:bg-gray-500 rounded-3xl">
               HỦY
             </button>
-          )}
-          <button type="submit" className="btn btn-soft btn-primary rounded-3xl font-semibold">
-            BÌNH LUẬN
-          </button>
+            <button type="submit" className="btn btn-soft btn-primary rounded-3xl font-semibold">
+              BÌNH LUẬN
+            </button>
+          </div>
         </div>
       )}
     </form>
