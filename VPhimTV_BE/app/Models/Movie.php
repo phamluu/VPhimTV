@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\MovieFavorite;
 
 class Movie extends Model
 {
@@ -50,5 +51,10 @@ class Movie extends Model
     public function movie_comments()
     {
         return $this->hasMany(MovieComment::class, 'movie_id');
+    }
+
+    public function favorites()
+    {
+    return $this->hasMany(MovieFavorite::class, 'movie_id');
     }
 }
