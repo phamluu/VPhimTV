@@ -148,7 +148,10 @@ export default function MovieWatchPage() {
           <div className="bg-base-300 rounded p-3 space-y-4">
             <div className="bg-base-100 p-4 space-y-4">
               <p className="font-bold text-primary text-2xl">
-                {movieInfo.data?.data.name} - Tập {episodeSlug!.split('-')[1]}
+                {movieInfo.data?.data.name} -{' '}
+                {currentEpisode?.episode_name === 'Full'
+                  ? `Tập ${currentEpisode?.episode_name}`
+                  : currentEpisode?.episode_name}
               </p>
 
               <p className="font-bold text-primary text-xl">
@@ -196,7 +199,7 @@ export default function MovieWatchPage() {
                 </div>
               </div>
 
-              <MovieComment />
+              <MovieComment movieId={movieInfo.data?.data?.id} />
             </>
 
             {/* Form related movies */}

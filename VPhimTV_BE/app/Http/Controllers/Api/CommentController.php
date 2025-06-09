@@ -7,6 +7,7 @@ use App\Http\Requests\CommentRequest;
 use App\Models\MovieComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
@@ -14,16 +15,28 @@ class CommentController extends Controller
     {
         $pagination = $request->paginationParams();
         $sorting = $request->sortingParams();
-        $filters = $request->filtersParams();
 
-        $commentsQuery = MovieComment::query()
-            ->where('movie_id', $filters['movie_id'])
-            ->with(['user' => function ($query) {
-                $query->select('id', 'name', 'avatar');
-            }]);
+        $movieId = $request->input('movie_id');
+        $replyTo = $request->input('reply_to');
 
-        $comments = $commentsQuery
-            ->orderBy($sorting['sort_field'], $sorting['sort_type'])
+        $comments = MovieComment::query()
+            ->join('user_info', 'movie_comments.user_id', '=', 'user_info.user_id')
+            ->leftJoin(DB::raw('(select reply_to, count(*) as reply_count from movie_comments where is_deleted = false group by reply_to) as replies'), 'movie_comments.id', '=', 'replies.reply_to')
+            ->select(
+                'movie_comments.*',
+                'user_info.full_name',
+                'user_info.avatar',
+                DB::raw('coalesce(replies.reply_count, 0) as reply_count')
+            )
+            ->where('movie_comments.movie_id', $movieId)
+            ->where('movie_comments.is_deleted', false);
+        if ($replyTo) {
+            $comments->where('movie_comments.reply_to', $replyTo);
+        } else {
+            $comments->whereNull('movie_comments.reply_to');
+        }
+
+        $comments = $comments->orderBy($sorting['sort_field'], $sorting['sort_type'])
             ->paginate($pagination['limit'], ['*'], 'page', $pagination['page']);
 
         return response()->json($comments);
