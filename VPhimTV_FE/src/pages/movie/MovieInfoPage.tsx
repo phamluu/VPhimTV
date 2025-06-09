@@ -140,8 +140,8 @@ export default function MovieInfoPage() {
                 <Link
                   className="btn btn-error w-32 font-bold"
                   to={`/phim/${movieInfo.data?.data.slug}/${
-                    movieInfo.data?.data.episodes[0].server_data[0].slug
-                  }-${hashids.encode(movieInfo.data?.data.episodes[0].server_data[0].id)}`}
+                    movieInfo.data?.data?.episodes[0].server_data[0].slug
+                  }-${hashids.encode(movieInfo.data?.data?.episodes[0].server_data[0].id)}`}
                 >
                   <i className="fa-regular fa-circle-play"></i>
                   Xem phim
@@ -163,7 +163,7 @@ export default function MovieInfoPage() {
                 {/* Status */}
                 <p className="font-bold">
                   <span>Trạng thái: </span>
-                  <span className="text-info">{movieInfo.data?.data.episode_current}</span>
+                  <span className="text-info">{movieInfo.data?.data?.episode_current}</span>
                 </p>
 
                 {/* Country */}
@@ -171,23 +171,23 @@ export default function MovieInfoPage() {
                   <span>Quốc gia: </span>
                   <Link
                     className="text-info hover:text-warning"
-                    to={`/tim-kiem?quoc-gia=${movieInfo.data?.data.country?.slug}`}
+                    to={`/tim-kiem?quoc-gia=${movieInfo.data?.data?.country?.slug}`}
                   >
-                    {movieInfo.data?.data.country?.name}
+                    {movieInfo.data?.data?.country?.name}
                   </Link>
                 </p>
 
                 {/* Quantity */}
                 <p className="font-bold">
                   <span>Chất lượng: </span>
-                  <span className="text-info">{movieInfo.data?.data.quality}</span>
+                  <span className="text-info">{movieInfo.data?.data?.quality}</span>
                 </p>
 
                 {/* Year */}
                 <p className="font-bold">
                   <span>Năm phát hành: </span>
-                  <Link className="text-info hover:text-warning" to={`/tim-kiem?nam=${movieInfo.data?.data.year}`}>
-                    {movieInfo.data?.data.year}
+                  <Link className="text-info hover:text-warning" to={`/tim-kiem?nam=${movieInfo.data?.data?.year}`}>
+                    {movieInfo.data?.data?.year}
                   </Link>
                 </p>
               </div>
@@ -196,25 +196,25 @@ export default function MovieInfoPage() {
                 {/* Total Episodes */}
                 <p className="font-bold">
                   <span>Tổng số tập: </span>
-                  <span className="text-warning">{movieInfo.data?.data.episode_total}</span>
+                  <span className="text-warning">{movieInfo.data?.data?.episode_total}</span>
                 </p>
                 {/* Duration */}
                 <p className="font-bold">
                   <span>Thời lượng: </span>
-                  <span className="text-info">{movieInfo.data?.data.time}</span>
+                  <span className="text-info">{movieInfo.data?.data?.time}</span>
                 </p>
 
                 {/* Category */}
                 <p className="font-bold">
                   <span>Thể loại: </span>
-                  {movieInfo.data?.data.category.map((item: any, i: number) => (
+                  {movieInfo.data?.data?.category?.map((item: any, i: number) => (
                     <Link
                       key={i}
                       className="text-info hover:text-warning"
                       to={`/tim-kiem?the-loai=${item.slug}&trang=1`}
                     >
                       {item.name}
-                      {i < movieInfo.data?.data.category.length - 1 ? ', ' : ''}
+                      {i < movieInfo.data?.data?.category?.length - 1 ? ', ' : ''}
                     </Link>
                   ))}
                 </p>
@@ -224,13 +224,13 @@ export default function MovieInfoPage() {
                 {/* Director */}
                 <p className="font-bold">
                   <span>Đạo diễn: </span>
-                  <span className="text-info">{movieInfo.data?.data.director}</span>
+                  <span className="text-info">{movieInfo.data?.data?.director}</span>
                 </p>
 
                 {/* Actor */}
                 <p className="font-bold">
                   <span>Diễn viên: </span>
-                  <span className="text-info">{movieInfo.data?.data.actor}</span>
+                  <span className="text-info">{movieInfo.data?.data?.actor}</span>
                 </p>
               </div>
             </div>
@@ -240,14 +240,14 @@ export default function MovieInfoPage() {
               <span> Nội dung</span>
             </p>
 
-            <p>{movieInfo.data?.data.content}</p>
+            <p>{movieInfo.data?.data?.content}</p>
 
             <p className="text-xl font-bold text-primary">
               <i className="fa-regular fa-database"></i>
               <span> Danh sách tập</span>
             </p>
 
-            {movieInfo.data?.data.episodes?.map((episode: any, i: number) => (
+            {movieInfo.data?.data?.episodes?.map((episode: any, i: number) => (
               <div key={i} className="space-y-2">
                 <p className="font-bold">
                   SERVER: <span className="text-info">{episode.server_name}</span>
@@ -255,7 +255,7 @@ export default function MovieInfoPage() {
 
                 <div className="max-h-[200px] overflow-y-auto">
                   <div className="flex flex-wrap gap-2">
-                    {episode.server_data.map((item: any, j: number) => (
+                    {episode?.server_data?.map((item: any, j: number) => (
                       <Link
                         key={j}
                         to={`/phim/${movieSlug}/${item.slug}-${hashids.encode(item.id)}`}
