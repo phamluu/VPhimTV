@@ -85,20 +85,20 @@ export default function MovieWatchPage() {
                 className: 'space-x-2',
               },
               {
-                label: movieInfo.data?.data.type.name,
-                href: `/danh-sach/${movieTypeMap[movieInfo.data?.data.type.slug]}`,
+                label: movieInfo.data?.data?.type?.name,
+                href: `/danh-sach/${movieTypeMap[movieInfo.data?.data?.type?.slug]}`,
               },
               {
-                label: movieInfo.data?.data.year,
-                href: `/tim-kiem?&nam=${movieInfo.data?.data.year}`,
+                label: movieInfo.data?.data?.year,
+                href: `/tim-kiem?&nam=${movieInfo.data?.data?.year}`,
               },
               {
-                label: movieInfo.data?.data.country.name,
-                href: `/tim-kiem?&nam=${movieInfo.data?.data.year}&quoc-gia=${movieInfo.data?.data.country.slug}`,
+                label: movieInfo.data?.data?.country?.name,
+                href: `/tim-kiem?&nam=${movieInfo.data?.data?.year}&quoc-gia=${movieInfo.data?.data?.country?.slug}`,
               },
               {
-                label: movieInfo.data?.data.name,
-                href: `/phim/${movieInfo.data?.data.slug}`,
+                label: movieInfo.data?.data?.name,
+                href: `/phim/${movieInfo.data?.data?.slug}`,
               },
               {
                 label:
@@ -112,7 +112,7 @@ export default function MovieWatchPage() {
           {currentEpisode && (
             <ArtPlayer
               url={currentEpisode.link_mp4 ? currentEpisode.link_mp4 : currentEpisode.link_m3u8}
-              poster={movieInfo.data?.data.poster_url}
+              poster={movieInfo.data?.data?.poster_url}
               height={650}
               on={{
                 'video:timeupdate': (event: Event) => {
@@ -127,7 +127,7 @@ export default function MovieWatchPage() {
                     lastSavedTimeRef.current = currentTime;
 
                     mutationAddHistory.mutate({
-                      movie_id: movieInfo.data?.data.id,
+                      movie_id: movieInfo.data?.data?.id,
                       episode_id: currentEpisode.id,
                       progress_seconds: Math.floor(currentTime),
                       duration_seconds: Math.floor(duration),
@@ -136,7 +136,7 @@ export default function MovieWatchPage() {
                 },
                 'video:ended': () => {
                   mutationAddHistory.mutate({
-                    movie_id: movieInfo.data?.data.id,
+                    movie_id: movieInfo.data?.data?.id,
                     episode_id: currentEpisode.id,
                     progress_seconds: Math.floor(currentEpisode.duration_seconds),
                     duration_seconds: Math.floor(currentEpisode.duration_seconds),
@@ -156,7 +156,7 @@ export default function MovieWatchPage() {
           <div className="bg-base-300 rounded p-3 space-y-4">
             <div className="bg-base-100 p-4 space-y-4">
               <p className="font-bold text-primary text-2xl">
-                {movieInfo.data?.data.name} -{' '}
+                {movieInfo.data?.data?.name} -{' '}
                 {currentEpisode?.episode_name === 'Full'
                   ? `Tập ${currentEpisode?.episode_name}`
                   : currentEpisode?.episode_name}
@@ -167,7 +167,7 @@ export default function MovieWatchPage() {
                 <span> Danh sách tập</span>
               </p>
 
-              {movieInfo.data?.data.episodes?.map((episode: any, i: number) => (
+              {movieInfo.data?.data?.episodes?.map((episode: any, i: number) => (
                 <div key={i} className="space-y-2">
                   <p className="font-bold">
                     SERVER: <span className="text-info">{episode.server_name}</span>

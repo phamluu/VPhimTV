@@ -55,6 +55,7 @@ export default function HomePage() {
                     status={`${movie.episode_current} | ${movie.language}`}
                     className="max-h-[137px]"
                     image={movie.thumb_url}
+                    linkTo={`/phim/${movie.slug}`}
                   />
                 </SplideSlide>
               ))}
