@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\MovieController;
 use App\Http\Controllers\Web\CountryController;
 use App\Http\Controllers\Web\EpisodeController;
 use App\Http\Controllers\Web\MovieCommentController;
+use App\Http\Controllers\Web\MovieFavoriteStatsController;
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
 
