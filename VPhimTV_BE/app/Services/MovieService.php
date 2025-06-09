@@ -60,6 +60,7 @@ class MovieService
         $model->director = $request->director;
 
         if ($model->save()) {
+            $model->categories()->sync($request->input('categories', []));
             return $model;
         }
         return false;

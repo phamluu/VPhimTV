@@ -68,6 +68,19 @@
                      @endif
                      <!-- <input type="text" name="thumb_url" class="form-control" value="{{ old('thumb_url', $model->thumb_url) }}"> -->
                  </div>
+
+                 <div class="form-group">
+                     <label for="categories">Danh mục</label>
+                     <select name="categories[]" class="form-control" multiple id="select2">
+                         @foreach($categories as $item)
+                         <option value="{{ $item->id }}"
+                             {{ (collect(old('categories', $model->categories->pluck('id')->toArray()))->contains($item->id)) ? 'selected' : '' }}>
+                             {{ $item->name }}
+                         </option>
+                         @endforeach
+                     </select>
+                 </div>
+
                  <div class="form-group">
                      <label for="type_id">Thể loại</label>
                      <select name="type_id" class="form-control" value="{{ old('type_id', $model->type_id) }}">
@@ -84,9 +97,6 @@
                          <option value="0" {{ old('status', $model->status) == 0 ? 'selected' : '' }}>Riêng tư</option>
                      </select>
                  </div>
-
-
-
 
 
                  <div class="form-group">
