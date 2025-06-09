@@ -4,16 +4,19 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import BreadCrumb from '~/components/BreadCrumb';
+import Select from '~/components/Select';
 import { useAuth } from '~/hooks/useAuth';
 import { toast } from '~/hooks/utils/toast';
-import Comments from '~/pages/movie/CommentPage';
+import { fetchCountComments } from '~/service/comment/commentApi';
 import { addFavorite, fetchCheckFavorite } from '~/service/favorite/favoriteApi';
 import { fetchMovieInfo, fetchMovies } from '~/service/movies/moviesApi';
 import { movieTypeMap } from '~/utils/classMap';
 
 import MovieContainer from '../home/components/MovieContainer';
+import MovieComment from './Components/MovieComment';
 
 export default function MovieInfoPage() {
+  const [commentSortDir, setCommentSortDir] = useState<'desc' | 'asc'>('desc');
   const { movieSlug } = useParams();
   const [isFavorite, setIsFavorite] = useState(false);
   const appName = import.meta.env.VITE_APP_NAME;
@@ -28,7 +31,7 @@ export default function MovieInfoPage() {
   const relatedMovies = useQuery({
     queryKey: ['relatedMovies', movieSlug],
     queryFn: () =>
-      fetchMovies({ limit: 12, country: movieInfo.data?.data.country.slug, year: movieInfo.data?.data.year }),
+      fetchMovies({ limit: 10, country: movieInfo.data?.data.country.slug, year: movieInfo.data?.data.year }),
     enabled: !!movieInfo.data,
   });
 
@@ -66,6 +69,12 @@ export default function MovieInfoPage() {
 
     mutationFavorite.mutate(movieInfo.data.data.id);
   };
+
+  const countCommentQuery = useQuery({
+    queryKey: ['countComments', movieInfo.data?.data.id],
+    queryFn: () => fetchCountComments(movieInfo.data?.data.id),
+    enabled: !!movieInfo.data?.data.id,
+  });
 
   if (!movieInfo.isLoading && movieInfo.data) {
     return (
@@ -261,20 +270,40 @@ export default function MovieInfoPage() {
             ))}
           </div>
 
-          <p className="font-bold text-xl mt-6 mb-6">Có thể bạn thích:</p>
+          {/* Form comments */}
+          <>
+            <div className="flex justify-between items-center">
+              <p className="font-bold text-xl mt-6 mb-6">{countCommentQuery.data?.data ?? 0} Bình luận</p>
 
-          <MovieContainer
-            className="space-y-3"
-            movies={relatedMovies.data?.data || []}
-            placeholderCount={16}
-            primary={false}
-            grid={4}
-            imageType="poster"
-          />
-          <div className="mt-6 rounded bg-base-100 p-4">
-            <p className="mb-4 text-xl font-bold">Bình luận</p>
-          </div>
-          <Comments movieId={1} />
+              <div className="flex items-center gap-2">
+                <p className="text-nowrap">Sắp xếp theo</p>
+                <Select
+                  options={[
+                    { label: 'Mới nhất', value: 'desc' },
+                    { label: 'Cũ nhất', value: 'asc' },
+                  ]}
+                  defaultOption="desc"
+                  onChange={(value) => setCommentSortDir(value as 'desc' | 'asc')}
+                />
+              </div>
+            </div>
+
+            <MovieComment movieId={movieInfo.data?.data?.id} sortBy={commentSortDir} />
+          </>
+
+          {/* Form related movies */}
+          <>
+            <p className="font-bold text-xl mt-6 mb-6">Có thể bạn thích:</p>
+
+            <MovieContainer
+              className="space-y-3"
+              movies={relatedMovies.data?.data || []}
+              placeholderCount={10}
+              primary={false}
+              grid={5}
+              imageType="poster"
+            />
+          </>
         </div>
       </div>
     );

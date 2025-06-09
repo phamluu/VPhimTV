@@ -7,84 +7,60 @@ use App\Http\Requests\CommentRequest;
 use App\Models\MovieComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CommentController extends Controller
 {
-    public function getList(Request $request)
+    public function getList(CommentRequest $request)
     {
-        try {
-            $movieId = $request->query('movie_id');
-            $comments = MovieComment::with('user:id,name')
-                ->where('movie_id', $movieId)
-                ->where('is_active', true)
-                ->where('is_deleted', false)
-                ->paginate(10);
+        $pagination = $request->paginationParams();
+        $sorting = $request->sortingParams();
 
-            return response()->json([
-                'status' => true,
-                'data' => $comments,
-                'message' => 'Danh sách bình luận',
-            ]);
-        } catch (\Exception $e) {
-            \Log::error('Lỗi getList: ' . $e->getMessage());
-            return response()->json([
-                'status' => false,
-                'message' => 'Không thể tải bình luận',
-                'error' => $e->getMessage(),
-            ], 500);
+        $movieId = $request->input('movie_id');
+        $replyTo = $request->input('reply_to');
+
+        $comments = MovieComment::query()
+            ->join('user_info', 'movie_comments.user_id', '=', 'user_info.user_id')
+            ->leftJoin(DB::raw('(select reply_to, count(*) as reply_count from movie_comments where is_deleted = false group by reply_to) as replies'), 'movie_comments.id', '=', 'replies.reply_to')
+            ->select(
+                'movie_comments.*',
+                'user_info.full_name',
+                'user_info.avatar',
+                DB::raw('coalesce(replies.reply_count, 0) as reply_count')
+            )
+            ->where('movie_comments.movie_id', $movieId)
+            ->where('movie_comments.is_deleted', false);
+        if ($replyTo) {
+            $comments->where('movie_comments.reply_to', $replyTo);
+        } else {
+            $comments->whereNull('movie_comments.reply_to');
         }
+
+        $comments = $comments->orderBy($sorting['sort_field'], $sorting['sort_type'])
+            ->paginate($pagination['limit'], ['*'], 'page', $pagination['page']);
+
+        return response()->json($comments);
     }
-public function create(Request $request)
-{
-    try {
+
+    public function create(Request $request)
+    {
+        $user = Auth::user();
+
         $data = $request->validate([
             'movie_id' => 'required|exists:movies,id',
-            'content' => 'required|string',
+            'reply_to' => 'nullable|exists:movie_comments,id',
+            'content' => 'required|string|max:1000',
         ]);
 
         $comment = MovieComment::create([
-            'user_id' => auth()->id(), // Lấy user_id từ token
+            'user_id' => $user->id,
             'movie_id' => $data['movie_id'],
+            'reply_to' => $data['reply_to'] ?? null,
             'content' => $data['content'],
         ]);
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Tạo bình luận thành công',
-            'data' => $comment,
-        ]);
-    } catch (\Exception $e) {
-        \Log::error('Lỗi create comment: ' . $e->getMessage());
-        return response()->json([
-            'status' => false,
-            'message' => 'Không thể tạo bình luận',
-            'error' => $e->getMessage(),
-        ], 500);
+        return response()->json($comment, 201);
     }
-}
-
-public function like(Request $request, $commentId)
-{
-    try {
-        $comment = MovieComment::findOrFail($commentId);
-        $comment->likes = ($comment->likes ?? 0) + 1;
-        $comment->save();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Thích bình luận thành công',
-            'data' => $comment,
-        ]);
-    } catch (\Exception $e) {
-        \Log::error('Lỗi like comment: ' . $e->getMessage());
-        return response()->json([
-            'status' => false,
-            'message' => 'Không thể thích bình luận',
-            'error' => $e->getMessage(),
-        ], 500);
-    }
-}
-
 
     public function update(Request $request, $id)
     {
@@ -105,12 +81,24 @@ public function like(Request $request, $commentId)
         return response()->json($comment);
     }
 
-    public function delete(Request $request, $id) {
+    public function delete(Request $request, $id)
+    {
         $user = Auth::user();
 
         $comment = MovieComment::where('id', $id)->where('user_id', $user->id)->firstOrFail();
         $comment->delete();
 
         return response()->json(['message' => 'Comment deleted successfully']);
+    }
+
+    public function countAll(Request $request)
+    {
+        $movieId = $request->input('movie_id');
+
+        $count = MovieComment::where('movie_id', $movieId)
+            ->where('is_deleted', false)
+            ->count();
+
+        return response()->json(['data' => $count]);
     }
 }

@@ -5,17 +5,20 @@ import { Link, useParams } from 'react-router-dom';
 
 import ArtPlayer from '~/components/ArtPlayer';
 import BreadCrumb from '~/components/BreadCrumb';
+import Select from '~/components/Select';
 import { useAuth } from '~/hooks/useAuth';
-import Comments from '~/pages/movie/CommentPage';
+import { fetchCountComments } from '~/service/comment/commentApi';
 import { addHistory } from '~/service/history/historyApi';
 import { fetchMovieInfo, fetchMovies } from '~/service/movies/moviesApi';
 import { addView } from '~/service/view/viewApi';
 import { movieTypeMap } from '~/utils/classMap';
 
 import MovieContainer from '../home/components/MovieContainer';
+import MovieComment from './Components/MovieComment';
 
 export default function MovieWatchPage() {
   const { movieSlug, episodeSlug } = useParams();
+  const [commentSortDir, setCommentSortDir] = useState<'desc' | 'asc'>('desc');
   const [currentEpisode, setCurrentEpisode] = useState<any>();
   const appName = import.meta.env.VITE_APP_NAME;
   const hashids = useMemo(() => new Hashids(appName, 6), [appName]);
@@ -30,7 +33,7 @@ export default function MovieWatchPage() {
   const relatedMovies = useQuery({
     queryKey: ['relatedMovies', movieSlug],
     queryFn: () =>
-      fetchMovies({ limit: 12, country: movieInfo.data?.data.country.slug, year: movieInfo.data?.data.year }),
+      fetchMovies({ limit: 10, country: movieInfo.data?.data.country.slug, year: movieInfo.data?.data.year }),
     enabled: !!movieInfo.data,
   });
 
@@ -60,6 +63,12 @@ export default function MovieWatchPage() {
     mutationFn: (episode_id: number) => addView(episode_id),
     onSuccess: () => console.log('Added view history'),
     onError: (error) => console.log('Error adding view history:', error),
+  });
+
+  const countCommentQuery = useQuery({
+    queryKey: ['countComments', movieInfo.data?.data.id],
+    queryFn: () => fetchCountComments(movieInfo.data?.data.id),
+    enabled: !!movieInfo.data?.data.id,
   });
 
   if (!movieInfo.isLoading && movieInfo.data && currentEpisode) {
@@ -147,7 +156,10 @@ export default function MovieWatchPage() {
           <div className="bg-base-300 rounded p-3 space-y-4">
             <div className="bg-base-100 p-4 space-y-4">
               <p className="font-bold text-primary text-2xl">
-                {movieInfo.data?.data.name} - Tập {episodeSlug!.split('-')[1]}
+                {movieInfo.data?.data.name} -{' '}
+                {currentEpisode?.episode_name === 'Full'
+                  ? `Tập ${currentEpisode?.episode_name}`
+                  : currentEpisode?.episode_name}
               </p>
 
               <p className="font-bold text-primary text-xl">
@@ -178,17 +190,40 @@ export default function MovieWatchPage() {
               ))}
             </div>
 
-            <p className="font-bold text-xl mt-6 mb-6">Có thể bạn thích:</p>
+            {/* Form comments */}
+            <>
+              <div className="flex justify-between items-center">
+                <p className="font-bold text-xl mt-6 mb-6">{countCommentQuery.data?.data ?? 0} Bình luận</p>
 
-            <MovieContainer
-              className="space-y-3"
-              movies={relatedMovies.data?.data || []}
-              placeholderCount={16}
-              primary={false}
-              grid={4}
-              imageType="poster"
-            />
-            <Comments movieId={1} />
+                <div className="flex items-center gap-2">
+                  <p className="text-nowrap">Sắp xếp theo</p>
+                  <Select
+                    options={[
+                      { label: 'Mới nhất', value: 'desc' },
+                      { label: 'Cũ nhất', value: 'asc' },
+                    ]}
+                    defaultOption="desc"
+                    onChange={(value) => setCommentSortDir(value as 'desc' | 'asc')}
+                  />
+                </div>
+              </div>
+
+              <MovieComment movieId={movieInfo.data?.data?.id} sortBy={commentSortDir} />
+            </>
+
+            {/* Form related movies */}
+            <>
+              <p className="font-bold text-xl mt-6 mb-6">Có thể bạn thích:</p>
+
+              <MovieContainer
+                className="space-y-3"
+                movies={relatedMovies.data?.data || []}
+                placeholderCount={10}
+                primary={false}
+                grid={5}
+                imageType="poster"
+              />
+            </>
           </div>
         </div>
       </div>
