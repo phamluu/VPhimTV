@@ -70,6 +70,7 @@
                     console.log(response);
                     if (response.status === true) {
                         alert('Tải lên thành công!');
+                        location.reload();
                     } else {
                         alert('Đã có lỗi xảy ra: ' + (response.message || 'Vui lòng thử lại.'));
                     }
