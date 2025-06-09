@@ -70,9 +70,9 @@
                  </div>
                  <div class="form-group">
                      <label for="type_id">Thể loại</label>
-                     <select name="movie_type" class="form-control" value="{{ old('type_id', $model->type_id) }}">
+                     <select name="type_id" class="form-control" value="{{ old('type_id', $model->type_id) }}">
                          @foreach($movie_type as $item)
-                         <option value="{{$item -> id}}" {{ old('movie_type', $model->movie_type) == $item->id ? 'selected' : '' }}>{{$item->name}}</option>
+                         <option value="{{$item -> id}}" {{ old('type_id', $model->type_id) == $item->id ? 'selected' : '' }}>{{$item->name}}</option>
                          @endforeach
                      </select>
                  </div>
