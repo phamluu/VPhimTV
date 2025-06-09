@@ -118,7 +118,7 @@
                         <a href="#" class="btn primary" data-toggle="modal" data-target="#episode_add">Thêm tập</a>
                         <div class="episode">
                             @foreach($episodes as $item)
-                            <span>{{$item -> episode_name}}</span>
+                            <span data-id="{{$item->id}}" class="btn">{{$item -> episode_name}}</span>
                             @endforeach
                         </div>
                 </div>
@@ -134,4 +134,29 @@ $episode = new Episode();
 $episode->movie_id = $model->id;
 ?>
 @include('episode.create', ['model' => $episode])
+
+<div class="modal fade" id="episode_edit" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+</div>
+
+<script>
+    $('.episode span').on("click", function() {
+        var id = $(this).data('id');
+        var url = '/episode/edit/' + id;
+        $.ajax({
+            url: url,
+            type: 'GET',
+
+            success: function(response) {
+                //console.log(response);
+                $("#episode_edit").html(response);
+                $("#episode_edit").modal('show');
+            },
+            error: function(xhr) {
+                console.log(xhr);
+            }
+        });
+    })
+</script>
+
+
 @endsection

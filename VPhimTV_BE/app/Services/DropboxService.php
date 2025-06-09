@@ -27,6 +27,7 @@ class DropboxService
 
         try {
             $response = $client->post('oauth2/token', [
+                'verify' => false,
                 'form_params' => [
                     'grant_type' => 'refresh_token',
                     'refresh_token' => $refreshToken,
@@ -54,6 +55,7 @@ class DropboxService
             ]);
         } catch (RequestException $e) {
             throw new \Exception("Lỗi khi lấy access token từ Dropbox: " . $e->getMessage());
+            // error_log("Dropbox API Token Error: " . $e->getMessage());
         }
     }
 
