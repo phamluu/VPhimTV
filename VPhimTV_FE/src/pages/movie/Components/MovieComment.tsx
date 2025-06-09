@@ -58,7 +58,6 @@ export default function MovieComment({ movieId }: MovieCommentProps) {
         onToggleReplies={handleToggleReplies}
         onSubmitReply={async (parentId, content) => {
           await createCommentMutation.mutateAsync({ movie_id: movieId, reply_to: parentId, content });
-          // handleToggleReplies(parentId);
         }}
         replyingToCommentId={replyingToCommentId}
         setReplyingToCommentId={setReplyingToCommentId}

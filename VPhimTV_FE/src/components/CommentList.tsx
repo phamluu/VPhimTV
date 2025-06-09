@@ -44,7 +44,6 @@ export default function CommentList({
             onReplyClick={() => setReplyingToCommentId(replyingToCommentId === comment.id ? undefined : comment.id)}
           />
 
-          {/* Render CommentInput nếu đang reply comment này */}
           {replyingToCommentId === comment.id && (
             <div className="ms-16 mt-2">
               <CommentInput
@@ -71,13 +70,31 @@ export default function CommentList({
 
               {expandedComments[comment.id] &&
                 replies[comment.id]?.map((reply) => (
-                  <CommentItem
-                    key={reply.id}
-                    userName={reply.full_name}
-                    avatar={`${import.meta.env.VITE_APP_API}${reply.avatar}`}
-                    date={timeAgo(reply.updated_at)}
-                    content={reply.content}
-                  />
+                  <div key={reply.id}>
+                    <CommentItem
+                      userName={reply.full_name}
+                      avatar={`${import.meta.env.VITE_APP_API}${reply.avatar}`}
+                      date={timeAgo(reply.updated_at)}
+                      content={reply.content}
+                      onReplyClick={() =>
+                        setReplyingToCommentId(replyingToCommentId === reply.id ? undefined : reply.id)
+                      }
+                    />
+
+                    {replyingToCommentId === reply.id && (
+                      <div className="mt-2">
+                        <CommentInput
+                          onSubmit={(content) => {
+                            onSubmitReply(comment.id, content);
+                            setReplyingToCommentId(undefined);
+                          }}
+                          onCancel={() => setReplyingToCommentId(undefined)}
+                          avatar={`${import.meta.env.VITE_APP_API}${reply.avatar}`}
+                          hiddenButton={false}
+                        />
+                      </div>
+                    )}
+                  </div>
                 ))}
             </div>
           )}
