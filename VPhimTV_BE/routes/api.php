@@ -61,11 +61,11 @@ Route::middleware(['web'])->group(function () {
     Route::prefix('comment')->name('comments.')->group(function () {
         Route::controller(CommentController::class)->group(function () {
             Route::get('/', 'getList')->name('getList');
+            Route::get('/count', 'countAll')->name('getCount');
             Route::middleware('apiAuth')->group(function () {
                 Route::post('/create', 'create')->name('create');
                 Route::put('/update/{id}', 'update')->name('update');
                 Route::post('/delete/{id}', 'delete')->name('delete');
-                Route::get('/count', 'countAll')->name('getCount');
             });
         });
     });
