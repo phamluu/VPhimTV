@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS movies (
     content TEXT,
     type_id INTEGER NOT NULL, -- Foreign Key movie_types.id,
     status VARCHAR(50),
+    trailer_url VARCHAR(255),
     is_active BOOLEAN DEFAULT TRUE,
     is_deleted BOOLEAN DEFAULT FALSE,
     poster_url TEXT,
@@ -92,6 +93,7 @@ CREATE TABLE IF NOT EXISTS movie_histories (
 );
 
 CREATE TABLE IF NOT EXISTS movie_categories (
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     movie_id INTEGER NOT NULL, -- Foreign Key movies.id,
     category_id INTEGER NOT NULL, -- Foreign Key categories.id,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

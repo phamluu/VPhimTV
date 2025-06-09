@@ -19,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware
+            ->use([
+                \Illuminate\Http\Middleware\HandleCors::class, // 👈 THÊM DÒNG NÀY
+            ])
             ->validateCsrfTokens(except: ['api/*'])
             ->appendToGroup('api', ApiResponseMiddleware::class)
             ->alias([

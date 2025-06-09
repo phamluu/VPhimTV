@@ -15,10 +15,12 @@ return [
     |
     */
 
-    'paths' => ['*', 'sanctum/csrf-cookie'],
+    //'paths' => ['*', 'sanctum/csrf-cookie'],
+    'paths' => ['/api*', 'sanctum/csrf-cookie'],
 
     'allowed_methods' => ['*'],
 
+    //'allowed_origins' => ['https://portal.inanhonglen.com/'],
     'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],

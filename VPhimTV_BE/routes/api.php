@@ -12,7 +12,7 @@ use App\Http\Controllers\Api\ViewsController;
 use App\Http\Controllers\Api\HistoryController;
 use App\Http\Controllers\Api\EpisodeController;
 
-Route::middleware(['web'])->group(function () {
+Route::middleware(['api'])->group(function () {
     // API Authenticate
     Route::prefix('auth')->name('auth.')->group(function () {
         Route::controller(AuthController::class)->group(function () {
@@ -69,7 +69,6 @@ Route::middleware(['web'])->group(function () {
             });
         });
     });
-
 
     // API History
     Route::prefix('history')->name('histories.')->middleware('apiAuth')->group(function () {
