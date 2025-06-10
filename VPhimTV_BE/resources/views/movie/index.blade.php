@@ -28,7 +28,6 @@
                                 <th>STT</th>
                                 <th>Hình</th>
                                 <th>Tên phim</th>
-                                <th>Lượt xem</th>
                                 <th>Lượt thích</th>
                                 <th>Lượt bình luận</th>
                                 <th class="text-right" style="width:130px;">Chức năng</th>
@@ -39,7 +38,6 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td><img src="{{ asset( $movie->thumb_url) }}" /></td>
                                     <td>{{ $movie->name }}</td>
-                                    <td><a href="">10</a></td>
                                     <td><a href="">{{ $movie->favorites->count() }}</a></td>
                                     <td><a href="#" class="" data-toggle="modal" data-target="#myModal-{{ $movie->id }}">
                                             {{ $movie->movie_comments->count() }}
