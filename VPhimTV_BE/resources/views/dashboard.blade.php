@@ -6,13 +6,17 @@
 </div>
 <div class="content">
     <div class="row">
-        <div class="col-lg-4">
-            <div class="card card-chart">
+        {{-- Phim được yêu thích --}}
+        <div class="col-lg-4 col-md-6">
+            <div class="card card-chart"
+                style="min-height: 400px; max-height:600px; display: flex; flex-direction: column; justify-content: space-between;">
                 <div class="card-header">
-                    <h5 class="card-category">Global Sales</h5>
+                    <h5 class="card-category">Tổng lượt yêu thích: {{ number_format($totalFavorites) }}</h5>
                     <h4 class="card-title">Phim được yêu thích</h4>
                     <div class="dropdown">
-                        <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
+                        <button type="button"
+                            class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
+                            data-toggle="dropdown">
                             <i class="now-ui-icons loader_gear"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
@@ -24,9 +28,14 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="lineChartExample"></canvas>
-                    </div>
+                    <ul class="list-group mt-3">
+                        @foreach ($topFavoriteMovies->take(5) as $movie)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ $movie->movie_name }}
+                            <span class="badge badge-primary badge-pill">{{ $movie->total_favorites }}</span>
+                        </li>
+                        @endforeach
+                    </ul>
                 </div>
                 <div class="card-footer">
                     <div class="stats">
@@ -35,13 +44,18 @@
                 </div>
             </div>
         </div>
+
+        {{-- Phim được xem nhiều --}}
         <div class="col-lg-4 col-md-6">
-            <div class="card card-chart">
+            <div class="card card-chart"
+                style="min-height: 400px; max-height:600px; display: flex; flex-direction: column; justify-content: space-between;">
                 <div class="card-header">
-                    <h5 class="card-category">Tổng số lượt xem</h5>
+                    <h5 class="card-category">Tổng số lượt xem: {{ number_format($totalViews) }}</h5>
                     <h4 class="card-title">Phim được xem nhiều</h4>
                     <div class="dropdown">
-                        <button type="button" class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret" data-toggle="dropdown">
+                        <button type="button"
+                            class="btn btn-round btn-outline-default dropdown-toggle btn-simple btn-icon no-caret"
+                            data-toggle="dropdown">
                             <i class="now-ui-icons loader_gear"></i>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
@@ -53,9 +67,14 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="chart-area">
-                        <canvas id="lineChartExampleWithNumbersAndGrid"></canvas>
-                    </div>
+                    <ul class="list-group mt-3">
+                        @foreach ($topViewedMovies as $movie)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ $movie->movie_name }}
+                            <span class="badge badge-info badge-pill">{{ $movie->total_views }}</span>
+                        </li>
+                        @endforeach
+                    </ul>
                 </div>
                 <div class="card-footer">
                     <div class="stats">
@@ -64,8 +83,10 @@
                 </div>
             </div>
         </div>
+
         <div class="col-lg-4 col-md-6">
-            <div class="card card-chart">
+            <div class="card card-chart"
+                style="min-height: 400px;max-height:600px; display: flex; flex-direction: column; justify-content: space-between;">
                 <div class="card-header">
                     <h5 class="card-category">Email Statistics</h5>
                     <h4 class="card-title">Tổng người dùng</h4>
@@ -103,12 +124,17 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td class="text-left">Sign contract for "What are conference organizers afraid of?"</td>
+                                    <td class="text-left">Sign contract for "What are conference organizers afraid of?"
+                                    </td>
                                     <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
+                                        <button type="button" rel="tooltip" title=""
+                                            class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral"
+                                            data-original-title="Edit Task">
                                             <i class="now-ui-icons ui-2_settings-90"></i>
                                         </button>
-                                        <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
+                                        <button type="button" rel="tooltip" title=""
+                                            class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral"
+                                            data-original-title="Remove">
                                             <i class="now-ui-icons ui-1_simple-remove"></i>
                                         </button>
                                     </td>
@@ -122,12 +148,17 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td class="text-left">Lines From Great Russian Literature? Or E-mails From My Boss?</td>
+                                    <td class="text-left">Lines From Great Russian Literature? Or E-mails From My Boss?
+                                    </td>
                                     <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
+                                        <button type="button" rel="tooltip" title=""
+                                            class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral"
+                                            data-original-title="Edit Task">
                                             <i class="now-ui-icons ui-2_settings-90"></i>
                                         </button>
-                                        <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
+                                        <button type="button" rel="tooltip" title=""
+                                            class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral"
+                                            data-original-title="Remove">
                                             <i class="now-ui-icons ui-1_simple-remove"></i>
                                         </button>
                                     </td>
@@ -141,12 +172,17 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td class="text-left">Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit</td>
+                                    <td class="text-left">Flooded: One year later, assessing what was lost and what was
+                                        found when a ravaging rain swept through metro Detroit</td>
                                     <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" title="" class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Edit Task">
+                                        <button type="button" rel="tooltip" title=""
+                                            class="btn btn-info btn-round btn-icon btn-icon-mini btn-neutral"
+                                            data-original-title="Edit Task">
                                             <i class="now-ui-icons ui-2_settings-90"></i>
                                         </button>
-                                        <button type="button" rel="tooltip" title="" class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral" data-original-title="Remove">
+                                        <button type="button" rel="tooltip" title=""
+                                            class="btn btn-danger btn-round btn-icon btn-icon-mini btn-neutral"
+                                            data-original-title="Remove">
                                             <i class="now-ui-icons ui-1_simple-remove"></i>
                                         </button>
                                     </td>
@@ -179,11 +215,11 @@
                             </thead>
                             <tbody>
                                 @foreach ($onlineUsers as $user)
-                                    <tr>
-                                        <td>{{ $user['name'] }}</td>
-                                        <td>{{ $user['start'] }}</td>
-                                        <td class="text-right">{{ $user['close'] }}</td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ $user['name'] }}</td>
+                                    <td>{{ $user['start'] }}</td>
+                                    <td class="text-right">{{ $user['close'] }}</td>
+                                </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -196,7 +232,7 @@
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     // Lấy dữ liệu từ backend
     const movieView = @json($movieView);
 
