@@ -52,7 +52,7 @@
                                         <form action="{{ route('movie.destroy', $movie->id) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-link btn-danger btn-just-icon">
+                                            <button type="submit" class="btn btn-link btn-danger btn-just-icon" onclick="return confirm('Bạn có chắc chắn muốn xoá phim này?')">
                                                 <i class="now-ui-icons ui-1_simple-remove"></i>
                                             </button>
                                         </form>
