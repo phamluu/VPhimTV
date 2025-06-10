@@ -70,9 +70,8 @@ class EpisodeController extends Controller
 
     public function destroy($id)
     {
-        $category = Episode::findOrFail($id);
-        $category->delete();
-
-        return redirect()->route('episode.index')->with('success', 'Xóa danh mục thành công.');
+        $rs = Episode::findOrFail($id);
+        $rs->delete();
+        return redirect()->back()->with('success', 'Xóa tập phim thành công');
     }
 }
