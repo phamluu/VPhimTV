@@ -11,6 +11,9 @@ php artisan make:migration create_categories_table
 php artisan make:migration create_movie_categories_table
 php artisan make:migration create_episodes_table
 
+
+
+
 CREATE TABLE IF NOT EXISTS movie_types (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255),
@@ -302,3 +305,11 @@ CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- END 1 SỐ MODULE KHÁC
+
+
+DELETE FROM categories;
+DELETE FROM countries;
+DELETE FROM movie_types;
+DELETE FROM movies;
+DELETE FROM movie_categories;
+DELETE FROM episodes;
