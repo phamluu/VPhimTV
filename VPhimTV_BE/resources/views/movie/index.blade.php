@@ -41,7 +41,9 @@
                                     <td>{{ $movie->name }}</td>
                                     <td><a href="">10</a></td>
                                     <td><a href="">10</a></td>
-                                    <td><a href="#" class="" data-toggle="modal" data-target="#myModal-{{ $movie->id }}">3</a></td>
+                                    <td><a href="#" class="" data-toggle="modal" data-target="#myModal-{{ $movie->id }}">
+                                            {{ $movie->movie_comments->count() }}
+                                        </a></td>
                                     <td class="text-right">
                                         <a href="{{ route('movie.detail', $movie->id) }}" class="btn btn-link btn-info btn-just-icon">
                                             <i class="fa fa-eye"></i>
