@@ -11,6 +11,9 @@
     <div class="row">
         <div class="col-md-8">
             <div class="card">
+                <div class="card-header">
+                    <h5 class="title" style="text-align: right;"><a href="{{ route('movie.edit', $model->id) }}">Sửa</a></h5>
+                </div>
                 <div class="card-body">
                     @if ($errors->any())
                     <div class="alert alert-danger">
@@ -64,7 +67,7 @@
                     </div>
                     <div class="form-group">
                         <label for="content">Nội dung</label>
-                        <div>{{ old('content', $model->content) }}</div>
+                        <div>{!! old('content', $model->content) !!}</div>
                     </div>
 
 
@@ -113,14 +116,16 @@
         </div>
         <div class="col-md-4">
             <div class="card">
+                <div class="card-header">
+                    <h5 class="title">Danh sách tập phim</h5>
+                </div>
                 <div class="card-body">
-                    <h6>Danh sách tập phim</h4>
-                        <a href="#" class="btn primary" data-toggle="modal" data-target="#episode_add">Thêm tập</a>
-                        <div class="episode">
-                            @foreach($episodes as $item)
-                            <span data-id="{{$item->id}}" class="btn">{{$item -> episode_name}}</span>
-                            @endforeach
-                        </div>
+                    <a href="#" class="btn primary" data-toggle="modal" data-target="#episode_add">Thêm tập</a>
+                    <div class="episode">
+                        @foreach($episodes as $item)
+                        <span data-id="{{$item->id}}" class="btn">{{$item -> episode_name}}</span>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
