@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Hashids from 'hashids';
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import BreadCrumb from '~/components/BreadCrumb';
 import Select from '~/components/Select';
@@ -21,6 +21,7 @@ export default function MovieInfoPage() {
   const [isFavorite, setIsFavorite] = useState(false);
   const appName = import.meta.env.VITE_APP_NAME;
   const hashids = useMemo(() => new Hashids(appName, 6), [appName]);
+  const navigate = useNavigate();
   const { user } = useAuth();
 
   const movieInfo = useQuery({
@@ -137,15 +138,22 @@ export default function MovieInfoPage() {
                   Trailer
                 </Link>
 
-                <Link
+                <button
                   className="btn btn-error w-32 font-bold"
-                  to={`/phim/${movieInfo.data?.data.slug}/${
-                    movieInfo.data?.data?.episodes[0].server_data[0].slug
-                  }-${hashids.encode(movieInfo.data?.data?.episodes[0].server_data[0].id)}`}
+                  onClick={() => {
+                    if (!movieInfo.data?.data?.episodes?.length)
+                      return toast({ type: 'info', message: 'Phim này chưa có tập' });
+
+                    navigate(
+                      `/phim/${movieInfo.data?.data.slug}/${
+                        movieInfo.data?.data?.episodes[0]?.server_data[0]?.slug
+                      }-${hashids.encode(movieInfo.data?.data?.episodes[0]?.server_data[0]?.id)}`,
+                    );
+                  }}
                 >
                   <i className="fa-regular fa-circle-play"></i>
                   Xem phim
-                </Link>
+                </button>
               </div>
             </div>
           </div>
