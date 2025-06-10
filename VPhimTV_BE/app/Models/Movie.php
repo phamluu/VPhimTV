@@ -55,6 +55,6 @@ class Movie extends Model
 
     public function favorites()
     {
-    return $this->hasMany(MovieFavorite::class, 'movie_id');
+        return $this->hasMany(MovieFavorite::class, 'movie_id');
     }
 }

@@ -22,7 +22,8 @@
                             <thead class=" text-primary">
                                 <th>STT</th>
                                 <th>Bình luận</th>
-
+                                <th>Phim</th>
+                                <th>Người dùng</th>
                                 <th class="text-right">Chức năng</th>
                             </thead>
                             <tbody>
@@ -30,6 +31,20 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->content }}</td>
+                                    <td>
+                                        @if ($item->movie)
+                                        <a href="{{ route('movie.detail', $item->movie->id) }}" target="_blank">{{ $item->movie->name }}</a>
+                                        @else
+                                        <span class="text-muted">Không có phim</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($item->user)
+                                        <a href="" target="_blank">{{ $item->user->name }}</a>
+                                        @else
+                                        <span class="text-muted">Không có người dùng</span>
+                                        @endif
+                                    </td>
                                     <td class="text-right">
 
                                         <form action="{{ route('movie_comments.destroy', $item->id) }}" method="POST" style="display: inline;">

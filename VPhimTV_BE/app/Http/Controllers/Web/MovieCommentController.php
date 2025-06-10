@@ -10,7 +10,7 @@ class MovieCommentController extends Controller
 {
     public function index()
     {
-        $model = MovieComment::all();
+        $model = MovieComment::with('movie')->with('user')->get();
         return view('movie_comments.index', compact('model'));
     }
 

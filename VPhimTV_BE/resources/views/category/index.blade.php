@@ -36,7 +36,7 @@
                                         <form action="{{ route('category.destroy', $category->id) }}" method="POST" style="display: inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-link btn-danger btn-just-icon">
+                                            <button type="submit" class="btn btn-link btn-danger btn-just-icon" onclick="return confirm('Bạn có chắc chắn muốn xoá danh mục này?')">
                                                 <i class="now-ui-icons ui-1_simple-remove"></i>
                                             </button>
                                         </form>
@@ -46,7 +46,7 @@
                             </tbody>
                         </table>
                         @if ($categories->isEmpty())
-                            <p class="text-center">Chưa có danh mục nào.</p>
+                        <p class="text-center">Chưa có danh mục nào.</p>
                         @endif
                     </div>
                 </div>
