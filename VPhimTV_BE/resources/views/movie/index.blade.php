@@ -40,7 +40,7 @@
                                     <td><img src="{{ asset( $movie->thumb_url) }}" /></td>
                                     <td>{{ $movie->name }}</td>
                                     <td><a href="">10</a></td>
-                                    <td><a href="">10</a></td>
+                                    <td><a href="">{{ $movie->favorites->count() }}</a></td>
                                     <td><a href="#" class="" data-toggle="modal" data-target="#myModal-{{ $movie->id }}">
                                             {{ $movie->movie_comments->count() }}
                                         </a></td>
