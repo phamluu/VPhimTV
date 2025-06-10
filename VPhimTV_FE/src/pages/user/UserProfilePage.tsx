@@ -111,8 +111,9 @@ export default function UserProfilePage() {
                 )}
               </div>
               <p>
-                Yêu thích phim {userQuery.data?.data?.top_categories[0]?.name} và{' '}
-                {userQuery.data?.data?.top_categories[1]?.name}
+                Yêu thích phim {userQuery.data?.data?.top_categories[0]?.name}
+                {userQuery.data?.data?.top_categories.length > 1 ? ' và ' : ''}
+                {userQuery.data?.data?.top_categories[1]?.name ?? ''}
               </p>
               <p className="rounded-xl bg-base-content/10 p-3 w-52">
                 <i className="fa-regular fa-calendar-week"></i>
