@@ -124,6 +124,13 @@ class DashboardController extends Controller
         $totalFavorites = $topFavoriteMovies->sum('total_favorites');
         $totalViews = DB::table('movie_views')->count();
 
+        // 8. Tổng Người Dùng
+        $recentUsers = DB::table('users')
+            ->select('name', 'email', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+        $totalUsers = DB::table('users')->count();
 
         return view('dashboard', [
             'user' => $user,
@@ -139,7 +146,8 @@ class DashboardController extends Controller
             'totalFavorites' => $totalFavorites,
             'topViewedMovies' => $topViewedMovies,
             'totalViews' => $totalViews,
-
+            'totalUsers' => $totalUsers,
+            'recentUsers' => $recentUsers,
         ]);
     }
 }
