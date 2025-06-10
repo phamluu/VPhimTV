@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useRef } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
 import { useAuth } from '~/hooks/useAuth';
@@ -12,6 +13,7 @@ export default function UserLayout() {
   const rootPath = pathSegments[0] || '';
   const lastPath = pathSegments[1] || '';
   const { user, setUser } = useAuth();
+  const modalPasswordRef = useRef<HTMLDialogElement | null>(null);
 
   const userQuery = useQuery({
     queryKey: ['userProfile'],
@@ -88,6 +90,12 @@ export default function UserLayout() {
                     </Link>
                   </li>
                 ))}
+                <li className="font-bold">
+                  <a className="p-3 rounded-xl" onClick={() => modalPasswordRef.current?.showModal()}>
+                    <i className="fa-regular fa-key"></i>
+                    Đổi Mật khẩu
+                  </a>
+                </li>
               </ul>
             </div>
 
@@ -104,6 +112,41 @@ export default function UserLayout() {
         <div className="flex-3/4 space-y-10">
           <Outlet />
         </div>
+
+        {/* Modal Change Password */}
+        <dialog ref={modalPasswordRef} className={`modal`}>
+          <div className="modal-box p-4 w-[370px]">
+            <form method="dialog">
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            </form>
+            <h3 className="text-lg font-bold">Thay Đổi Mật Khẩu</h3>
+            <div className="py-4">
+              <div className="space-y-4 mx-auto">
+                <label className="floating-label">
+                  <span>Mật khẩu cũ</span>
+                  <input type="password" placeholder="Mật khẩu cũ" className="input w-full" />
+                </label>
+
+                <label className="floating-label">
+                  <span>Mật khẩu mới</span>
+                  <input type="password" placeholder="Mật khẩu mới" className="input w-full" />
+                </label>
+
+                <label className="floating-label">
+                  <span>Nhập lại mật khẩu mới</span>
+                  <input type="password" placeholder="Nhập lại mật khẩu mới" className="input w-full" />
+                </label>
+              </div>
+            </div>
+            <div className="modal-action mt-0">
+              <button className={`btn btn-soft w-[90px]`}>Huỷ</button>
+              <button className={`btn btn-primary w-[90px]`}>OK</button>
+            </div>
+          </div>
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
+        </dialog>
       </div>
     </div>
   );

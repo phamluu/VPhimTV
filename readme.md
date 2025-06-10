@@ -41,6 +41,11 @@ cd VPhimTV
     npm run setup
     ```
 
+- **Lấy dữ liệu:**
+    ```bash
+    npm run crawl
+    ```
+
 ### 3. Chạy dự án
 
 ```bash

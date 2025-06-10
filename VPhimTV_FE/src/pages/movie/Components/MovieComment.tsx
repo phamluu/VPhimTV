@@ -48,7 +48,12 @@ export default function MovieComment({ movieId, sortBy }: MovieCommentProps) {
     <div className="container mx-auto p-4 bg-base-300 rounded-lg">
       <CommentInput
         className="mb-8"
-        onSubmit={(content) => createCommentMutation.mutate({ movie_id: movieId, content })}
+        onSubmit={(content) => {
+          if (!user) {
+            return toast({ type: 'warning', message: 'Bạn cần đăng nhập để bình luận.' });
+          }
+          createCommentMutation.mutate({ movie_id: movieId, content });
+        }}
         avatar={user ? `${import.meta.env.VITE_APP_API}${user.avatar}` : undefined}
       />
 
@@ -58,6 +63,9 @@ export default function MovieComment({ movieId, sortBy }: MovieCommentProps) {
         expandedComments={expandedComments}
         onToggleReplies={handleToggleReplies}
         onSubmitReply={async (parentId, content) => {
+          if (!user) {
+            return toast({ type: 'warning', message: 'Bạn cần đăng nhập để bình luận.' });
+          }
           await createCommentMutation.mutateAsync({ movie_id: movieId, reply_to: parentId, content });
         }}
         replyingToCommentId={replyingToCommentId}
