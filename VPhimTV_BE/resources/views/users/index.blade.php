@@ -19,7 +19,7 @@
                 @endif
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table">
+                        <table class="table" id="grid">
                             <thead class=" text-primary">
                                 <th>
                                     STT

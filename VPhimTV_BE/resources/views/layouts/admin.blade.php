@@ -20,6 +20,7 @@
     <link href="/assets/demo/demo.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
     <link href="/css/style.css" rel="stylesheet" />
     <script src="/assets/js/core/jquery.min.js"></script>
 </head>
@@ -142,7 +143,7 @@
     <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
     <script src="/assets/demo/demo.js"></script>
-
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -162,6 +163,7 @@
 
     <script>
         $(document).ready(function() {
+            $('#grid').DataTable();
             $('#select2').select2({
                 placeholder: 'Chọn tất cả',
                 allowClear: true
