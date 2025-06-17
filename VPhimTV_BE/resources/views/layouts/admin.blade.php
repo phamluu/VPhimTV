@@ -83,7 +83,7 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="/admin/profile/show">Profile</a>
+                                    <a class="dropdown-item" href="/profile/show">Profile</a>
                                     <a class="dropdown-item" href="/logout">Đăng xuất</a>
                                 </div>
                                 @else

@@ -119,7 +119,7 @@ class DashboardController extends Controller
             ->select('movies.id as movie_id', 'movies.name as movie_name', DB::raw('COUNT(*) as total_views'))
             ->groupBy('movies.id', 'movies.name')
             ->orderByDesc('total_views')
-            ->limit(10)
+            ->limit(5)
             ->get();
         $totalFavorites = $topFavoriteMovies->sum('total_favorites');
         $totalViews = DB::table('movie_views')->count();

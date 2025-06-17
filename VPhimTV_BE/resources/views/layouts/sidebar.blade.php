@@ -53,8 +53,8 @@
                     <p>Quản lý bình luận</p>
                 </a>
             </li>
-            <li class="{{ request()->is('admin/user') ? 'active' : '' }}">
-                <a href="/user">
+            <li class="{{ request()->routeIs('user.index') ? 'active' : '' }}">
+                <a href="{{ route('user.index') }}">
                     <i class="now-ui-icons users_single-02"></i>
                     <p>Người dùng</p>
                 </a>

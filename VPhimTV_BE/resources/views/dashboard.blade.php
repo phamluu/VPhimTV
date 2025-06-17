@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <ul class="list-group mt-3">
+                    <ul class="list-group mt-3 overflow-auto">
                         @foreach ($topViewedMovies as $movie)
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             {{ $movie->movie_name }}
